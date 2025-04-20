@@ -91,24 +91,20 @@
   <button id="resetButton">Resetuj grę</button>
 
   <script>
-    // Przechowuje stan gry
-    let board = Array(9).fill(null);
+    let board = Array(9).fill(null); // Plansza
     let currentPlayer = 'O'; // Zaczyna gracz O
-
-    // Tablica do śledzenia symboli na planszy
     let symbols = {
       'O': [],
       'X': []
     };
 
-    // Zwraca status gry (zwycięzca lub remisy)
+    // Sprawdza zwycięzcę
     function checkWinner(board) {
       const lines = [
         [0, 1, 2], [3, 4, 5], [6, 7, 8], // wiersze
         [0, 3, 6], [1, 4, 7], [2, 5, 8], // kolumny
         [0, 4, 8], [2, 4, 6] // przekątne
       ];
-
       for (let [a, b, c] of lines) {
         if (board[a] && board[a] === board[b] && board[a] === board[c]) {
           return board[a]; // Zwycięzca (O lub X)
@@ -117,12 +113,12 @@
       return null;
     }
 
-    // Sprawdza, czy plansza jest pełna (remis)
+    // Sprawdza, czy plansza jest pełna
     function isBoardFull(board) {
       return board.every(cell => cell !== null);
     }
 
-    // Aktualizuje status gry
+    // Zaktualizowanie statusu gry
     function updateStatus() {
       const status = document.getElementById('status');
       const winner = checkWinner(board);
@@ -136,30 +132,29 @@
       }
     }
 
-    // Usuwa najstarszy symbol z planszy
+    // Funkcja do usunięcia najstarszego symbolu
     function removeOldestSymbol(symbol) {
-      const oldestSymbol = symbols[symbol][0];  // Pierwszy symbol (najstarszy)
-      board[oldestSymbol.index] = null;  // Usuwamy symbol z planszy
+      const oldestSymbol = symbols[symbol][0]; // Pierwszy symbol w tablicy
+      board[oldestSymbol.index] = null; // Usuwamy symbol z planszy
       document.querySelectorAll('.cell')[oldestSymbol.index].textContent = ''; // Usuwamy symbol z komórki
-      document.querySelectorAll('.cell')[oldestSymbol.index].disabled = false;  // Włączamy komórkę
-      document.querySelectorAll('.cell')[oldestSymbol.index].classList.remove('old-symbol'); // Usuwamy wyróżnienie
-      symbols[symbol].shift();  // Usuwamy najstarszy symbol z tablicy
+      document.querySelectorAll('.cell')[oldestSymbol.index].disabled = false; // Przywracamy przycisk
+      document.querySelectorAll('.cell')[oldestSymbol.index].classList.remove('old-symbol'); // Usuwamy podświetlenie
+      symbols[symbol].shift(); // Usuwamy najstarszy symbol z tablicy
     }
 
-    // Funkcja do wyróżnienia najstarszego symbolu
+    // Funkcja do podświetlenia najstarszego symbolu
     function highlightOldestSymbol(symbol) {
       if (symbols[symbol].length >= 3) {
-        const oldestSymbol = symbols[symbol][0];  // Najstarszy symbol
-        document.querySelectorAll('.cell')[oldestSymbol.index].classList.add('old-symbol'); // Wyróżniamy komórkę
+        const oldestSymbol = symbols[symbol][0]; // Najstarszy symbol
+        const cell = document.querySelectorAll('.cell')[oldestSymbol.index];
+        cell.classList.add('old-symbol'); // Podświetlamy komórkę
       }
     }
 
-    // Funkcja do aktualizacji wyglądu komórki
+    // Funkcja do aktualizacji komórki
     function updateCell(index, symbol) {
       const cell = document.querySelectorAll('.cell')[index];
       cell.textContent = symbol;
-
-      // Dodaj kolor do symbolu
       if (symbol === 'O') {
         cell.classList.add('symbol-O');
       } else if (symbol === 'X') {
@@ -167,11 +162,27 @@
       }
     }
 
-    // Obsługuje kliknięcie w komórkę planszy
+    // Funkcja do obsługi kliknięcia w komórkę
     function handleCellClick(index) {
-      if (board[index] || checkWinner(board)) return; // Komórka już zajęta lub gra zakończona
+      if (board[index] || checkWinner(board)) return; // Jeśli komórka jest zajęta lub gra już zakończona
 
-      // Jeżeli gracz dodaje 4 kółko lub 4 krzyżyki, usuń najstarszy
+      // Dodaj symbol do planszy
+      board[index] = currentPlayer;
+      const symbolData = { symbol: currentPlayer, index: index };
+      symbols[currentPlayer].push(symbolData); // Dodajemy symbol do tablicy
+
+      // Zaktualizowanie komórki
+      updateCell(index, currentPlayer);
+      document.querySelectorAll('.cell')[index].disabled = true; // Zablokuj przycisk
+
+      // Wyróżnij najstarszy symbol (jeśli są już 3 symbole)
+      highlightOldestSymbol('O');
+      highlightOldestSymbol('X');
+
+      // Sprawdzenie statusu gry
+      updateStatus();
+
+      // Jeśli są już 3 symbole, usuń najstarszy, gdy gracz chce dodać czwórty symbol
       if (currentPlayer === 'O' && symbols['O'].length >= 3) {
         removeOldestSymbol('O');
       }
@@ -179,64 +190,35 @@
         removeOldestSymbol('X');
       }
 
-      // Ustawienie symbolu gracza
-      board[index] = currentPlayer;
-      const symbolData = {
-        symbol: currentPlayer,
-        index: index
-      };
-
-      symbols[currentPlayer].push(symbolData);  // Dodajemy symbol do tablicy
-
-      // Zaktualizowanie UI
-      updateCell(index, board[index]);
-      document.querySelectorAll('.cell')[index].disabled = true;
-
-      // Zaktualizowanie statusu gry
-      updateStatus();
-
-      // Wyróżnij najstarszy symbol, jeśli to konieczne
-      highlightOldestSymbol('O');
-      highlightOldestSymbol('X');
-
-      // Przełączamy turę
+      // Zmiana tury
       currentPlayer = currentPlayer === 'O' ? 'X' : 'O';
     }
 
-    // Inicjalizacja gry
+    // Funkcja do inicjalizacji gry
     function initGame() {
-      board = Array(9).fill(null);  // Wyczyść planszę
-      symbols = { 'O': [], 'X': [] }; // Resetuj tablicę symboli
-      currentPlayer = 'O';  // Zaczyna gracz O
-
-      // Zresetuj wygląd komórek i przywróć je do kliknięcia
+      board = Array(9).fill(null);
+      symbols = { 'O': [], 'X': [] };
+      currentPlayer = 'O';
       document.querySelectorAll('.cell').forEach((cell, index) => {
-        cell.textContent = '';  // Usuń symbol
-        cell.disabled = false;  // Włącz przycisk
-        cell.classList.remove('symbol-O', 'symbol-X', 'old-symbol'); // Usuń kolory i wyróżnienia
-        // Usuwamy poprzedni nasłuchiwacz, aby uniknąć wielokrotnego dodawania
-        cell.removeEventListener('click', handleCellClick);
-        // Dodajemy nowy nasłuchiwacz
-        cell.addEventListener('click', () => handleCellClick(index));  // Dodaj nasłuchiwanie zdarzeń
+        cell.textContent = '';
+        cell.disabled = false;
+        cell.classList.remove('symbol-O', 'symbol-X', 'old-symbol');
+        cell.removeEventListener('click', () => handleCellClick(index));
+        cell.addEventListener('click', () => handleCellClick(index));
       });
-
-      // Zaktualizuj status
       updateStatus();
     }
 
-    // Obsługuje resetowanie gry
+    // Funkcja resetująca grę
     function resetGame() {
-      initGame();  // Uruchom inicjalizację gry
+      initGame();
     }
 
-    // Rozpocznij grę
-    window.onload = () => {
-      initGame();  // Zainicjuj grę po załadowaniu strony
+    // Zdarzenie resetu gry
+    document.getElementById('resetButton').addEventListener('click', resetGame);
 
-      // Obsługa kliknięcia przycisku resetu
-      const resetButton = document.getElementById('resetButton');
-      resetButton.addEventListener('click', resetGame);  // Nasłuchaj kliknięcia przycisku resetu
-    };
+    // Inicjalizacja gry po załadowaniu strony
+    window.onload = initGame;
   </script>
 </body>
 </html>
