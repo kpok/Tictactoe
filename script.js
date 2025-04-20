@@ -80,5 +80,16 @@ function initGame() {
   updateStatus();
 }
 
+// Obsługuje resetowanie gry
+function resetGame() {
+  initGame();
+}
+
 // Rozpocznij grę
-window.onload = initGame;
+window.onload = () => {
+  initGame();
+
+  // Obsługa kliknięcia przycisku resetu
+  const resetButton = document.getElementById('resetButton');
+  resetButton.addEventListener('click', resetGame);
+};
