@@ -16,7 +16,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'
+        node-version: '18.19'  # Zaktualizowana wersja Node.js
 
     - name: Install dependencies
       run: |
@@ -33,3 +33,4 @@ jobs:
         branch: gh-pages      # Branch to deploy to
         folder: dist/tictactoe # Folder containing the build output
         token: ${{ secrets.GITHUB_TOKEN }} # GitHub token to authenticate
+        
