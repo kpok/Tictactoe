@@ -34,3 +34,18 @@ button.cell {
 button.cell:disabled {
   background-color: #e0e0e0;
 }
+
+#resetButton {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#resetButton:hover {
+  background-color: #0056b3;
+}
