@@ -1,0 +1,13 @@
+<h1>{{ title }}</h1>
+<div class="board">
+  <div
+    *ngFor="let cell of board; let i = index"
+    class="cell"
+    [class.x]="cell === 'x'"
+    [class.o]="cell === 'o'"
+    (click)="handleCellClick(i)"
+  >
+    {{ cell }}
+  </div>
+</div>
+<button (click)="resetGame()">Resetuj grę</button>
