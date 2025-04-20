@@ -20,7 +20,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        npm ci  # Instalacja zależności z package-lock.json, co zapewnia czystą instalację
+        npm install  # Zmienione na npm install zamiast npm ci
 
     - name: Install Angular CLI globally
       run: npm install -g @angular/cli
