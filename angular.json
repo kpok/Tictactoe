@@ -1,0 +1,13 @@
+{
+  "projects": {
+    "tictactoe": {
+      "architect": {
+        "build": {
+          "options": {
+            "baseHref": "/Tictactoe/"
+          }
+        }
+      }
+    }
+  }
+}
