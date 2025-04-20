@@ -1,3 +1,168 @@
 <!DOCTYPE html>
-<html lang="pl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Kółko i Krzyżyk</title><style>body{font-family:Arial,sans-serif;text-align:center;margin:50px}h1{font-size:36px}#status{font-size:20px;margin-bottom:20px}.game-board{display:grid;grid-template-columns:repeat(3,100px);grid-template-rows:repeat(3,100px);gap:10px;justify-content:center;margin-top:20px}button.cell{width:100px;height:100px;font-size:36px;background-color:#f0f0f0;border:2px solid #ccc;cursor:pointer}button.cell:disabled{background-color:#e0e0e0}#resetButton{margin-top:20px;padding:10px 20px;font-size:18px;background-color:#007bff;color:white;border:none;border-radius:5px;cursor:pointer}#resetButton:hover{background-color:#0056b3}</style></head><body><h1>Kółko i Krzyżyk</h1><div id="status">Tura gracza: O</div><div class="game-board"><button class="cell" data-index="0"></button><button class="cell" data-index="1"></button><button class="cell" data-index="2"></button><button class="cell" data-index="3"></button><button class
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kółko i Krzyżyk</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+
+    h1 {
+      font-size: 36px;
+    }
+
+    #status {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button.cell {
+      width: 100px;
+      height: 100px;
+      font-size: 36px;
+      background-color: #f0f0f0;
+      border: 2px solid #ccc;
+      cursor: pointer;
+    }
+
+    button.cell:disabled {
+      background-color: #e0e0e0;
+    }
+
+    #resetButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #resetButton:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kółko i Krzyżyk</h1>
+  <div id="status">Tura gracza: O</div>
+  <div class="game-board">
+    <button class="cell" data-index="0"></button>
+    <button class="cell" data-index="1"></button>
+    <button class="cell" data-index="2"></button>
+    <button class="cell" data-index="3"></button>
+    <button class="cell" data-index="4"></button>
+    <button class="cell" data-index="5"></button>
+    <button class="cell" data-index="6"></button>
+    <button class="cell" data-index="7"></button>
+    <button class="cell" data-index="8"></button>
+  </div>
+  <button id="resetButton">Resetuj grę</button>
+
+  <script>
+    // Przechowuje stan gry
+    let board = Array(9).fill(null);
+    let currentPlayer = 'O'; // Zaczyna gracz O
+
+    // Zwraca status gry (zwycięzca lub remisy)
+    function checkWinner(board) {
+      const lines = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // wiersze
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // kolumny
+        [0, 4, 8], [2, 4, 6] // przekątne
+      ];
+
+      for (let [a, b, c] of lines) {
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+          return board[a]; // Zwycięzca (O lub X)
+        }
+      }
+      return null;
+    }
+
+    // Sprawdza, czy plansza jest pełna (remis)
+    function isBoardFull(board) {
+      return board.every(cell => cell !== null);
+    }
+
+    // Aktualizuje status gry
+    function updateStatus() {
+      const status = document.getElementById('status');
+      const winner = checkWinner(board);
+      
+      if (winner) {
+        status.textContent = `Gracz ${winner} wygrał!`;
+      } else if (isBoardFull(board)) {
+        status.textContent = 'Remis!';
+      } else {
+        status.textContent = `Tura gracza: ${currentPlayer}`;
+      }
+    }
+
+    // Obsługuje kliknięcie w komórkę planszy
+    function handleCellClick(index) {
+      if (board[index] || checkWinner(board)) return; // Komórka już zajęta lub gra zakończona
+
+      // Ustawienie symbolu gracza
+      board[index] = currentPlayer;
+
+      // Przełączamy turę
+      currentPlayer = currentPlayer === 'O' ? 'X' : 'O';
+
+      // Zaktualizowanie UI
+      const cell = document.querySelectorAll('.cell')[index];
+      cell.textContent = board[index];
+      cell.disabled = true;
+
+      // Zaktualizowanie statusu gry
+      updateStatus();
+    }
+
+    // Inicjalizacja gry
+    function initGame() {
+      board = Array(9).fill(null);  // Wyczyść planszę
+      currentPlayer = 'O';  // Zaczyna gracz O
+
+      // Zresetuj wygląd komórek i przywróć je do kliknięcia
+      const cells = document.querySelectorAll('.cell');
+      cells.forEach((cell, index) => {
+        cell.textContent = '';  // Usuń symbol
+        cell.disabled = false;  // Włącz przycisk
+        cell.addEventListener('click', () => handleCellClick(index));  // Dodaj nasłuchiwanie zdarzeń
+      });
+
+      // Zaktualizuj status
+      updateStatus();
+    }
+
+    // Obsługuje resetowanie gry
+    function resetGame() {
+      initGame();  // Uruchom inicjalizację gry
+    }
+
+    // Rozpocznij grę
+    window.onload = () => {
+      initGame();  // Zainicjuj grę po załadowaniu strony
+
+      // Obsługa kliknięcia przycisku resetu
+      const resetButton = document.getElementById('resetButton');
+      resetButton.addEventListener('click', resetGame);  // Nasłuchaj kliknięcia przycisku resetu
+    };
+  </script>
+</body>
+</html>
