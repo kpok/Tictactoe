@@ -56,6 +56,12 @@
     #resetButton:hover {
       background-color: #0056b3;
     }
+
+    /* Styl dla najstarszego symbolu */
+    .old-symbol {
+      background-color: #f8d7da;
+      border: 2px solid red;
+    }
   </style>
 </head>
 <body>
@@ -121,6 +127,15 @@
         board[indexToRemove] = null;
         document.querySelectorAll('.cell')[indexToRemove].textContent = '';
         document.querySelectorAll('.cell')[indexToRemove].disabled = false;
+        document.querySelectorAll('.cell')[indexToRemove].classList.remove('old-symbol'); // Usuń wyróżnienie
+      }
+    }
+
+    // Funkcja do wyróżnienia najstarszego symbolu
+    function highlightOldestSymbol(symbol) {
+      const indexToHighlight = board.indexOf(symbol);
+      if (indexToHighlight !== -1) {
+        document.querySelectorAll('.cell')[indexToHighlight].classList.add('old-symbol');
       }
     }
 
@@ -148,6 +163,14 @@
 
       // Zaktualizowanie statusu gry
       updateStatus();
+
+      // Wyróżnij najstarszy symbol, jeśli to konieczne
+      if (board.filter(cell => cell === 'O').length >= 3) {
+        highlightOldestSymbol('O');
+      }
+      if (board.filter(cell => cell === 'X').length >= 3) {
+        highlightOldestSymbol('X');
+      }
     }
 
     // Inicjalizacja gry
@@ -159,6 +182,7 @@
       document.querySelectorAll('.cell').forEach((cell, index) => {
         cell.textContent = '';  // Usuń symbol
         cell.disabled = false;  // Włącz przycisk
+        cell.classList.remove('old-symbol'); // Usuń wyróżnienie
         // Usuwamy poprzedni nasłuchiwacz, aby uniknąć wielokrotnego dodawania
         cell.removeEventListener('click', handleCellClick);
         // Dodajemy nowy nasłuchiwacz
