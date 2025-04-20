@@ -1,0 +1,48 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  install-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Ustaw wersję Node.js zgodnie z Twoimi potrzebami
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Check if there are changes to commit
+        run: |
+          git diff --exit-code || echo "Changes detected"
+
+      - name: Commit changes if needed
+        run: |
+          if [[ $(git status --porcelain) ]]; then
+            git config --global user.name "github-actions"
+            git config --global user.email "github-actions@github.com"
+            git add .
+            git commit -m "Add node_modules or package-lock.json changes"
+            git push
+          else
+            echo "No changes to commit"
+          fi
