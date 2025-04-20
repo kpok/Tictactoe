@@ -132,7 +132,7 @@
       }
     }
 
-    // Funkcja do usunięcia najstarszego symbolu
+    // Sprawdza, który symbol ma być usunięty
     function removeOldestSymbol(symbol) {
       const oldestSymbol = symbols[symbol][0]; // Pierwszy symbol w tablicy
       board[oldestSymbol.index] = null; // Usuwamy symbol z planszy
@@ -144,7 +144,7 @@
 
     // Funkcja do podświetlenia najstarszego symbolu
     function highlightOldestSymbol(symbol) {
-      if (symbols[symbol].length >= 3) {
+      if (symbols[symbol].length === 3) {
         const oldestSymbol = symbols[symbol][0]; // Najstarszy symbol
         const cell = document.querySelectorAll('.cell')[oldestSymbol.index];
         cell.classList.add('old-symbol'); // Podświetlamy komórkę
@@ -183,10 +183,10 @@
       updateStatus();
 
       // Jeśli są już 3 symbole, usuń najstarszy, gdy gracz chce dodać czwórty symbol
-      if (currentPlayer === 'O' && symbols['O'].length >= 3) {
+      if (currentPlayer === 'O' && symbols['O'].length > 3) {
         removeOldestSymbol('O');
       }
-      if (currentPlayer === 'X' && symbols['X'].length >= 3) {
+      if (currentPlayer === 'X' && symbols['X'].length > 3) {
         removeOldestSymbol('X');
       }
 
