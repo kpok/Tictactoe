@@ -138,16 +138,17 @@
 
     // Usuwa najstarszy symbol z planszy
     function removeOldestSymbol(symbol) {
-      const oldestSymbol = symbols[symbol].shift();  // Usuwa najstarszy symbol z tablicy
-      board[oldestSymbol.index] = null;  // Aktualizuje planszę
+      const oldestSymbol = symbols[symbol][0];  // Pierwszy symbol (najstarszy)
+      board[oldestSymbol.index] = null;  // Usuwamy symbol z planszy
       document.querySelectorAll('.cell')[oldestSymbol.index].textContent = ''; // Usuwamy symbol z komórki
       document.querySelectorAll('.cell')[oldestSymbol.index].disabled = false;  // Włączamy komórkę
       document.querySelectorAll('.cell')[oldestSymbol.index].classList.remove('old-symbol'); // Usuwamy wyróżnienie
+      symbols[symbol].shift();  // Usuwamy najstarszy symbol z tablicy
     }
 
     // Funkcja do wyróżnienia najstarszego symbolu
     function highlightOldestSymbol(symbol) {
-      if (symbols[symbol].length > 0) {
+      if (symbols[symbol].length >= 3) {
         const oldestSymbol = symbols[symbol][0];  // Najstarszy symbol
         document.querySelectorAll('.cell')[oldestSymbol.index].classList.add('old-symbol'); // Wyróżniamy komórkę
       }
