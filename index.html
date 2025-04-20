@@ -57,10 +57,20 @@
       background-color: #0056b3;
     }
 
-    /* Styl dla najstarszego symbolu */
+    /* Styl dla symbolu O (zielony) */
+    .symbol-O {
+      color: green;
+    }
+
+    /* Styl dla symbolu X (niebieski) */
+    .symbol-X {
+      color: blue;
+    }
+
+    /* Styl dla najstarszego symbolu, który ma zostać usunięty (pomarańczowy) */
     .old-symbol {
       background-color: #f8d7da;
-      border: 2px solid red;
+      border: 2px solid orange;
     }
   </style>
 </head>
@@ -139,6 +149,19 @@
       }
     }
 
+    // Funkcja do aktualizacji wyglądu komórki
+    function updateCell(index, symbol) {
+      const cell = document.querySelectorAll('.cell')[index];
+      cell.textContent = symbol;
+
+      // Dodaj kolor do symbolu
+      if (symbol === 'O') {
+        cell.classList.add('symbol-O');
+      } else if (symbol === 'X') {
+        cell.classList.add('symbol-X');
+      }
+    }
+
     // Obsługuje kliknięcie w komórkę planszy
     function handleCellClick(index) {
       if (board[index] || checkWinner(board)) return; // Komórka już zajęta lub gra zakończona
@@ -158,7 +181,7 @@
       currentPlayer = currentPlayer === 'O' ? 'X' : 'O';
 
       // Zaktualizowanie UI
-      document.querySelectorAll('.cell')[index].textContent = board[index];
+      updateCell(index, board[index]);
       document.querySelectorAll('.cell')[index].disabled = true;
 
       // Zaktualizowanie statusu gry
@@ -182,7 +205,7 @@
       document.querySelectorAll('.cell').forEach((cell, index) => {
         cell.textContent = '';  // Usuń symbol
         cell.disabled = false;  // Włącz przycisk
-        cell.classList.remove('old-symbol'); // Usuń wyróżnienie
+        cell.classList.remove('symbol-O', 'symbol-X', 'old-symbol'); // Usuń kolory i wyróżnienia
         // Usuwamy poprzedni nasłuchiwacz, aby uniknąć wielokrotnego dodawania
         cell.removeEventListener('click', handleCellClick);
         // Dodajemy nowy nasłuchiwacz
