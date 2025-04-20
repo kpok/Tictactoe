@@ -4,7 +4,59 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kółko i Krzyżyk</title>
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+
+    h1 {
+      font-size: 36px;
+    }
+
+    #status {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .game-board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    button.cell {
+      width: 100px;
+      height: 100px;
+      font-size: 36px;
+      background-color: #f0f0f0;
+      border: 2px solid #ccc;
+      cursor: pointer;
+    }
+
+    button.cell:disabled {
+      background-color: #e0e0e0;
+    }
+
+    #resetButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #resetButton:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
   <h1>Kółko i Krzyżyk</h1>
@@ -21,6 +73,7 @@
     <button class="cell" data-index="8"></button>
   </div>
   <button id="resetButton">Resetuj grę</button>
-  <script src="script.js"></script>
-</body>
-</html>
+
+  <script>
+    // Przechowuje stan gry
+    
