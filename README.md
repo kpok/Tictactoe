@@ -19,11 +19,19 @@ Otwórz http://localhost:3000. Bez zależności runtime. `PORT` i `HOST` zmienia
 
 ## Co jest gotowe
 
-- Polska i angielska wersja, responsywna autorska oprawa SVG/CSS, klawiatura i ograniczenie animacji.
+- 16 języków, responsywna autorska oprawa SVG/CSS, klawiatura i ograniczenie animacji.
 - Lokalna gra dwóch osób, 3 poziomy komputera w Web Workerze, wynik i kolejne rundy.
 - Zapis lokalnej partii, ustawień i wyników; PWA z grą offline po pierwszym pełnym załadowaniu.
 - Prywatne pokoje online: kod/link, oddzielne tokeny, autorytatywny serwer, reconnect po odświeżeniu tej samej karty, rewanż za zgodą obu osób.
 - Testy zasad, API HTTP i Playwright; CI buduje i testuje przy pushu na `main` i w PR.
+
+## Języki
+
+Polski, English, Tagalog, Español, Português (wariant brazylijski), Français, Deutsch, Italiano, Русский, العربية, हिन्दी, 简体中文, 日本語, 한국어, Bahasa Indonesia i বাংলা.
+
+Wybór znajduje się w nagłówku. Pierwsza wizyta używa obsługiwanego języka przeglądarki (m.in. `fil-PH` → Tagalog); ręczny wybór ma pierwszeństwo i zapisuje się lokalnie. Nie zmienia partii, wyniku ani sesji pokoju. Nieobsługiwane preferencje mają fallback do angielskiego. Arabski używa RTL, a plansza i kody pokojów zachowują stabilny układ LTR. Wszystkie katalogi są dostępne offline po pełnym załadowaniu PWA.
+
+`web/locales/*.js` zawiera po111 tekstów: interfejs, zasady, prywatność, komunikaty błędów i dostępność. `web/i18n.js` normalizuje języki i udostępnia katalogi. Dodając język, uzupełnij cały katalog, listę języków i listę precache w `web/sw.js`; testy pilnują kompletności i dozwolonego HTML. Przed komercyjną lokalizacją na dany rynek wskazana jest redakcja przez native speakera.
 
 ## Zasady
 

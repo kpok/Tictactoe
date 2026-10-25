@@ -1,5 +1,5 @@
-const CACHE='threefold-v2';
-const FILES=['./','./index.html','./styles.css','./app.js','./engine.js','./ai.js','./ai-worker.js','./icon.svg','./manifest.webmanifest'];
+const CACHE='threefold-v3-i18n';
+const FILES=['./','./index.html','./styles.css','./app.js','./engine.js','./ai.js','./ai-worker.js','./icon.svg','./manifest.webmanifest','./i18n.js',...['pl','en','tl','es','pt','fr','de','it','ru','ar','hi','zh-CN','ja','ko','id','bn'].map(code=>`./locales/${code}.js`)];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('threefold-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener('fetch',event=>{

@@ -47,7 +47,7 @@ test('AI plays and switching modes cancels an obsolete worker',async({page})=>{
   await expect(page.locator('#move-count')).toContainText('0/100');
 });
 test('language, instructions, keyboard focus and mobile layout',async({page})=>{
-  await page.goto('/');await page.locator('#language').click();
+  await page.goto('/');await page.locator('#language').selectOption('en');
   await expect(page.locator('html')).toHaveAttribute('lang','en');
   await page.locator('#help').click();await expect(page.locator('#help-dialog')).toBeVisible();
   await expect(page.locator('#help-dialog')).toContainText('oldest disappears');
@@ -68,13 +68,16 @@ test('local game survives reload and works when the server is unreachable',async
     await stopServer(server);await reloadLikeUser(page);
     await expect(cell(page,4)).toHaveAttribute('data-mark','O');await expect(cell(page,0)).toHaveAttribute('data-mark','X');
     await clickCell(page,8);await expect(cell(page,8)).toHaveAttribute('data-mark','O');
+    await page.locator('#language').selectOption('tl');await reloadLikeUser(page);
+    await expect(page.locator('html')).toHaveAttribute('lang','tl');
+    await expect(page.locator('[data-mode="ai"]')).toContainText('Kompyuter');
   }finally{if(server.listening)await stopServer(server);}
 });
 test('two isolated browsers join, play, reconnect and accept rematch together',async({browser,baseURL},testInfo)=>{
   // Two recorded mobile contexts plus round-trip polling need a larger total budget on hosted WebKit.
   // Individual assertions retain the same short timeout; no functional check is relaxed.
   test.setTimeout(60_000);
-  const use=testInfo.project.use;const options={viewport:use.viewport,userAgent:use.userAgent,deviceScaleFactor:use.deviceScaleFactor,isMobile:use.isMobile,hasTouch:use.hasTouch,recordVideo:{dir:testInfo.outputPath('online-video')}};
+  const use=testInfo.project.use;const options={locale:use.locale,viewport:use.viewport,userAgent:use.userAgent,deviceScaleFactor:use.deviceScaleFactor,isMobile:use.isMobile,hasTouch:use.hasTouch,recordVideo:{dir:testInfo.outputPath('online-video')}};
   const a=await browser.newContext(options),b=await browser.newContext(options);
   try{
     const first=await a.newPage(),second=await b.newPage();

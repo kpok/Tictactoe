@@ -1,23 +1,18 @@
 import { newGame, other, play, validGame } from './engine.js';
+import { LANGUAGES, message, hasMessage, normalizeLanguage, languageFromPreferences, directionFor } from './i18n.js';
 const $ = id => document.getElementById(id);
-const EN = {
- tagline:'SMALL BOARD. BIG DIFFERENCE.',eyebrow:'TIC-TAC-TOE. WITH A TWIST.',headline:'Three marks.<br> <span>New possibilities.</span>',lead:'You know the rules. Now forget a permanent board. Place your fourth mark and your oldest disappears. Think one move ahead.',introBottom:'A little break.<br>One more rematch.',playNow:'MAKE YOUR NEXT MOVE',chooseGame:'Play your way',modeAi:'Computer',modeLocal:'Pass & play',modeOnline:'Online',difficulty:'Level',easy:'Relaxed',medium:'Clever',hard:'Challenging',roomOptions:'Room',copyLink:'Copy link',match:'MATCH',fadeHint:'Dashed border = this mark will disappear',newRound:'New round',resetScore:'Reset score',offlineNote:'No account. No rush. Local play works offline too.',howLabel:'A SIMPLE TWIST',howTitle:'Fewer marks.<br> More strategy.',rule1Title:'Three in a row',rule1:'Line up three of your marks horizontally, vertically or diagonally.',rule2Title:'The fourth changes everything',rule2:'Already have three? Your next move removes your oldest mark.',rule3Title:'Plan the disappearance',rule3:'Watch the marked square. Your defence will not stay there forever.',footer:'THREE MARKS ARE JUST THE BEGINNING.',privacy:'Privacy',helpTitle:'A small change. A different game.',helpBody:'O starts. Choose an empty square. Each player has up to 3 marks: on the next move, the oldest disappears before we check for a win. Occupied squares, including your fading mark, are unavailable. Three repetitions of the same position with the same mark order and turn, or 100 moves, mean a draw. The starting player alternates each round.',helpOnline:'Online: create a room and send a friend its link or code. There is no random matchmaking or chat. Both players must agree to a rematch.',gotIt:'Got it. Let’s play.',onlineTitle:'A friend. One code. Let’s play.',onlineBody:'Create a private room or enter your friend’s code. Rooms expire after inactivity and may disappear when the server restarts.',createRoom:'Create room ↗',or:'OR JOIN A FRIEND',roomCode:'Room code',join:'Join',leaveRoom:'Leave room on this device',privacyBody:'No ads, analytics or accounts. Settings, your local game and scores stay in this browser. Online, the server keeps room state and random player tokens in memory. Your session token stays in this browser tab. Hosting may process IP addresses to serve and secure connections. Never share your session token. The room code/link lets a friend claim the open seat. Clearing data affects this browser; server rooms expire automatically.',clearData:'Clear local data'
-};
-const D = {
- pl:{newRound:'Nowa runda',you:'Ty',computer:'Komputer',playerO:'Gracz O',playerX:'Gracz X',friend:'Znajomy',localNote:'Dwie osoby · jeden ekran',aiNote:'Ty grasz kółkiem',onlineNote:'Prywatny pokój · bez konta',room:'POKÓJ',turn:'Ruch gracza',yourTurn:'Twój ruch',theirTurn:'Ruch znajomego',thinking:'Komputer myśli…',waiting:'Czekamy na znajomego…',connect:'Utwórz pokój lub dołącz do znajomego',reconnecting:'Łączę ponownie…',offline:'Brak sieci. Lokalnie nadal możesz grać.',won:'Wygrywa',youWon:'Wygrywasz!',aiWon:'Komputer wygrywa',draw:'Remis',repeat:'Pozycja powtórzyła się trzy razy.',limit:'Limit 100 ruchów. Czas na rewanż!',ended:'Runda zakończona',rematch:'Chcę rewanż',waitRematch:'Czekamy na zgodę…',rematchInvite:'Znajomy chce rewanż',roundDetail:'Trzy w linii. Dobra robota!',moves:'ruchów',square:'Pole',empty:'puste',fades:'najstarszy, zniknie przy następnym ruchu',copied:'Link skopiowany',copyFallback:'Skopiuj adres z paska lub przekaż kod pokoju.',savedError:'Nie można zapisać danych. Gra nadal działa.',networkError:'Nie udało się połączyć. Spróbuj ponownie.',room_not_found:'Pokój nie istnieje lub wygasł. Utwórz nowy.',room_full:'Pokój jest już pełny.',unauthorized:'Sesja pokoju wygasła. Utwórz nowy pokój.',rate_limited:'Za dużo żądań. Odczekaj chwilę.',rooms_full:'Serwer jest pełny. Spróbuj później.',stale_revision:'Plansza się zmieniła. Odświeżam pozycję.',not_your_turn:'Teraz ruch przeciwnika.',illegal_move:'Ten ruch jest niedostępny.',waiting_for_opponent:'Poczekaj, aż dołączy znajomy.',game_not_finished:'Najpierw dokończ rundę.',already_requested:'Twoja zgoda na rewanż została zapisana.',resetConfirm:'Rozpocząć nową rundę? Obecna partia zostanie zakończona.',scoreConfirm:'Wyzerować wyniki tego trybu?',clearConfirm:'Usunąć lokalną partię, ustawienia i wyniki?',dataCleared:'Lokalne dane usunięte.',soundOn:'Wyłącz dźwięk',soundOff:'Włącz dźwięk',help:'Zasady gry',close:'Zamknij',board:'Plansza 3 na 3',mode:'Tryb gry',onlineConnection:'Pokój online · odświeżanie co sekundę',serviceUnavailable:'Tryb online wymaga serwera Threefold. Na tej stronie możesz grać lokalnie lub z komputerem.',pending:'Wysyłam ruch…',emptyCode:'Wpisz sześcioznakowy kod pokoju.',reset:'Nowa runda',aiError:'Komputer jest niedostępny. Wybierz grę na zmianę.',install:'Gra jest gotowa do działania offline.'},
- en:{newRound:'New round',you:'You',computer:'Computer',playerO:'Player O',playerX:'Player X',friend:'Friend',localNote:'Two players · one screen',aiNote:'You play as O',onlineNote:'Private room · no account',room:'ROOM',turn:'Player to move:',yourTurn:'Your move',theirTurn:'Your friend’s move',thinking:'Computer is thinking…',waiting:'Waiting for your friend…',connect:'Create a room or join a friend',reconnecting:'Reconnecting…',offline:'You’re offline. Local games still work.',won:'Winner:',youWon:'You win!',aiWon:'Computer wins',draw:'Draw',repeat:'The same position occurred three times.',limit:'100 moves. Time for a rematch!',ended:'Round finished',rematch:'Play again',waitRematch:'Waiting for agreement…',rematchInvite:'Your friend wants a rematch',roundDetail:'Three in a row. Well played!',moves:'moves',square:'Square',empty:'empty',fades:'oldest, disappears on your next move',copied:'Link copied',copyFallback:'Copy the address bar or share the room code.',savedError:'Storage unavailable. You can still play.',networkError:'Could not connect. Please try again.',room_not_found:'Room not found or expired. Create a new one.',room_full:'This room is already full.',unauthorized:'Room session expired. Create a new room.',rate_limited:'Too many requests. Please wait a moment.',rooms_full:'Server is full. Try again later.',stale_revision:'The board changed. Refreshing the position.',not_your_turn:'It is your opponent’s turn.',illegal_move:'That move is unavailable.',waiting_for_opponent:'Wait for your friend to join.',game_not_finished:'Finish the current round first.',already_requested:'Your rematch vote is saved.',resetConfirm:'Start a new round? This will end the current game.',scoreConfirm:'Reset scores for this mode?',clearConfirm:'Remove local game, settings and scores?',dataCleared:'Local data cleared.',soundOn:'Mute sound',soundOff:'Enable sound',help:'How to play',close:'Close',board:'3 by 3 board',mode:'Game mode',onlineConnection:'Online room · updates every second',serviceUnavailable:'Online play needs a Threefold server. You can play locally or against the computer here.',pending:'Sending move…',emptyCode:'Enter a six-character room code.',reset:'New round',aiError:'Computer unavailable. Please select pass & play.',install:'Ready for offline play.'}
-};
-let language='pl', mode='ai', difficulty='medium', sound=false, localGame=newGame(), game=localGame;
+let language=languageFromPreferences(navigator.languages || [navigator.language]), mode='ai', difficulty='medium', sound=false, localGame=newGame(), game=localGame;
 let scores={ai:{O:0,X:0},local:{O:0,X:0},online:{O:0,X:0}}, counted=false;
 let session=null, room=null, onlineHealthy=true, busy=false, pollTimer, pollSequence=0, worker=null, generation=0, pendingId=0, aiUnavailable=false;
 let toastTimer, audio;
 const storageKey='threefold.v1';
-const t=key=>D[language][key] || key;
-const staticPL=new Map([...document.querySelectorAll('[data-i18n],[data-i18n-html]')].map(el=>[el,el.innerHTML]));
+const t=key=>message(language,key);
+const richTextKeys=new Set(['headline','introBottom','howTitle']);
+for(const item of LANGUAGES){const option=document.createElement('option');option.value=item.code;option.textContent=`${item.short} · ${item.name}`;option.lang=item.code;option.dir=item.direction||'ltr';$('language').append(option);}
 try {
   const saved=JSON.parse(localStorage.getItem(storageKey));
   if(saved) {
-    language=saved.language==='en'?'en':'pl';mode=saved.mode==='local'?'local':'ai';
+    language=normalizeLanguage(saved.language)||language;mode=saved.mode==='local'?'local':'ai';
     difficulty=['easy','medium','hard'].includes(saved.difficulty)?saved.difficulty:'medium';sound=saved.sound===true;
     if(validGame(saved.game)) localGame=saved.game;
     if(saved.scores && ['ai','local'].every(m=>['O','X'].every(p=>Number.isInteger(saved.scores[m]?.[p])&&saved.scores[m][p]>=0&&saved.scores[m][p]<1e7))) {scores.ai=saved.scores.ai;scores.local=saved.scores.local;}
@@ -42,11 +37,18 @@ function soundEffect(win=false) {
 function cancelAI(){generation++;if(worker){worker.terminate();worker=null;}pendingId++;}
 function translate(){
   document.documentElement.lang=language;
-  for(const [el,pl] of staticPL){const key=el.dataset.i18n||el.dataset.i18nHtml;if(language==='pl')el.innerHTML=pl;else if(EN[key])el.innerHTML=EN[key];}
-  $('language').textContent=language==='pl'?'EN':'PL';$('language').setAttribute('aria-label',language==='pl'?'Switch to English':'Przełącz na polski');
+  document.documentElement.dir=directionFor(language);
+  document.title=t('appTitle');
+  document.querySelector('meta[name="description"]').content=t('description');
+  for(const el of document.querySelectorAll('[data-i18n],[data-i18n-html]')){
+    const key=el.dataset.i18n||el.dataset.i18nHtml;
+    // Rich markup is restricted to three author-controlled catalog entries.
+    if(richTextKeys.has(key))el.innerHTML=t(key);else el.textContent=t(key);
+  }
+  $('language').value=language;$('language').setAttribute('aria-label',t('languageLabel'));$('language').title=t('languageLabel');
   $('help').setAttribute('aria-label',t('help'));$('help').title=t('help');
   document.querySelectorAll('.close-dialog.icon-button').forEach(el=>el.setAttribute('aria-label',t('close')));
-  $('board').setAttribute('aria-label',t('board'));document.querySelector('.mode-tabs').setAttribute('aria-label',t('mode'));
+  $('board').setAttribute('aria-label',t('board'));document.querySelector('.game-area').setAttribute('aria-label',t('chooseGame'));document.querySelector('.mode-tabs').setAttribute('aria-label',t('mode'));
   $('difficulty').value=difficulty;
 }
 const markSVG=p=>p==='O'?'<svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="23"/></svg>':'<svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M13 13L51 51M51 13L13 51"/></svg>';
@@ -85,7 +87,7 @@ function render(){
   if(mode==='online'&&ended&&room?.rematch[other(session?.seat||'O')])$('result-detail').textContent=t('rematchInvite');
   $('online-banner').hidden=mode!=='online'||!session;$('room-label').textContent=t('room');$('room-code').textContent=session?.code||'';
   $('leave-room').hidden=!session;
-  $('connection-note').textContent=mode==='online'?t('onlineConnection'):(language==='pl'?staticPL.get($('connection-note')):EN.offlineNote);
+  $('connection-note').textContent=mode==='online'?t('onlineConnection'):t('offlineNote');
   $('sound').textContent=sound?'♫':'♪';$('sound').setAttribute('aria-label',t(sound?'soundOn':'soundOff'));$('sound').setAttribute('aria-pressed',String(sound));$('sound').title=t(sound?'soundOn':'soundOff');
 }
 function finishRound(){
@@ -150,7 +152,7 @@ async function enterRoom(joinCode){
     const data=await api(joinCode?`/${joinCode}/join`:'',{},null);if(expected!==generation)return;
     session={code:data.code,token:data.token,seat:data.seat};saveSession();room=null;counted=false;scores.online={O:0,X:0};onlineHealthy=true;acceptRoom(data.room);$('online-dialog').close();
     const url=new URL(location.href);url.searchParams.set('room',session.code);history.replaceState(null,'',url);poll();
-  }catch(error){if(expected===generation)$('online-error').textContent=t(error.message in D[language]?error.message:'networkError');}
+  }catch(error){if(expected===generation)$('online-error').textContent=t(hasMessage(error.message)?error.message:'networkError');}
   finally{if(expected===generation){busy=false;$('create-room').disabled=false;render();if(session)poll();}}
 }
 async function sendRoomAction(action,extra={}){
@@ -160,16 +162,16 @@ async function sendRoomAction(action,extra={}){
   try{
     let next;
     try{next=await api(`/${auth.code}/${action}`,body,auth);}
-    catch(error){if(!(error.message in D[language])&&expected===generation)next=await api(`/${auth.code}/${action}`,body,auth);else throw error;}
+    catch(error){if(!(hasMessage(error.message))&&expected===generation)next=await api(`/${auth.code}/${action}`,body,auth);else throw error;}
     if(expected===generation&&session===auth)acceptRoom(next);
-  }catch(error){if(expected===generation){toast(t(error.message in D[language]?error.message:'networkError'));}}
+  }catch(error){if(expected===generation){toast(t(hasMessage(error.message)?error.message:'networkError'));}}
   finally{if(expected===generation){busy=false;render();poll();}}
 }
 document.querySelectorAll('[data-mode]').forEach(el=>el.addEventListener('click',()=>setMode(el.dataset.mode)));
 $('difficulty').addEventListener('change',()=>{difficulty=$('difficulty').value;save();cancelAI();scheduleAI();render();});
 $('restart').addEventListener('click',()=>mode==='online'?sendRoomAction('rematch'):localRestart());
 $('reset-score').addEventListener('click',()=>{if(confirm(t('scoreConfirm'))){scores[mode]={O:0,X:0};save();render();}});
-$('language').addEventListener('click',()=>{language=language==='pl'?'en':'pl';translate();render();save();});
+$('language').addEventListener('change',()=>{language=normalizeLanguage($('language').value)||'en';translate();render();save();});
 $('sound').addEventListener('click',()=>{sound=!sound;soundEffect();save();render();});
 $('help').addEventListener('click',()=>$('help-dialog').showModal());$('privacy').addEventListener('click',()=>$('privacy-dialog').showModal());
 $('online-manage').addEventListener('click',()=>$('online-dialog').showModal());
