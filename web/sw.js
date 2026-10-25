@@ -1,4 +1,4 @@
-const CACHE='threefold-v5-typography';
+const CACHE='threefold-v6-language-select';
 const FILES=['./','./index.html','./styles.css','./app.js','./engine.js','./ai.js','./ai-worker.js','./icon.svg','./manifest.webmanifest','./i18n.js',...['pl','en','tl','es','pt','fr','de','it','ru','ar','hi','zh-CN','ja','ko','id','bn'].map(code=>`./locales/${code}.js`)];
 self.addEventListener('install',event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(FILES))));
 self.addEventListener('activate',event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key.startsWith('threefold-')&&key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));

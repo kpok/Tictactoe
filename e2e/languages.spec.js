@@ -43,3 +43,18 @@ test('new users receive their browser language including Filipino',async({browse
   try{const page=await context.newPage();await page.goto(baseURL);await expect(page.locator('#language')).toHaveValue('tl');await expect(page.locator('html')).toHaveAttribute('lang','tl');}
   finally{await context.close();}
 });
+
+test('long Indonesian language label stays inside the mobile header',async({page})=>{
+  await page.setViewportSize({width:320,height:800});
+  await page.goto('/');
+  for(const code of ['en','id','pl','id']){
+    await page.locator('#language').selectOption(code);
+    await expect(page.locator('#language')).toHaveValue(code);
+    const widths=await page.evaluate(()=>Object.fromEntries(['html','.header','.header-actions'].map(selector=>{const el=document.querySelector(selector);return [selector,{client:el.clientWidth,scroll:el.scrollWidth}];})));
+    for(const [selector,{client,scroll}] of Object.entries(widths))expect(scroll,`${selector} must contain the selected language label`).toBeLessThanOrEqual(client);
+  }
+  await userReload(page);
+  await expect(page.locator('#language')).toHaveValue('id');
+  const width=await page.evaluate(()=>({screen:innerWidth,content:document.documentElement.scrollWidth}));
+  expect(width.content).toBeLessThanOrEqual(width.screen);
+});
