@@ -43,7 +43,7 @@
     "council": 1,
     "plan_review": 1,
     "code_review": 2,
-    "ci_repair": 1
+    "ci_repair": 2
   },
   "checks": {
     "unit_http": "18/18 pass",
@@ -53,8 +53,9 @@
     "webkit_local": "blocked missing system libraries",
     "docker": "not run",
     "native": "not run",
-    "github_run_40222693239": "Node22/24 success; 25/30 E2E; WebKit harness repaired, new run pending"
+    "github_run_40222693239": "Node22/24 success; 25/30 E2E; WebKit harness repaired, new run pending",
+    "github_run_40223341937": "success, 29 first-attempt pass + 1 flaky retry"
   },
-  "next_step": "Confirm repaired cross-engine CI",
+  "next_step": "Verify strict final CI (flaky tests fail the run)",
   "updated_at": "2026-10-25T18:52:25.688067+00:00"
 }

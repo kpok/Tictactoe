@@ -3,6 +3,7 @@ export default defineConfig({
   testDir:'./e2e',
   fullyParallel:true,
   forbidOnly:!!process.env.CI,
+  failOnFlakyTests:!!process.env.CI,
   retries:process.env.CI?1:0,
   workers:process.env.CI?2:2,
   timeout:30_000,
@@ -12,7 +13,7 @@ export default defineConfig({
   projects:[
     {name:'chromium',use:{...devices['Desktop Chrome']}},
     {name:'mobile-chromium',use:{...devices['Pixel 7']}},
-    {name:'webkit-iphone',use:{...devices['iPhone 13'],defaultBrowserType:'webkit'}}
+    {name:'webkit-iphone',workers:1,use:{...devices['iPhone 13'],defaultBrowserType:'webkit'}}
   ],
   webServer:{command:'npm start',url:'http://127.0.0.1:4173/health',env:{PORT:'4173',HOST:'127.0.0.1'},reuseExistingServer:!process.env.CI,timeout:15000}
 });

@@ -60,7 +60,7 @@ Testy PWA symulują awarię przez zatrzymanie prawdziwego serwera, a reload wywo
 
 Testy E2E obejmują FIFO i regresję fałszywej wygranej, wynik i rewanż, AI oraz anulowanie starego workera, język, klawiaturę, mały ekran, reduced motion, zapis/offline i dwóch izolowanych graczy online z reconnectem. Raport HTML, trace, wideo i screenshoty błędów zapisują się w `playwright-report/` oraz `test-results/`.
 
-Workflow `Build and test`: Node 22/24, syntax + unit/HTTP + build, następnie Playwright z Chromium i WebKit. Artefakty: `threefold-web` i `playwright-report`. CI nie commituje zależności i nie wdraża automatycznie. Ręczny workflow `Package web preview` przygotowuje dodatkowy artefakt statyczny.
+Workflow `Build and test`: Node 22/24, syntax + unit/HTTP + build, następnie Playwright z Chromium i WebKit. Artefakty: `threefold-web` i `playwright-report`. CI uznaje także flaky test (sukces dopiero po retry) za błąd. WebKit ma jeden worker, aby dwa nagrywane konteksty online nie konkurowały z innymi testami o zasoby renderowania. CI nie commituje zależności i nie wdraża automatycznie. Ręczny workflow `Package web preview` przygotowuje dodatkowy artefakt statyczny.
 
 ## Build i hosting
 

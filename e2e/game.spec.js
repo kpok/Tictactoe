@@ -71,6 +71,9 @@ test('local game survives reload and works when the server is unreachable',async
   }finally{if(server.listening)await stopServer(server);}
 });
 test('two isolated browsers join, play, reconnect and accept rematch together',async({browser,baseURL},testInfo)=>{
+  // Two recorded mobile contexts plus round-trip polling need a larger total budget on hosted WebKit.
+  // Individual assertions retain the same short timeout; no functional check is relaxed.
+  test.setTimeout(60_000);
   const use=testInfo.project.use;const options={viewport:use.viewport,userAgent:use.userAgent,deviceScaleFactor:use.deviceScaleFactor,isMobile:use.isMobile,hasTouch:use.hasTouch,recordVideo:{dir:testInfo.outputPath('online-video')}};
   const a=await browser.newContext(options),b=await browser.newContext(options);
   try{

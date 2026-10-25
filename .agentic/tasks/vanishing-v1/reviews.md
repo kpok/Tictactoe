@@ -20,3 +20,5 @@ CI round 1 (run 40222693239, implementation 297d407): Node22/24 checks/build/tes
 CI repair: user-initiated location.reload replaces protocol reload; actual dedicated HTTP server shutdown replaces offline emulation in PWA tests; only the two API-mocking tests block service workers per official routing guidance. The real multiplayer, PWA and cache-update tests retain actual SW behavior. Local Chromium suites rerun; WebKit confirmation is delegated to the actual CI runner, not assumed.
 
 Evidence: https://github.com/microsoft/playwright/issues/42775 ; https://github.com/microsoft/playwright/issues/42273 ; https://playwright.dev/docs/network#missing-network-events-and-service-workers .
+
+CI round 2 run40223341937: overall success, 29 first-attempt PASS and one WebKit online retry PASS. This is not a clean 30/30 first-attempt result. CI round 3 refinement: serialize WebKit project; online scenario alone has a 60s total budget for two recorded mobile contexts and polling, unchanged 7s assertion budgets; failOnFlakyTests enabled on CI. No runtime application behavior changed. This is the final bounded CI repair round.
