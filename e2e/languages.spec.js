@@ -21,7 +21,7 @@ test('all sixteen languages translate controls and preserve the current game',as
     const width=await page.evaluate(()=>({screen:innerWidth,content:document.documentElement.scrollWidth}));expect(width.content,`${code} overflows screen`).toBeLessThanOrEqual(width.screen);
   }
   await page.setViewportSize({width:320,height:800});
-  for(const {code}of LANGUAGES){await page.locator('#language').selectOption(code);const width=await page.evaluate(()=>({screen:innerWidth,content:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('main *,header *')].filter(el=>{const r=el.getBoundingClientRect();return r.right>innerWidth+.5||r.left<-.5;}).slice(0,8).map(el=>el.id||el.className||el.tagName)}));expect(width.content,`${code} overflows 320px screen: ${width.overflow.join(',')}`).toBeLessThanOrEqual(width.screen);}
+  for(const {code}of LANGUAGES){await page.locator('#language').selectOption(code);await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));const width=await page.evaluate(()=>({screen:innerWidth,content:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('main *,header *')].filter(el=>{const r=el.getBoundingClientRect();return r.right>innerWidth+.5||r.left<-.5;}).slice(0,8).map(el=>el.id||el.className||el.tagName)}));expect(width.content,`${code} overflows 320px screen: ${width.overflow.join(',')}`).toBeLessThanOrEqual(width.screen);}
   await page.locator('#language').selectOption('tl');await userReload(page);
   await expect(page.locator('#language')).toHaveValue('tl');await expect(page.locator('html')).toHaveAttribute('lang','tl');
   await expect(page.locator('#board button[data-index="4"]')).toHaveAttribute('data-mark','O');
