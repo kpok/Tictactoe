@@ -109,5 +109,7 @@ export default {
   "install": "Siap dimainkan tanpa internet.",
   "languageLabel": "Bahasa",
   "appTitle": "Threefold — Tiga tanda. Kemungkinan baru.",
-  "description": "Tic-tac-toe dengan tanda yang menghilang. Tiga tanda per pemain. Lawan komputer atau teman."
+  "description": "Tic-tac-toe dengan tanda yang menghilang. Tiga tanda per pemain. Lawan komputer atau teman.",
+  "fullscreen": "Papan layar penuh",
+  "exitFullscreen": "Keluar dari layar penuh"
 };

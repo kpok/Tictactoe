@@ -109,5 +109,7 @@ export default {
   "install": "オフラインで遊ぶ準備ができました。",
   "languageLabel": "言語",
   "appTitle": "Threefold — 3つのマーク、新しい可能性。",
-  "description": "マークが消える三目並べ。ひとり3つのマークで、コンピューターや友達と対戦しよう。"
+  "description": "マークが消える三目並べ。ひとり3つのマークで、コンピューターや友達と対戦しよう。",
+  "fullscreen": "盤面を全画面表示",
+  "exitFullscreen": "全画面表示を終了"
 };

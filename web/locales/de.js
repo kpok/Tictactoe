@@ -109,5 +109,7 @@ export default {
   "install": "Bereit zum Spielen ohne Internet.",
   "languageLabel": "Sprache",
   "appTitle": "Threefold — Drei Zeichen. Neue Möglichkeiten.",
-  "description": "Tic-Tac-Toe mit verschwindenden Zeichen. Drei Zeichen pro Spieler. Spiele gegen den Computer oder einen Freund."
+  "description": "Tic-Tac-Toe mit verschwindenden Zeichen. Drei Zeichen pro Spieler. Spiele gegen den Computer oder einen Freund.",
+  "fullscreen": "Spielfeld im Vollbild",
+  "exitFullscreen": "Vollbild verlassen"
 };

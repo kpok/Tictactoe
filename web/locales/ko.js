@@ -109,5 +109,7 @@ export default {
   "install": "오프라인 플레이 준비가 되었습니다.",
   "languageLabel": "언어",
   "appTitle": "Threefold — 세 개의 표시, 새로운 가능성.",
-  "description": "표시가 사라지는 틱택토. 각자 세 개의 표시로 컴퓨터나 친구와 대결하세요."
+  "description": "표시가 사라지는 틱택토. 각자 세 개의 표시로 컴퓨터나 친구와 대결하세요.",
+  "fullscreen": "게임판 전체 화면",
+  "exitFullscreen": "전체 화면 종료"
 };

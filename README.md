@@ -25,13 +25,17 @@ Otwórz http://localhost:3000. Bez zależności runtime. `PORT` i `HOST` zmienia
 - Prywatne pokoje online: kod/link, oddzielne tokeny, autorytatywny serwer, reconnect po odświeżeniu tej samej karty, rewanż za zgodą obu osób.
 - Testy zasad, API HTTP i Playwright; CI buduje i testuje przy pushu na `main` i w PR.
 
+## Pełny ekran planszy
+
+Przycisk ⛶ w nagłówku karty gry otwiera widok samej gry i powiększa planszę. Próbuje również natywnego pełnego ekranu, jeśli przeglądarka go obsługuje; na innych urządzeniach działa widok skupienia. Wyjście: ten sam przycisk lub Escape. Partia, komputer i pokój online zachowują swój stan.
+
 ## Języki
 
 Polski, English, Tagalog, Español, Português (wariant brazylijski), Français, Deutsch, Italiano, Русский, العربية, हिन्दी, 简体中文, 日本語, 한국어, Bahasa Indonesia i বাংলা.
 
-Wybór znajduje się w nagłówku. Pierwsza wizyta używa obsługiwanego języka przeglądarki (m.in. `fil-PH` → Tagalog); ręczny wybór ma pierwszeństwo i zapisuje się lokalnie. Nie zmienia partii, wyniku ani sesji pokoju. Nieobsługiwane preferencje mają fallback do angielskiego. Arabski używa RTL, a plansza i kody pokojów zachowują stabilny układ LTR. Wszystkie katalogi są dostępne offline po pełnym załadowaniu PWA.
+Wybór znajduje się w nagłówku. Pozostałe języki mają mniejsze nagłówki, aby dłuższe teksty nie dominowały planszy. Pierwsza wizyta używa obsługiwanego języka przeglądarki (m.in. `fil-PH` → Tagalog); ręczny wybór ma pierwszeństwo i zapisuje się lokalnie. Nie zmienia partii, wyniku ani sesji pokoju. Nieobsługiwane preferencje mają fallback do angielskiego. Arabski używa RTL, a plansza i kody pokojów zachowują stabilny układ LTR. Wszystkie katalogi są dostępne offline po pełnym załadowaniu PWA.
 
-`web/locales/*.js` zawiera po111 tekstów: interfejs, zasady, prywatność, komunikaty błędów i dostępność. `web/i18n.js` normalizuje języki i udostępnia katalogi. Dodając język, uzupełnij cały katalog, listę języków i listę precache w `web/sw.js`; testy pilnują kompletności i dozwolonego HTML. Przed komercyjną lokalizacją na dany rynek wskazana jest redakcja przez native speakera.
+`web/locales/*.js` zawiera po113 tekstów: interfejs, zasady, prywatność, komunikaty błędów i dostępność. `web/i18n.js` normalizuje języki i udostępnia katalogi. Dodając język, uzupełnij cały katalog, listę języków i listę precache w `web/sw.js`; testy pilnują kompletności i dozwolonego HTML. Przed komercyjną lokalizacją na dany rynek wskazana jest redakcja przez native speakera.
 
 ## Zasady
 

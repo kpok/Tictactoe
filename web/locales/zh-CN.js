@@ -109,5 +109,7 @@ export default {
   "install": "已准备好离线游戏。",
   "languageLabel": "语言",
   "appTitle": "Threefold — 三个棋子，全新可能。",
-  "description": "会消失棋子的井字棋。每位玩家最多拥有三个棋子，与电脑或好友对战。"
+  "description": "会消失棋子的井字棋。每位玩家最多拥有三个棋子，与电脑或好友对战。",
+  "fullscreen": "全屏棋盘",
+  "exitFullscreen": "退出全屏"
 };

@@ -27,3 +27,41 @@ html[lang=ja] h1,html[lang=ko] h1,html[lang=zh-CN] h1,html[lang=bn] h1,html[lang
 .player-score>div>span{overflow-wrap:anywhere}
 .turn-dot,.score-symbol,.score-middle{flex-shrink:0}
 @media(max-width:380px){.player-score{gap:7px}.score-symbol{font-size:34px}.scoreboard{gap:8px;padding-inline:3px}}
+/* Explicit zero minimums prevent WebKit from sizing tabs to long translated words. */
+.mode-tabs{grid-template-columns:repeat(3,minmax(0,1fr))}
+.mode-button,.mode-button>span{min-width:0}
+.mode-button>span:last-child{overflow-wrap:anywhere}
+.board{width:100%;grid-template-columns:repeat(3,minmax(0,1fr))}
+.score-middle{min-width:0;max-width:72px}
+.score-middle span{overflow-wrap:anywhere}
+@media(max-width:380px){.score-middle{max-width:52px}}
+
+/* Display headings are quieter in longer or visually denser translations. */
+html[data-compact-type] h1{font-size:clamp(32px,3.5vw,46px);line-height:1.22;letter-spacing:normal}
+html[data-compact-type] .game-card h2{font-size:18px;line-height:1.35}
+html[data-compact-type] .how-title h2{font-size:17px;line-height:1.5}
+html[data-compact-type] dialog h2{font-size:22px;line-height:1.35}
+.card-tools{display:flex;gap:12px;align-items:center;flex-shrink:0}
+.fullscreen-button{font-size:23px;color:var(--mint)}
+@media(max-width:800px){html[data-compact-type] .intro h1{font-size:25px;line-height:1.25}.card-tools{gap:8px}.card-tools .card-number{font-size:22px}}
+@media(max-width:380px){.card-tools .card-number{display:none}.fullscreen-button{width:32px;height:32px}}
+/* This view also works without the optional native Fullscreen API. */
+.focus-mode{overflow:hidden}
+.focus-mode .header,.focus-mode .intro,.focus-mode .how-card,.focus-mode .footer,.focus-mode .under-card{display:none}
+.focus-mode .layout{display:block;width:100%;max-width:none;margin:0;padding:0}
+.focus-mode .game-area{position:fixed;inset:0;z-index:20;overflow:auto;background:var(--bg);padding:12px;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:max(12px,env(safe-area-inset-bottom));display:flex;align-items:flex-start;justify-content:center}
+.focus-mode .game-card{width:min(100%,760px);margin:auto;padding:8px 12px;border:0;border-radius:0;box-shadow:none;background:none}
+.focus-mode .card-heading{justify-content:flex-end;margin:0 0 4px;min-height:32px}
+.focus-mode .card-heading>div:first-child,.focus-mode .card-number,.focus-mode .mode-tabs,.focus-mode .game-options,.focus-mode .board-meta,.focus-mode #reset-score{display:none}
+.focus-mode .scoreboard{border:0;padding-block:5px}
+.focus-mode .score-symbol{font-size:32px}
+.focus-mode .turn-status{min-height:28px}
+.focus-mode .board{width:min(100%,calc(100vh - 220px));width:min(100%,calc(100dvh - 220px));max-width:none}
+.focus-mode .game-footer{margin-top:12px}
+.focus-mode .game-footer .primary-button{max-width:370px;margin-inline:auto}
+.focus-mode .result{margin:10px 0 0}
+@media(max-height:500px){.focus-mode .scoreboard{display:none}.focus-mode .game-area{padding-top:max(6px,env(safe-area-inset-top));padding-bottom:max(6px,env(safe-area-inset-bottom))}.focus-mode .game-card{padding-block:0}.focus-mode .board{width:min(100%,calc(100vh - 145px));width:min(100%,calc(100dvh - 145px))}.focus-mode .game-footer{margin-top:8px}}
+.focus-mode .toast{z-index:30}
+.focus-mode .game-area{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+
+.fullscreen-exit,.focus-mode .fullscreen-enter{display:none}.focus-mode .fullscreen-exit{display:initial}

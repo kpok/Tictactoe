@@ -4,7 +4,7 @@ const $ = id => document.getElementById(id);
 let language=languageFromPreferences(navigator.languages || [navigator.language]), mode='ai', difficulty='medium', sound=false, localGame=newGame(), game=localGame;
 let scores={ai:{O:0,X:0},local:{O:0,X:0},online:{O:0,X:0}}, counted=false;
 let session=null, room=null, onlineHealthy=true, busy=false, pollTimer, pollSequence=0, worker=null, generation=0, pendingId=0, aiUnavailable=false;
-let toastTimer, audio;
+let toastTimer, audio, focusMode=false, nativeFocus=false;
 const storageKey='threefold.v1';
 const t=key=>message(language,key);
 const richTextKeys=new Set(['headline','introBottom','howTitle']);
@@ -38,6 +38,7 @@ function cancelAI(){generation++;if(worker){worker.terminate();worker=null;}pend
 function translate(){
   document.documentElement.lang=language;
   document.documentElement.dir=directionFor(language);
+  document.documentElement.toggleAttribute('data-compact-type',!['pl','en'].includes(language));
   document.title=t('appTitle');
   document.querySelector('meta[name="description"]').content=t('description');
   for(const el of document.querySelectorAll('[data-i18n],[data-i18n-html]')){
@@ -52,7 +53,29 @@ function translate(){
   $('difficulty').value=difficulty;
 }
 const markSVG=p=>p==='O'?'<svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="23"/></svg>':'<svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><path d="M13 13L51 51M51 13L13 51"/></svg>';
+function updateFullscreenButton(){
+  const label=t(focusMode?'exitFullscreen':'fullscreen');
+  $('fullscreen').setAttribute('aria-label',label);$('fullscreen').title=label;$('fullscreen').setAttribute('aria-pressed',String(focusMode));
+}
+function applyFocusMode(active){
+  focusMode=active;document.body.classList.toggle('focus-mode',active);updateFullscreenButton();
+}
+async function toggleFullscreen(){
+  if(focusMode){
+    applyFocusMode(false);nativeFocus=false;
+    if(document.fullscreenElement&&document.exitFullscreen)try{await document.exitFullscreen();}catch{/* The board focus view is already closed. */}
+    $('fullscreen').focus({preventScroll:true});return;
+  }
+  applyFocusMode(true);
+  // Keep an accessible board-only view even where native fullscreen is unavailable.
+  if(document.documentElement.requestFullscreen)try{
+    await document.documentElement.requestFullscreen();
+    nativeFocus=!!document.fullscreenElement;
+    if(!focusMode&&document.fullscreenElement)await document.exitFullscreen();
+  }catch{/* Mobile Safari and embedded browsers can use the CSS fallback. */}
+}
 function render(){
+  updateFullscreenButton();
   if(mode!=='online')game=localGame;
   const ended=!!(game.winner||game.draw), activeAI=mode==='ai'&&game.turn==='X'&&!ended;
   document.querySelectorAll('[data-mode]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.mode===mode)));
@@ -173,6 +196,14 @@ $('restart').addEventListener('click',()=>mode==='online'?sendRoomAction('rematc
 $('reset-score').addEventListener('click',()=>{if(confirm(t('scoreConfirm'))){scores[mode]={O:0,X:0};save();render();}});
 $('language').addEventListener('change',()=>{language=normalizeLanguage($('language').value)||'en';translate();render();save();});
 $('sound').addEventListener('click',()=>{sound=!sound;soundEffect();save();render();});
+$('fullscreen').addEventListener('click',toggleFullscreen);
+document.addEventListener('fullscreenchange',()=>{
+  if(document.fullscreenElement){nativeFocus=true;return;}
+  if(nativeFocus){nativeFocus=false;applyFocusMode(false);$('fullscreen').focus({preventScroll:true});}
+});
+document.addEventListener('keydown',event=>{
+  if(event.key==='Escape'&&focusMode&&!document.fullscreenElement){applyFocusMode(false);$('fullscreen').focus({preventScroll:true});}
+});
 $('help').addEventListener('click',()=>$('help-dialog').showModal());$('privacy').addEventListener('click',()=>$('privacy-dialog').showModal());
 $('online-manage').addEventListener('click',()=>$('online-dialog').showModal());
 for(const button of document.querySelectorAll('.close-dialog'))button.addEventListener('click',()=>button.closest('dialog').close());

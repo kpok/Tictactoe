@@ -6,8 +6,12 @@ test('all sixteen languages translate controls and preserve the current game',as
   // This scenario exercises sixteen complete UI renders on mobile browser engines.
   test.setTimeout(60_000);
   await page.goto('/');await page.locator('[data-mode="local"]').click();await page.locator('#board button[data-index="4"]').click();
+  await page.locator('#language').selectOption('en');
+  const englishHeadingSize=await page.locator('h1').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
   for(const {code}of LANGUAGES){
     await page.locator('#language').selectOption(code);
+    const headingSize=await page.locator('h1').evaluate(el=>parseFloat(getComputedStyle(el).fontSize));
+    if(!['pl','en'].includes(code))expect(headingSize,`${code} heading should be more compact`).toBeLessThan(englishHeadingSize);
     await expect(page.locator('html')).toHaveAttribute('lang',code);
     await expect(page.locator('#language')).toHaveAccessibleName(MESSAGES[code].languageLabel);
     await expect(page.locator('[data-mode="ai"]')).toContainText(MESSAGES[code].modeAi);
@@ -17,7 +21,7 @@ test('all sixteen languages translate controls and preserve the current game',as
     const width=await page.evaluate(()=>({screen:innerWidth,content:document.documentElement.scrollWidth}));expect(width.content,`${code} overflows screen`).toBeLessThanOrEqual(width.screen);
   }
   await page.setViewportSize({width:320,height:800});
-  for(const {code}of LANGUAGES){await page.locator('#language').selectOption(code);const width=await page.evaluate(()=>({screen:innerWidth,content:document.documentElement.scrollWidth}));expect(width.content,`${code} overflows 320px screen`).toBeLessThanOrEqual(width.screen);}
+  for(const {code}of LANGUAGES){await page.locator('#language').selectOption(code);const width=await page.evaluate(()=>({screen:innerWidth,content:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('main *,header *')].filter(el=>{const r=el.getBoundingClientRect();return r.right>innerWidth+.5||r.left<-.5;}).slice(0,8).map(el=>el.id||el.className||el.tagName)}));expect(width.content,`${code} overflows 320px screen: ${width.overflow.join(',')}`).toBeLessThanOrEqual(width.screen);}
   await page.locator('#language').selectOption('tl');await userReload(page);
   await expect(page.locator('#language')).toHaveValue('tl');await expect(page.locator('html')).toHaveAttribute('lang','tl');
   await expect(page.locator('#board button[data-index="4"]')).toHaveAttribute('data-mark','O');

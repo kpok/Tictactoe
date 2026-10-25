@@ -12,3 +12,7 @@ Baseline main206bc71. Implemented16 catalogs,111 keys each. Main/game rules unch
 - Screenshots: Tagalog and Arabic at320px inspected; decorative brand kept LTR, board and invite codes LTR within Arabic layout.
 - Native-speaker editorial certification: not performed. Translations authored in this implementation and structurally/semantically reviewed; professional market localization may still refine wording.
 - GitHub Actions: pending this implementation upload. No claim of final WebKit PASS until observed.
+
+First GitHub run40225266286: Node22/24 success;38/39 browser PASS. WebKit identified4px Indonesian overflow at320px. Screenshot reviewed: unusually long match label plus intrinsic flex/grid minima. Fix: bounded/wrapping match label, zero tab/board track minima, explicit board width; no clipping or relaxed assertions. Final run pending.
+
+Follow-up: 113 keys per locale including fullscreen controls. Smaller non-PL/EN headings, accessible SVG fullscreen button, native Fullscreen API with CSS fallback, Escape/external exit and safe-area landscape support. Local focused follow-up:22/22 unit and6/6 E2E PASS. Independent reviewer reported no confirmed fullscreen blocker before hitting its usage limit; final fullscreen verdict unavailable. Parent verification remains required.

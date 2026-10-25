@@ -109,5 +109,7 @@ export default {
   "install": "Ready for offline play.",
   "languageLabel": "Language",
   "appTitle": "Threefold — Three marks. New possibilities.",
-  "description": "Vanishing tic-tac-toe. Three marks per player. Play against the computer or a friend."
+  "description": "Vanishing tic-tac-toe. Three marks per player. Play against the computer or a friend.",
+  "fullscreen": "Fullscreen board",
+  "exitFullscreen": "Exit fullscreen"
 };

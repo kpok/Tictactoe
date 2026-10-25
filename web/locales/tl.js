@@ -109,5 +109,7 @@ export default {
   "install": "Handa nang maglaro nang walang internet.",
   "languageLabel": "Wika",
   "appTitle": "Threefold — Tatlong marka. Bagong posibilidad.",
-  "description": "Tic-tac-toe na may nawawalang mga marka. Tatlong marka bawat manlalaro. Labanan ang kompyuter o kaibigan."
+  "description": "Tic-tac-toe na may nawawalang mga marka. Tatlong marka bawat manlalaro. Labanan ang kompyuter o kaibigan.",
+  "fullscreen": "Buong screen ng tablero",
+  "exitFullscreen": "Lumabas sa buong screen"
 };

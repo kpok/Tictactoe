@@ -2,15 +2,16 @@
   "task_id": "multilingual-v1",
   "repository": "kpok/Tictactoe",
   "baseline_revision": "206bc71250564e210639d817f0a432344492061c",
-  "requirement": "16 languages including Polish English Tagalog; preserve game and online behavior",
+  "requirement": "16 languages including Polish English Tagalog; preserve game and online behavior; smaller headings outside PL/EN and native/fullscreen fallback board mode",
   "phase": "VERIFY",
   "status": "ready_for_review",
   "acceptance_criteria": {
-    "AC1": "pass16x111",
+    "AC1": "pass16x113",
     "AC2": "pass selector/detection/persistence",
     "AC3": "pass RTL/narrow layout",
     "AC4": "pass local unit/E2E/offline",
-    "AC5": "CI pending"
+    "AC5": "CI pending",
+    "AC6": "fullscreen preserves game; native and CSS fallback; Escape and landscape"
   },
   "capabilities": {
     "github": "available main writes authorized",
@@ -36,6 +37,6 @@
     "build": "pass",
     "syntax": "pass"
   },
-  "next_step": "Observe39 browser cases and Node22/24 on GitHub Actions",
+  "next_step": "Observe45 browser cases and Node22/24 on GitHub Actions",
   "updated_at": "2026-10-25T19:16:30.194134+00:00"
 }

@@ -109,5 +109,7 @@ export default {
   "install": "Gra jest gotowa do działania offline.",
   "languageLabel": "Język",
   "appTitle": "Threefold — Trzy znaki. Nowe możliwości.",
-  "description": "Kółko i krzyżyk ze znikającymi znakami. Zagraj z komputerem lub znajomym."
+  "description": "Kółko i krzyżyk ze znikającymi znakami. Zagraj z komputerem lub znajomym.",
+  "fullscreen": "Pełny ekran planszy",
+  "exitFullscreen": "Opuść pełny ekran"
 };
