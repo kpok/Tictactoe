@@ -3,14 +3,14 @@
   "repository": "kpok/Tictactoe",
   "baseline_revision": "206bc71250564e210639d817f0a432344492061c",
   "requirement": "16 languages including Polish English Tagalog; preserve game and online behavior; smaller headings outside PL/EN and native/fullscreen fallback board mode",
-  "phase": "VERIFY",
-  "status": "blocked_on_webkit_layout",
+  "phase": "DELIVERED",
+  "status": "completed",
   "acceptance_criteria": {
     "AC1": "pass16x113",
     "AC2": "pass selector/detection/persistence",
-    "AC3": "blocked: Indonesian320px WebKit overflow",
+    "AC3": "pass including Indonesian320px WebKit",
     "AC4": "pass local unit/E2E/offline",
-    "AC5": "44/45 E2E PASS; CI red",
+    "AC5": "60/60 E2E PASS; CI green",
     "AC6": "pass6/6 fullscreen scenarios in CI"
   },
   "capabilities": {
@@ -24,7 +24,7 @@
   ],
   "findings": {
     "I18N-001": "Tagalog320px scoreboard overflow fixed, tested across16 languages",
-    "I18N-002": "OPEN: Indonesian WebKit320px scrollWidth324; no outside bounding rects; two-frame wait did not fix",
+    "I18N-002": "CLOSED: native select label overflow in WebKit header; explicit appearance/ellipsis bounded rendering; regression PASS",
     "I18N-003": "Tagalog font scale reduced;12/12 viewport regression cases PASS in CI"
   },
   "stage_round_counts": {
@@ -38,10 +38,12 @@
     "final_320px": "2/2 pass",
     "build": "pass",
     "syntax": "pass",
-    "ci": "Node22/24 PASS;56/57 E2E PASS; existing Indonesian WebKit defect OPEN",
-    "latest_run": "https://github.com/kpok/Tictactoe/actions/runs/40241467570",
-    "tagalog_typography": "12/12 first-attempt PASS"
+    "ci": "Node22/24 PASS;60/60 E2E PASS first attempt",
+    "latest_run": "https://github.com/kpok/Tictactoe/actions/runs/40242363311",
+    "tagalog_typography": "12/12 first-attempt PASS",
+    "local_languages": "8/8 PASS"
   },
-  "next_step": "Focused investigation of WebKit scrollable overflow, including text ink and pseudo-elements; bounded current fix loop ended",
-  "updated_at": "2026-10-25T19:16:30.194134+00:00"
+  "next_step": "No blocking implementation work remains in multilingual scope",
+  "updated_at": "2026-10-25T19:16:30.194134+00:00",
+  "indonesian_followup_rounds": 2
 }
