@@ -14,3 +14,5 @@ Environment Node 24.22.1, npm, Playwright pinned 1.56.1. Tested implementation i
 - Public hosting: NOT DEPLOYED. Full web online works only when both clients access the same running Node service; static hosting supports local/AI only.
 
 GitHub Actions verification will be recorded with actual run status after main upload; no result assumed before observation.
+
+GitHub run [40222693239](https://github.com/kpok/Tictactoe/actions/runs/40222693239): Node22 and Node24 all checks/build/unit tests succeeded. Browser suite 25/30 passed; five WebKit test-harness issues reproduced in logs and repaired as described in reviews.md. Awaiting the next real run. Final typography/viewport checks: 4/4 PASS plus 2/2 after whitespace adjustment.

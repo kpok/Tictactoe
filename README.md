@@ -4,6 +4,8 @@ Kółko i krzyżyk z limitem **trzech znaków na gracza**. Czwarty ruch usuwa na
 
 Projekt pierwotnie powstał na smartfonie z Androidem, przy użyciu GitHub Mobile i ChatGPT. Mechanika FIFO istniała w historycznej wersji HTML (`a729775`), ale została pominięta przy nieukończonej migracji na Angular. Bieżąca wersja odtwarza ten pomysł jako niezależne moduły JavaScript, ze wspólnym silnikiem dla przeglądarki, AI i serwera.
 
+[Zagraj w statyczne demo](https://kpok.github.io/Tictactoe/web/) — komputer i lokalne PvP; online wymaga serwera Node.
+
 ## Uruchomienie
 
 Node.js 22 lub 24 (zalecany 24):
@@ -53,6 +55,8 @@ npm run test:e2e
 ```
 
 `npm run test:e2e:ui` otwiera interaktywny runner. Playwright automatycznie uruchamia serwer na `127.0.0.1:4173`. Projekty: desktop Chromium, viewport Android/Pixel, WebKit/iPhone. Emulacja przeglądarki nie zastępuje testów natywnych na telefonach.
+
+Testy PWA symulują awarię przez zatrzymanie prawdziwego serwera, a reload wywołują tak jak użytkownik (`location.reload`). Unikają znanych problemów protokołu emulacji WebKit z service workerem. Tylko testy wstrzykiwania błędów HTTP wyłączają SW, aby routing Playwright mógł przechwycić żądania; testy PWA i rzeczywistego multiplayera używają SW.
 
 Testy E2E obejmują FIFO i regresję fałszywej wygranej, wynik i rewanż, AI oraz anulowanie starego workera, język, klawiaturę, mały ekran, reduced motion, zapis/offline i dwóch izolowanych graczy online z reconnectem. Raport HTML, trace, wideo i screenshoty błędów zapisują się w `playwright-report/` oraz `test-results/`.
 

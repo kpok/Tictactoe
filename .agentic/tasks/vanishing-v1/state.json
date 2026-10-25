@@ -42,7 +42,8 @@
   "stage_round_counts": {
     "council": 1,
     "plan_review": 1,
-    "code_review": 2
+    "code_review": 2,
+    "ci_repair": 1
   },
   "checks": {
     "unit_http": "18/18 pass",
@@ -51,8 +52,9 @@
     "syntax": "pass",
     "webkit_local": "blocked missing system libraries",
     "docker": "not run",
-    "native": "not run"
+    "native": "not run",
+    "github_run_40222693239": "Node22/24 success; 25/30 E2E; WebKit harness repaired, new run pending"
   },
-  "next_step": "Publish verified changes on main and inspect GitHub Actions",
-  "updated_at": "2026-10-25T18:43:42.085109+00:00"
+  "next_step": "Confirm repaired cross-engine CI",
+  "updated_at": "2026-10-25T18:52:25.688067+00:00"
 }

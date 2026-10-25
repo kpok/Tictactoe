@@ -7,6 +7,10 @@ const cell=(page,i)=>page.locator(`#board button[data-index="${i}"]`);
 async function clickCell(page,i){await expect(cell(page,i)).toBeEnabled();await cell(page,i).click();}
 async function local(page){await page.goto('/');await page.locator('[data-mode="local"]').click();}
 async function playSequence(page,moves){for(const i of moves)await clickCell(page,i);}
+// User-initiated navigation avoids WebKit protocol Page.reload + SW cache-write hangs (#42273).
+async function reloadLikeUser(page){await Promise.all([page.waitForNavigation({waitUntil:'load'}),page.evaluate(()=>location.reload())]);}
+async function stopServer(server){const closed=new Promise(resolve=>server.close(resolve));server.closeAllConnections();await closed;}
+async function readyOffline(page){await page.evaluate(async()=>{await navigator.serviceWorker.ready;if(!navigator.serviceWorker.controller)await new Promise(resolve=>navigator.serviceWorker.addEventListener('controllerchange',resolve,{once:true}));});}
 
 test('local FIFO removes the oldest mark before checking a winning line',async({page})=>{
   const errors=[];page.on('pageerror',e=>errors.push(e.message));await local(page);
@@ -55,13 +59,16 @@ test('language, instructions, keyboard focus and mobile layout',async({page})=>{
   await page.emulateMedia({reducedMotion:'reduce'});
   expect(await page.locator('.mark').evaluate(el=>getComputedStyle(el).animationName)).toBe('none');
 });
-test('local game survives reload and works without network after first visit',async({page,context})=>{
-  await local(page);await playSequence(page,[4,0]);
-  await page.evaluate(async()=>{await navigator.serviceWorker.ready;if(!navigator.serviceWorker.controller)await new Promise(resolve=>navigator.serviceWorker.addEventListener('controllerchange',resolve,{once:true}));});
-  await context.setOffline(true);await page.reload();
-  await expect(cell(page,4)).toHaveAttribute('data-mark','O');await expect(cell(page,0)).toHaveAttribute('data-mark','X');
-  await clickCell(page,8);await expect(cell(page,8)).toHaveAttribute('data-mark','O');
-  await context.setOffline(false);
+test('local game survives reload and works when the server is unreachable',async({page})=>{
+  const server=createApp();await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  try{
+    await page.goto(`http://127.0.0.1:${server.address().port}`);await page.locator('[data-mode="local"]').click();await playSequence(page,[4,0]);
+    await readyOffline(page);
+    // A real stopped server tests fallback in every engine; WebKit setOffline bypasses SW (#42775).
+    await stopServer(server);await reloadLikeUser(page);
+    await expect(cell(page,4)).toHaveAttribute('data-mark','O');await expect(cell(page,0)).toHaveAttribute('data-mark','X');
+    await clickCell(page,8);await expect(cell(page,8)).toHaveAttribute('data-mark','O');
+  }finally{if(server.listening)await stopServer(server);}
 });
 test('two isolated browsers join, play, reconnect and accept rematch together',async({browser,baseURL},testInfo)=>{
   const use=testInfo.project.use;const options={viewport:use.viewport,userAgent:use.userAgent,deviceScaleFactor:use.deviceScaleFactor,isMobile:use.isMobile,hasTouch:use.hasTouch,recordVideo:{dir:testInfo.outputPath('online-video')}};
@@ -74,7 +81,7 @@ test('two isolated browsers join, play, reconnect and accept rematch together',a
     await expect(second.locator('#online-dialog')).toBeHidden();
     for(const [n,index]of [0,3,1,4,2].entries())await clickCell(n%2?second:first,index);
     await expect(first.locator('#result-title')).toContainText('O');await expect(second.locator('#result-title')).toContainText('O');
-    await first.reload();await expect(first.locator('#result-title')).toContainText('O');
+    await reloadLikeUser(first);await expect(first.locator('#result-title')).toContainText('O');
     await first.locator('#restart').click();await expect(first.locator('#restart')).toBeDisabled();
     await expect(second.locator('#result-detail')).toContainText('rewanż');await second.locator('#restart').click();
     await expect(first.locator('#move-count')).toContainText('0/100');await expect(second.locator('#move-count')).toContainText('0/100');
@@ -83,6 +90,9 @@ test('two isolated browsers join, play, reconnect and accept rematch together',a
     expect(cachedApi).toBe(false);
   }finally{await a.close();await b.close();}
 });
+test.describe('injected HTTP failures',()=>{
+  // Playwright routing cannot reliably intercept service-worker-owned requests.
+  test.use({serviceWorkers:'block'});
 test('failed connection is visible and local play remains available',async({page})=>{
   await page.route('**/api/rooms',route=>route.fulfill({status:503,contentType:'application/json',body:'{"error":"rooms_full"}'}));
   await page.goto('/');await page.locator('[data-mode="online"]').click();await page.locator('#create-room').click();
@@ -90,13 +100,16 @@ test('failed connection is visible and local play remains available',async({page
   await page.locator('#online-dialog .close-dialog').click();await page.locator('[data-mode="local"]').click();
   await clickCell(page,0);await expect(cell(page,0)).toHaveAttribute('data-mark','O');
 });
+});
 test('leaving online removes its invite and reload preserves local mode',async({page})=>{
   await page.goto('/');await page.locator('[data-mode="online"]').click();await page.locator('#create-room').click();
   await expect(page.locator('#online-dialog')).toBeHidden();await expect(page).toHaveURL(/room=/);
   await page.locator('[data-mode="local"]').click();await expect(page).not.toHaveURL(/room=/);
-  await clickCell(page,4);await page.reload();await expect(page.locator('#online-dialog')).toBeHidden();
+  await clickCell(page,4);await reloadLikeUser(page);await expect(page.locator('#online-dialog')).toBeHidden();
   await expect(page.locator('[data-mode="local"]')).toHaveAttribute('aria-pressed','true');await expect(cell(page,4)).toHaveAttribute('data-mark','O');
 });
+test.describe('delayed HTTP replies',()=>{
+  test.use({serviceWorkers:'block'});
 test('an obsolete poll error cannot clear a newly created room',async({page})=>{
   await page.goto('/');await page.locator('[data-mode="online"]').click();await page.locator('#create-room').click();
   await expect(page.locator('#online-dialog')).toBeHidden();const oldCode=await page.locator('#room-code').textContent();
@@ -106,16 +119,17 @@ test('an obsolete poll error cannot clear a newly created room',async({page})=>{
   await expect(page.locator('#online-dialog')).toBeHidden();const newCode=await page.locator('#room-code').textContent();expect(newCode).not.toBe(oldCode);release();
   await page.waitForTimeout(1200);await expect(page.locator('#room-code')).toHaveText(newCode);await expect(page.locator('#online-banner')).toBeVisible();
 });
-test('service worker fetches updated assets online and retains them offline',async({page,context})=>{
+});
+test('service worker fetches updated assets online and retains them offline',async({page})=>{
   const root=await mkdtemp(path.join(tmpdir(),'threefold-e2e-'));
   await cp(new URL('../web/',import.meta.url),root,{recursive:true});
   const server=createApp({webRoot:root});await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
   try{
     await page.goto(`http://127.0.0.1:${server.address().port}`);
-    await page.evaluate(async()=>{await navigator.serviceWorker.ready;if(!navigator.serviceWorker.controller)await new Promise(resolve=>navigator.serviceWorker.addEventListener('controllerchange',resolve,{once:true}));});
+    await readyOffline(page);
     await appendFile(path.join(root,'styles.css'),'\n/* new-version-marker */');
     expect(await page.evaluate(async()=>(await fetch('./styles.css')).text())).toContain('new-version-marker');
-    await context.setOffline(true);
+    await stopServer(server);
     expect(await page.evaluate(async()=>(await fetch('./styles.css')).text())).toContain('new-version-marker');
-  }finally{await context.setOffline(false);await new Promise(resolve=>server.close(resolve));await rm(root,{recursive:true,force:true});}
+  }finally{if(server.listening)await stopServer(server);await rm(root,{recursive:true,force:true});}
 });

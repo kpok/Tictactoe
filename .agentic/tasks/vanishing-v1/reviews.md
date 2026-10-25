@@ -14,3 +14,9 @@ Round 2 UI: PASS. Reviewer independently ran the three new Chromium regression s
 Server/CI: PASS. Reviewer independently ran syntax, build, 17 then-current unit/HTTP tests and listed Playwright tests. No substantive security blocker. SC-001 optional residual: create/join do not have idempotent receipts; losing a join response may require creating a new room. Move/rematch retries are idempotent. SC-002 fixed: manual online contexts now use project device settings and record video; runner itself supplies traces. An attempted redundant manual tracing.start caused a test-harness failure and was removed; full Chromium suites subsequently passed.
 
 No review establishes public deployment, native release, store acceptance, stress-test performance or business viability.
+
+CI round 1 (run 40222693239, implementation 297d407): Node22/24 checks/build/tests PASS; 25/30 browser cases PASS. Five WebKit failures investigated using actual logs/traces. Dedicated reviewer identified upstream Playwright issues #42775 (setOffline bypasses service-worker responses) and #42273 (protocol reload plus SW cache writes). API route mocks were hidden by service-worker ownership. No application assertion was removed.
+
+CI repair: user-initiated location.reload replaces protocol reload; actual dedicated HTTP server shutdown replaces offline emulation in PWA tests; only the two API-mocking tests block service workers per official routing guidance. The real multiplayer, PWA and cache-update tests retain actual SW behavior. Local Chromium suites rerun; WebKit confirmation is delegated to the actual CI runner, not assumed.
+
+Evidence: https://github.com/microsoft/playwright/issues/42775 ; https://github.com/microsoft/playwright/issues/42273 ; https://playwright.dev/docs/network#missing-network-events-and-service-workers .
