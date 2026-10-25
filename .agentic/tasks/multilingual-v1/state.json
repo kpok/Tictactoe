@@ -24,7 +24,8 @@
   ],
   "findings": {
     "I18N-001": "Tagalog320px scoreboard overflow fixed, tested across16 languages",
-    "I18N-002": "OPEN: Indonesian WebKit320px scrollWidth324; no outside bounding rects; two-frame wait did not fix"
+    "I18N-002": "OPEN: Indonesian WebKit320px scrollWidth324; no outside bounding rects; two-frame wait did not fix",
+    "I18N-003": "Tagalog font scale reduced;12/12 viewport regression cases PASS in CI"
   },
   "stage_round_counts": {
     "review": 1,
@@ -37,8 +38,9 @@
     "final_320px": "2/2 pass",
     "build": "pass",
     "syntax": "pass",
-    "ci": "Node22/24 PASS;44/45 E2E PASS; fullscreen6/6 PASS",
-    "latest_run": "https://github.com/kpok/Tictactoe/actions/runs/40240846217"
+    "ci": "Node22/24 PASS;56/57 E2E PASS; existing Indonesian WebKit defect OPEN",
+    "latest_run": "https://github.com/kpok/Tictactoe/actions/runs/40241467570",
+    "tagalog_typography": "12/12 first-attempt PASS"
   },
   "next_step": "Focused investigation of WebKit scrollable overflow, including text ink and pseudo-elements; bounded current fix loop ended",
   "updated_at": "2026-10-25T19:16:30.194134+00:00"
