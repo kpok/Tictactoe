@@ -4,14 +4,14 @@
   "baseline_revision": "206bc71250564e210639d817f0a432344492061c",
   "requirement": "16 languages including Polish English Tagalog; preserve game and online behavior; smaller headings outside PL/EN and native/fullscreen fallback board mode",
   "phase": "VERIFY",
-  "status": "ready_for_review",
+  "status": "blocked_on_webkit_layout",
   "acceptance_criteria": {
     "AC1": "pass16x113",
     "AC2": "pass selector/detection/persistence",
-    "AC3": "pass RTL/narrow layout",
+    "AC3": "blocked: Indonesian320px WebKit overflow",
     "AC4": "pass local unit/E2E/offline",
-    "AC5": "CI pending",
-    "AC6": "fullscreen preserves game; native and CSS fallback; Escape and landscape"
+    "AC5": "44/45 E2E PASS; CI red",
+    "AC6": "pass6/6 fullscreen scenarios in CI"
   },
   "capabilities": {
     "github": "available main writes authorized",
@@ -23,11 +23,12 @@
     "professional native-speaker certification outside current validation"
   ],
   "findings": {
-    "I18N-001": "Tagalog320px scoreboard overflow fixed, tested across16 languages"
+    "I18N-001": "Tagalog320px scoreboard overflow fixed, tested across16 languages",
+    "I18N-002": "OPEN: Indonesian WebKit320px scrollWidth324; no outside bounding rects; two-frame wait did not fix"
   },
   "stage_round_counts": {
     "review": 1,
-    "fix": 1
+    "fix": 3
   },
   "checks": {
     "unit": "22/22 pass",
@@ -35,8 +36,10 @@
     "offline_locale": "4/4 pass",
     "final_320px": "2/2 pass",
     "build": "pass",
-    "syntax": "pass"
+    "syntax": "pass",
+    "ci": "Node22/24 PASS;44/45 E2E PASS; fullscreen6/6 PASS",
+    "latest_run": "https://github.com/kpok/Tictactoe/actions/runs/40240846217"
   },
-  "next_step": "Observe45 browser cases and Node22/24 on GitHub Actions",
+  "next_step": "Focused investigation of WebKit scrollable overflow, including text ink and pseudo-elements; bounded current fix loop ended",
   "updated_at": "2026-10-25T19:16:30.194134+00:00"
 }
