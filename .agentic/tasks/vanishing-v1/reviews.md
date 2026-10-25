@@ -22,3 +22,5 @@ CI repair: user-initiated location.reload replaces protocol reload; actual dedic
 Evidence: https://github.com/microsoft/playwright/issues/42775 ; https://github.com/microsoft/playwright/issues/42273 ; https://playwright.dev/docs/network#missing-network-events-and-service-workers .
 
 CI round 2 run40223341937: overall success, 29 first-attempt PASS and one WebKit online retry PASS. This is not a clean 30/30 first-attempt result. CI round 3 refinement: serialize WebKit project; online scenario alone has a 60s total budget for two recorded mobile contexts and polling, unchanged 7s assertion budgets; failOnFlakyTests enabled on CI. No runtime application behavior changed. This is the final bounded CI repair round.
+
+Final CI refinement independently reviewed by review_server_ci: PASS, no functional coverage weakened. Final strict run40223718836: SUCCESS, 30/30 first-attempt browser PASS in1.3m. All blocking findings closed for the web/PWA delivery; native and hosting boundaries remain explicit.

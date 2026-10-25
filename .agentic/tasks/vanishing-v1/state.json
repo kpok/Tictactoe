@@ -3,8 +3,8 @@
   "requirement": "Complete disappearing-mark game with polished UI, local/AI/private online and GitHub Actions with Playwright",
   "repository": "kpok/Tictactoe",
   "baseline_revision": "0c7fa98c3197eb5e32bde5a8a0079557da5fcfa4",
-  "phase": "VERIFY",
-  "status": "ready_for_review",
+  "phase": "HANDOFF",
+  "status": "complete",
   "authorized_actions": [
     "local implementation",
     "independent review",
@@ -12,12 +12,12 @@
     "CI build/tests"
   ],
   "acceptance_criteria": {
-    "AC1": "pass",
-    "AC2": "pass; final copy/responsive check pending",
-    "AC3": "pass",
-    "AC4": "pass with documented in-memory and join-response limitations",
-    "AC5": "web build pass; WebKit CI pending; native outside verified boundary",
-    "AC6": "independent reviews pass; main upload pending"
+    "AC1": "PASS; 18 rules/API tests",
+    "AC2": "PASS; screenshots inspected, PL/EN responsive accessible controls",
+    "AC3": "PASS; local/AI, cancellation, persistence",
+    "AC4": "PASS; authoritative private rooms, auth/replay/revision/rematch/reconnect; limitations documented",
+    "AC5": "PASS for web/PWA build and CI; native release explicitly outside delivered verification",
+    "AC6": "PASS independent reviews, main delivery and strict green CI"
   },
   "assumptions": [
     "no paid infrastructure",
@@ -47,15 +47,28 @@
   },
   "checks": {
     "unit_http": "18/18 pass",
-    "chromium_mobile_e2e": "20/20 pass",
+    "chromium_mobile_e2e": "20/20 PASS32.9s; final online focused1/1 PASS8.9s",
     "build": "pass",
     "syntax": "pass",
     "webkit_local": "blocked missing system libraries",
     "docker": "not run",
     "native": "not run",
     "github_run_40222693239": "Node22/24 success; 25/30 E2E; WebKit harness repaired, new run pending",
-    "github_run_40223341937": "success, 29 first-attempt pass + 1 flaky retry"
+    "github_run_40223341937": "success, 29 first-attempt pass + 1 flaky retry",
+    "github_run_40223718836": "SUCCESS; Node22/24 build+syntax+18 unit/API tests, 30/30 E2E first attempt in1.3m; failOnFlakyTests enabled",
+    "webkit_ci": "PASS"
   },
-  "next_step": "Verify strict final CI (flaky tests fail the run)",
-  "updated_at": "2026-10-25T18:52:25.688067+00:00"
+  "next_step": "Run Node server on selected HTTPS host for public multiplayer; follow docs/MOBILE.md for separate native release work",
+  "updated_at": "2026-10-25T19:01:20.634230+00:00",
+  "current_revision": "997db82a82d1f9691c6883d6ea23b4353c95475e",
+  "delivery_scope": "Verified web/PWA game and Node private-room service; no native/store or public backend deployment",
+  "capabilities": {
+    "github": "available; verified direct main writes",
+    "node": "available24; CI22/24 verified",
+    "chromium": "local and CI verified",
+    "webkit": "CI verified; local system libraries unavailable",
+    "docker": "unavailable locally",
+    "native_signing": "unavailable/unverified",
+    "public_backend": "not deployed"
+  }
 }
