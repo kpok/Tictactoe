@@ -1,49 +1,62 @@
-name: CI Pipeline
-
+name: Build and test
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
-
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  install-and-commit:
+  build-and-unit-tests:
+    name: Node ${{ matrix.node }} · build and tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        node: [22, 24]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '16'  # Ustaw wersję Node.js zgodnie z Twoimi potrzebami
-
-      - name: Cache npm dependencies
-        uses: actions/cache@v3
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        if: matrix.node == 24
         with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Check if there are changes to commit
-        run: |
-          git diff --exit-code || echo "Changes detected"
-
-      - name: Commit changes if needed
-        run: |
-          if [[ $(git status --porcelain) ]]; then
-            git config --global user.name "github-actions"
-            git config --global user.email "github-actions@github.com"
-            git add .
-            git commit -m "Add node_modules or package-lock.json changes"
-            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
-          else
-            echo "No changes to commit"
-          fi
-          
+          name: threefold-web
+          path: dist/
+          if-no-files-found: error
+          retention-days: 14
+  playwright:
+    name: Playwright · desktop, Android viewport, iPhone WebKit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build-and-unit-tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run build
+      - run: npm run test:e2e
+        env:
+          CI: 'true'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14

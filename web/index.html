@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101625">
+  <meta name="description" content="Threefold — kółko i krzyżyk z twistem. Tylko trzy znaki. Zagraj z komputerem lub znajomym.">
+  <title>Threefold — Three marks. New possibilities.</title>
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div><div class="ambient ambient-two" aria-hidden="true"></div>
+  <header class="header shell">
+    <a class="brand" href="./" aria-label="Threefold"><span class="brand-icon" aria-hidden="true">Ⅲ</span>threefold<span class="brand-dot">.</span></a>
+    <div class="header-actions"><span class="small-label desktop" data-i18n="tagline">MAŁA PLANSZA. WIELKA ZMIANA.</span><button id="sound" class="icon-button" aria-label="Dźwięk" title="Dźwięk"></button><button id="language" class="icon-button language" aria-label="Switch to English">EN</button><button id="help" class="icon-button" aria-label="Zasady gry" title="Zasady gry">?</button></div>
+  </header>
+  <main class="shell layout">
+    <section class="intro">
+      <div class="eyebrow"><span class="live-dot"></span><span data-i18n="eyebrow">KÓŁKO I KRZYŻYK. NOWY RUCH.</span></div>
+      <h1 data-i18n-html="headline">Trzy znaki.<br><span>Nowe możliwości.</span></h1>
+      <p class="lead" data-i18n="lead">Znasz zasady. Teraz zapomnij o stałej planszy. Postaw czwarty znak, a Twój najstarszy zniknie. Myśl o krok dalej.</p>
+      <div class="orbit-art" aria-hidden="true"><div class="orbit-ring"></div><span class="orbit-o"></span><span class="orbit-x"></span><span class="orbit-small">3</span><span class="orbit-caption">LESS IS MORE.</span><div class="orbit-path"></div></div>
+      <div class="intro-bottom"><span class="mini-symbols" aria-hidden="true">○ × ○</span><p data-i18n="introBottom">Szybka przerwa.<br>Jeszcze jeden rewanż.</p></div>
+    </section>
+    <section class="game-area" aria-label="Gra">
+      <div class="game-card">
+        <div class="card-heading"><div><span class="small-label" data-i18n="playNow">TWÓJ NASTĘPNY RUCH</span><h2 data-i18n="chooseGame">Zagraj po swojemu</h2></div><span class="card-number" aria-hidden="true">03<span>/03</span></span></div>
+        <div class="mode-tabs" role="group" aria-label="Tryb gry"><button data-mode="ai" class="mode-button"><span aria-hidden="true">✦</span><span data-i18n="modeAi">Komputer</span></button><button data-mode="local" class="mode-button"><span aria-hidden="true">♧</span><span data-i18n="modeLocal">Na zmianę</span></button><button data-mode="online" class="mode-button"><span aria-hidden="true">◎</span><span data-i18n="modeOnline">Online</span></button></div>
+        <div class="game-options"><label id="difficulty-label"><span data-i18n="difficulty">Poziom</span><select id="difficulty"><option value="easy" data-i18n="easy">Spokojny</option><option value="medium" data-i18n="medium">Sprytny</option><option value="hard" data-i18n="hard">Wymagający</option></select></label><span id="mode-note"></span><button id="online-manage" class="text-button" hidden data-i18n="roomOptions">Pokój</button></div>
+        <div id="online-banner" class="online-banner" hidden><div><span id="room-label"></span><strong id="room-code"></strong></div><button id="copy-link" class="text-button" data-i18n="copyLink">Kopiuj link</button></div>
+        <div class="scoreboard"><div class="player-score player-o"><span class="score-symbol" aria-hidden="true">○</span><div><span id="o-label"></span><strong id="o-score">0</strong></div><span id="o-turn" class="turn-dot" aria-hidden="true"></span></div><div class="score-middle"><span data-i18n="match">MECZ</span><strong>:</strong></div><div class="player-score player-x"><span id="x-turn" class="turn-dot" aria-hidden="true"></span><div><span id="x-label"></span><strong id="x-score">0</strong></div><span class="score-symbol" aria-hidden="true">×</span></div></div>
+        <div id="turn-status" class="turn-status" role="status" aria-live="polite"></div>
+        <div id="board" class="board" role="group" aria-label="Plansza 3 na 3"></div>
+        <div class="board-meta"><span><span class="fading-demo" aria-hidden="true"></span><span data-i18n="fadeHint">Przerywana ramka = ten znak zniknie</span></span><span id="move-count"></span></div>
+        <div id="result" class="result" hidden aria-live="polite"><strong id="result-title"></strong><span id="result-detail"></span></div>
+        <div class="game-footer"><button id="restart" class="primary-button"><span data-i18n="newRound">Nowa runda</span><span aria-hidden="true">↗</span></button><button id="reset-score" class="text-button" data-i18n="resetScore">Wyzeruj wynik</button></div>
+      </div>
+      <div class="under-card"><span class="shield" aria-hidden="true">◇</span><span id="connection-note" data-i18n="offlineNote">Bez konta. Bez pośpiechu. Lokalnie także bez internetu.</span></div>
+    </section>
+    <section class="how-card"><div class="how-title"><span class="small-label" data-i18n="howLabel">PROSTY TWIST</span><h2 data-i18n="howTitle">Mniej znaków.<br> Więcej strategii.</h2></div><div class="rule"><span>01</span><div><h3 data-i18n="rule1Title">Trzy w linii</h3><p data-i18n="rule1">Ułóż trzy swoje znaki w rzędzie, kolumnie lub na przekątnej.</p></div></div><div class="rule"><span>02</span><div><h3 data-i18n="rule2Title">Czwarty zmienia wszystko</h3><p data-i18n="rule2">Masz już trzy? Następny ruch usuwa Twój najstarszy znak.</p></div></div><div class="rule"><span>03</span><div><h3 data-i18n="rule3Title">Zaplanuj zniknięcie</h3><p data-i18n="rule3">Patrz na oznaczone pole. Twoja obrona nie zostanie tam na zawsze.</p></div></div></section>
+  </main>
+  <footer class="shell footer"><span>THREEFOLD © 2026</span><span data-i18n="footer">TRZY ZNAKI TO DOPIERO POCZĄTEK.</span><button id="privacy" class="text-button" data-i18n="privacy">Prywatność</button></footer>
+  <dialog id="help-dialog"><div class="dialog-top"><span class="eyebrow" data-i18n="howLabel">PROSTY TWIST</span><button class="icon-button close-dialog" aria-label="Zamknij">×</button></div><h2 data-i18n="helpTitle">Mała zmiana. Inna gra.</h2><p data-i18n="helpBody">Zaczyna kółko. Wybierz puste pole. Każdy ma maksymalnie 3 znaki: przy kolejnym ruchu najstarszy znika, a dopiero potem sprawdzamy wygraną. Zajęte pole — także własny znikający znak — jest niedostępne. Trzykrotne powtórzenie pozycji z tą samą kolejnością znaków i turą lub 100 ruchów oznacza remis. W kolejnej rundzie zmieniamy zaczynającego.</p><p data-i18n="helpOnline">Online: utwórz pokój i wyślij znajomemu link lub kod. Nie ma losowego dobierania graczy ani czatu. Rewanż rozpoczyna się po zgodzie obu graczy.</p><button class="primary-button close-dialog" data-i18n="gotIt">Rozumiem, gramy</button></dialog>
+  <dialog id="online-dialog"><div class="dialog-top"><span class="eyebrow" data-i18n="modeOnline">ONLINE</span><button class="icon-button close-dialog" aria-label="Zamknij">×</button></div><h2 data-i18n="onlineTitle">Znajomy. Jeden kod. Gramy.</h2><p data-i18n="onlineBody">Utwórz prywatny pokój lub wpisz kod od znajomego. Pokój wygasa po bezczynności i może zniknąć po restarcie serwera.</p><button id="create-room" class="primary-button" data-i18n="createRoom">Utwórz pokój ↗</button><div class="divider" data-i18n="or">LUB DOŁĄCZ</div><form id="join-form"><label for="join-code" data-i18n="roomCode">Kod pokoju</label><div class="join-row"><input id="join-code" name="code" maxlength="6" minlength="6" pattern="[A-Za-z0-9]{6}" autocomplete="off" autocapitalize="characters" placeholder="ABCDEF" required><button class="primary-button" type="submit" data-i18n="join">Dołącz</button></div></form><p id="online-error" role="alert"></p><button id="leave-room" class="text-button" data-i18n="leaveRoom" hidden>Opuść pokój na tym urządzeniu</button></dialog>
+  <dialog id="privacy-dialog"><div class="dialog-top"><span class="eyebrow">THREEFOLD</span><button class="icon-button close-dialog" aria-label="Zamknij">×</button></div><h2 data-i18n="privacy">Prywatność</h2><p data-i18n="privacyBody">Gra nie zawiera reklam, analityki ani kont. Ustawienia, lokalna partia i wyniki są zapisywane tylko w tej przeglądarce. Online serwer przechowuje stan pokoju i losowe tokeny graczy w pamięci. Token sesji jest zapisany w karcie przeglądarki. Hosting może przetwarzać adres IP w celu obsługi i zabezpieczenia połączeń. Nie wysyłaj nikomu tokenu sesji. Kod/link pokoju służy do zajęcia wolnego miejsca. Usunięcie danych dotyczy tej przeglądarki; pokoje na serwerze wygasają automatycznie.</p><button id="clear-data" class="primary-button" data-i18n="clearData">Usuń lokalne dane</button></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

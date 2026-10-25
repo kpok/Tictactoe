@@ -1,38 +1,25 @@
-name: Deploy Angular app to GitHub Pages
-
+name: Package web preview
+# Packaging only: public deployment is a separate, explicit decision.
 on:
-  push:
-    branches:
-      - main  # Trigger deployment on push to main branch
-
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  deploy:
+  package:
     runs-on: ubuntu-latest
-
+    timeout-minutes: 10
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '18.19'
-
-    - name: Install dependencies
-      run: |
-        npm install  # Zmienione na npm install zamiast npm ci
-
-    - name: Install Angular CLI globally
-      run: npm install -g @angular/cli
-
-    - name: Build the Angular app
-      run: |
-        ng build --prod --base-href /Tictactoe/
-
-    - name: Deploy to GitHub Pages
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        branch: gh-pages      # Branch to deploy to
-        folder: dist/tictactoe # Folder containing the build output
-        token: ${{ secrets.GITHUB_TOKEN }} # GitHub token to authenticate
-        
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm test
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: threefold-static-preview
+          path: dist/
+          if-no-files-found: error

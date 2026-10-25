@@ -1,0 +1,58 @@
+{
+  "task_id": "vanishing-v1",
+  "requirement": "Complete disappearing-mark game with polished UI, local/AI/private online and GitHub Actions with Playwright",
+  "repository": "kpok/Tictactoe",
+  "baseline_revision": "0c7fa98c3197eb5e32bde5a8a0079557da5fcfa4",
+  "phase": "VERIFY",
+  "status": "ready_for_review",
+  "authorized_actions": [
+    "local implementation",
+    "independent review",
+    "direct main commits",
+    "CI build/tests"
+  ],
+  "acceptance_criteria": {
+    "AC1": "pass",
+    "AC2": "pass; final copy/responsive check pending",
+    "AC3": "pass",
+    "AC4": "pass with documented in-memory and join-response limitations",
+    "AC5": "web build pass; WebKit CI pending; native outside verified boundary",
+    "AC6": "independent reviews pass; main upload pending"
+  },
+  "assumptions": [
+    "no paid infrastructure",
+    "no accounts/chat/ranking/ads/IAP",
+    "single-instance multiplayer"
+  ],
+  "decision_ids": [
+    "DEC-001",
+    "DEC-002",
+    "DEC-003",
+    "DEC-004",
+    "DEC-005",
+    "DEC-006"
+  ],
+  "findings": {
+    "UI-001": "verified-closed",
+    "UI-002": "verified-closed",
+    "UI-003": "verified-closed",
+    "SC-001": "optional acknowledged",
+    "SC-002": "fixed"
+  },
+  "stage_round_counts": {
+    "council": 1,
+    "plan_review": 1,
+    "code_review": 2
+  },
+  "checks": {
+    "unit_http": "18/18 pass",
+    "chromium_mobile_e2e": "20/20 pass",
+    "build": "pass",
+    "syntax": "pass",
+    "webkit_local": "blocked missing system libraries",
+    "docker": "not run",
+    "native": "not run"
+  },
+  "next_step": "Publish verified changes on main and inspect GitHub Actions",
+  "updated_at": "2026-10-25T18:43:42.085109+00:00"
+}
