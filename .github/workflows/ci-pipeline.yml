@@ -100,7 +100,7 @@ jobs:
         run: npm run android:sync
       - name: Build Android packages
         working-directory: android
-        run: ./gradlew --no-daemon -PversionCode="$ANDROID_VERSION_CODE" assembleDebug assembleDebugAndroidTest bundleRelease
+        run: ./gradlew --no-daemon -PversionCode="$ANDROID_VERSION_CODE" :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
       - name: Collect immutable Android artifacts
         run: node scripts/android-artifacts.js
       - uses: actions/upload-artifact@v4

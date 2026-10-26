@@ -14,3 +14,5 @@ Baseline a1c3c2f580f5a87e40b1e308e5338f9b26ed3f05.
 - Real signing with upload key, protected Environment configuration, Play Console bootstrap and live upload: NOT RUN, owner credentials/setup required. No private material committed.
 
 First CI40327303232 at60192a0: Node22/24 PASS; Android setup failed before Gradle because setup-android v3 default tools package is no longer available. Fix explicitly requests platform-tools only; SDK36/build-tools installed separately. Emulator skipped because build failed. No Android build PASS claimed.
+
+Second CI40327558788 at933d840: setup fixed; actual :app:assembleDebug and :app:assembleDebugAndroidTest including GameE2ETest compilation PASSED. Unqualified root Gradle task also tried instrumentation of dependency capacitor-cordova-android-plugins and failed there with Kotlin1.6/1.8 duplicates. Fix scopes all requested builds to :app tasks, leaving all5 app E2E tests intact; no force/exclusion of production dependencies or app assertions. Release bundle/emulator not yet verified.

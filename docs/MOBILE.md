@@ -8,7 +8,7 @@ Projekt `android/` jest zapisany w repo, bez generowania nowego projektu przy ka
 npm ci
 npm run android:sync
 cd android
-./gradlew --no-daemon assembleDebug assembleDebugAndroidTest bundleRelease
+./gradlew --no-daemon :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
 ```
 
 Wymagane Android SDK z platform36 i build-tools36.0.0; SDK wskazuje ANDROID_HOME lub lokalny android/local.properties (nie commitować). Gradle `-PversionCode=42` ustawia kod wersji; versionName pochodzi z package.json.

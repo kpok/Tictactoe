@@ -15,11 +15,12 @@
   "findings": {
     "AR-PLAN-001": "resolved: API35 modern WebView diagnostics",
     "AR-PLAN-002": "resolved: fail-closed runner parser",
-    "AR-CI-001": "setup-android default obsolete tools package; fixed explicit platform-tools"
+    "AR-CI-001": "setup-android default obsolete tools package; fixed explicit platform-tools",
+    "AR-CI-002": "unqualified Gradle test task selects dependency projects; fix :app-qualified tasks"
   },
   "stage_round_counts": {
     "plan_review": 2,
-    "implementation_fix": 1
+    "implementation_fix": 2
   },
   "capabilities": {
     "github_main": "authorized, available",
@@ -41,7 +42,8 @@
     "local_browser": "2/2 native-shell Chromium/mobile PASS2.9s",
     "android_build_emulator": "not yet run",
     "independent_plan_review": "PASS after2 findings fixed",
-    "independent_code_review": "PASS static; Android runtime CI pending"
+    "independent_code_review": "PASS static; Android runtime CI pending",
+    "android_app_compile": "debug and AndroidTest compilation PASS in run40327558788; overall failed dependency tests"
   },
   "next_step": "Commit main and observe first Android build/emulator CI"
 }
