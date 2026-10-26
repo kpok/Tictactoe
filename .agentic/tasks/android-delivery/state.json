@@ -14,11 +14,12 @@
   },
   "findings": {
     "AR-PLAN-001": "resolved: API35 modern WebView diagnostics",
-    "AR-PLAN-002": "resolved: fail-closed runner parser"
+    "AR-PLAN-002": "resolved: fail-closed runner parser",
+    "AR-CI-001": "setup-android default obsolete tools package; fixed explicit platform-tools"
   },
   "stage_round_counts": {
     "plan_review": 2,
-    "implementation_fix": 0
+    "implementation_fix": 1
   },
   "capabilities": {
     "github_main": "authorized, available",
