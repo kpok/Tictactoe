@@ -15,4 +15,11 @@ public class AdAudienceTest {
         }
         assertTrue(AdAudience.allowed("test","adult",false));
     }
+    @Test public void adultPrivacyOptionsDoNotDependOnAdEligibility() {
+        assertTrue(AdAudience.privacyOptions("adult",true,true,true));
+        assertFalse(AdAudience.privacyOptions("adult",true,false,true));
+        assertFalse(AdAudience.privacyOptions("under18",true,true,true));
+        assertFalse(AdAudience.privacyOptions("unknown",true,true,true));
+        assertFalse(AdAudience.privacyOptions("adult",false,true,true));
+    }
 }

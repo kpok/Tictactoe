@@ -35,7 +35,7 @@ Polski, English, Tagalog, Español, Português (wariant brazylijski), Français,
 
 Wybór znajduje się w nagłówku. Pozostałe języki mają mniejsze nagłówki, aby dłuższe teksty nie dominowały planszy. Pierwsza wizyta używa obsługiwanego języka przeglądarki (m.in. `fil-PH` → Tagalog); ręczny wybór ma pierwszeństwo i zapisuje się lokalnie. Nie zmienia partii, wyniku ani sesji pokoju. Nieobsługiwane preferencje mają fallback do angielskiego. Arabski używa RTL, a plansza i kody pokojów zachowują stabilny układ LTR. Wszystkie katalogi są dostępne offline po pełnym załadowaniu PWA.
 
-`web/locales/*.js` zawiera po113 tekstów: interfejs, zasady, prywatność, komunikaty błędów i dostępność. `web/i18n.js` normalizuje języki i udostępnia katalogi. Dodając język, uzupełnij cały katalog, listę języków i listę precache w `web/sw.js`; testy pilnują kompletności i dozwolonego HTML. Przed komercyjną lokalizacją na dany rynek wskazana jest redakcja przez native speakera.
+`web/locales/*.js` zawiera po127 tekstów: interfejs, zasady, prywatność, komunikaty błędów i dostępność. `web/i18n.js` normalizuje języki i udostępnia katalogi. Dodając język, uzupełnij cały katalog, listę języków i listę precache w `web/sw.js`; testy pilnują kompletności i dozwolonego HTML. Przed komercyjną lokalizacją na dany rynek wskazana jest redakcja przez native speakera.
 
 ## Zasady
 

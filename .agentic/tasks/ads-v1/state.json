@@ -18,12 +18,13 @@
   "findings": {
     "AR-ADS-001": "resolved: independent rereview PASS",
     "AR-ADS-002": "resolved: independent rereview PASS",
-    "AR-ADS-003": "parent found plugin registration before Bridge creation required; corrected before CI"
+    "AR-ADS-003": "resolved: independent rereview PASS; native privacy controls independent of ad eligibility",
+    "AR-ADS-REG001": "plugin registration before Bridge creation verified"
   },
   "stage_round_counts": {
     "council": 2,
     "code_review": 1,
-    "fix": 1
+    "fix": 2
   },
   "capabilities": {
     "local_node": "24",
@@ -34,7 +35,7 @@
   "checks": {
     "node": "29/29 PASS",
     "browser_focused": "8/8 initialdesktop/mobile;4/4 latestdesktop adsregressions PASS",
-    "native_unit": "CI pending5tests",
+    "native_unit": "6 tests final CI pending",
     "android_sdk_runtime": "not tested",
     "live_emissions": "not enabled/not tested",
     "first_ci": "40391747153: Android build/nativeunit/mergedmanifest PASS,75/75 browser PASS; emulator pending",

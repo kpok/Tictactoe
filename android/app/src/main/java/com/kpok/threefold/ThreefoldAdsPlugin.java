@@ -37,7 +37,7 @@ public class ThreefoldAdsPlugin extends Plugin {
     private InterstitialAd ad;
     private String age = "";
     private int generation = 0;
-    private boolean initialized, initializing, consentFresh, loading, showing, refreshing, privacyBusy;
+    private boolean initialized, initializing, consentFresh, consentUpdated, loading, showing, refreshing, privacyBusy;
     private int requests;
     private PluginCall pendingShow;
     private long loadedAt;
@@ -62,7 +62,11 @@ public class ThreefoldAdsPlugin extends Plugin {
     private void persist() {
         prefs.edit().putInt("rounds",cadence.rounds()).putString("lastRound",cadence.lastRound()).apply();
     }
-    private void invalidate() { generation++;ad=null;loading=false;consentFresh=false;refreshing=false;boundaryToken=""; }
+    private void invalidate() { invalidate(false); }
+    private void invalidate(boolean keepProfile) {
+        generation++;ad=null;loading=false;consentFresh=false;refreshing=false;boundaryToken="";
+        if(!keepProfile)consentUpdated=false;
+    }
     @SuppressWarnings("deprecation") private void restrictRequests() {
         MobileAds.setRequestConfiguration(new RequestConfiguration.Builder()
             .setTagForChildDirectedTreatment(child()?RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE:RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_FALSE)
@@ -80,6 +84,7 @@ public class ThreefoldAdsPlugin extends Plugin {
         ConsentRequestParameters params=new ConsentRequestParameters.Builder().setTagForUnderAgeOfConsent(child()).build();
         consent.requestConsentInfoUpdate(getActivity(),params,()->{
             if(token!=generation||!allowed()||!active())return;
+            consentUpdated=true;
             if(child()) consentFinished(token);
             else if(consent.getConsentStatus()==ConsentInformation.ConsentStatus.REQUIRED){
                 UserMessagingPlatform.loadConsentForm(getContext(),form->{
@@ -122,7 +127,7 @@ public class ThreefoldAdsPlugin extends Plugin {
         JSObject out=new JSObject();out.put("mode",BuildConfig.ADS_MODE);out.put("age",age);
         out.put("familiesReady",BuildConfig.ADS_FAMILIES_REVIEWED);out.put("allowed",allowed());out.put("initialized",initialized);
         out.put("privacyBusy",privacyBusy);out.put("requests",requests);out.put("rounds",cadence.rounds());out.put("privacyUrl",BuildConfig.ADS_PRIVACY_URL);
-        out.put("privacyOptions",allowed()&&consentFresh&&consent!=null&&consent.getPrivacyOptionsRequirementStatus()==ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED);
+        out.put("privacyOptions",AdAudience.privacyOptions(age,allowed(),consentUpdated,consent!=null&&consent.getPrivacyOptionsRequirementStatus()==ConsentInformation.PrivacyOptionsRequirementStatus.REQUIRED));
         return out;
     }
     @PluginMethod public void getState(PluginCall call){main.post(()->call.resolve(state()));}
@@ -171,8 +176,8 @@ public class ThreefoldAdsPlugin extends Plugin {
         try{ready.show(getActivity());}catch(RuntimeException error){finishShow(call,false);}
     });}
     @PluginMethod public void privacyOptions(PluginCall call){main.post(()->{
-        if(!allowed()||!active()||!consentFresh||consent==null||showing||privacyBusy){call.resolve();return;}
-        invalidate();privacyBusy=true;
+        if(!allowed()||child()||!active()||!consentUpdated||consent==null||showing||privacyBusy){call.resolve();return;}
+        invalidate(true);privacyBusy=true;
         try{UserMessagingPlatform.showPrivacyOptionsForm(getActivity(),error->{privacyBusy=false;refreshConsent();call.resolve();});}
         catch(RuntimeException error){privacyBusy=false;call.resolve();}
     });}
@@ -182,7 +187,7 @@ public class ThreefoldAdsPlugin extends Plugin {
         if(consent!=null)consent.reset();prefs.edit().clear().apply();
         cadence=new AdCadence(0,"",SystemClock.elapsedRealtime());call.resolve(state());
     });}
-    @Override protected void handleOnPause(){main.post(()->{if(!showing)invalidate();});}
+    @Override protected void handleOnPause(){main.post(()->{if(!showing)invalidate(true);});}
     @Override protected void handleOnResume(){main.post(()->{if(!showing)refreshConsent();});}
     @Override protected void handleOnDestroy(){main.post(()->{invalidate();finishShow(pendingShow,false);});}
 }
