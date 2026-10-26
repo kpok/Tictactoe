@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Três marcas. Novas possibilidades.",
   "description": "Jogo da velha com marcas que desaparecem. Três marcas por jogador. Jogue contra o computador ou um amigo.",
   "fullscreen": "Tabuleiro em tela cheia",
-  "exitFullscreen": "Sair da tela cheia"
+  "exitFullscreen": "Sair da tela cheia",
+  "adsSettings": "Anúncios e idade",
+  "ageTitle": "Faixa etária",
+  "ageBody": "Escolha a faixa etária para ajustar a privacidade. Não pedimos sua data de nascimento.",
+  "ageChoose": "Escolher",
+  "ageUnder18": "Menos de 18",
+  "ageAdult": "18 ou mais",
+  "ageUnknown": "Prefiro não informar",
+  "ageSave": "Salvar",
+  "adsPrivacyOptions": "Privacidade dos anúncios",
+  "adsStatusOff": "Anúncios desativados",
+  "adsStatusTest": "Anúncios de teste",
+  "adsStatusLive": "Anúncios ativados",
+  "adsLoading": "Anúncio…",
+  "adsNativePrivacy": "Partida, ajustes e faixa etária ficam neste dispositivo. Anúncios vêm desativados. Quando ativados, o Google AdMob pode processar dados do dispositivo e da conexão; solicitamos anúncios não personalizados de classificação G. Menores de 18 e idades desconhecidas exigem configuração Families verificada. Sem anúncio, o jogo continua. Você pode alterar suas escolhas aqui."
 };

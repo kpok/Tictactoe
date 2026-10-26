@@ -1,0 +1,42 @@
+{
+  "task_id": "ads-v1",
+  "repository": "kpok/Tictactoe",
+  "baseline_revision": "555044349fa139e91c1bc3221b430031563c2856",
+  "requirement": "Android optional interstitial max1/5 completed rounds AND180s; mixedchild audience; defaultoff publicrepo",
+  "phase": "VERIFY",
+  "status": "in_progress",
+  "decisions": [
+    "ADS-001 round2 conditionalchildcapability"
+  ],
+  "acceptance_criteria": {
+    "AC1": "native policy +unit tests implemented, CI pending",
+    "AC2": "pinned SDK24.9.0 UMP4.0.0 defaultoff ownergates/manifest removals",
+    "AC3": "guardedpreload freshconsent shortboundary token +restartlocks",
+    "AC4": "16localizedneutralage/privacy settings",
+    "AC5": "local Node/browserPASS; Android/mergedmanifestCI pending"
+  },
+  "findings": {
+    "AR-ADS-001": "resolved: independent rereview PASS",
+    "AR-ADS-002": "resolved: independent rereview PASS",
+    "AR-ADS-003": "parent found plugin registration before Bridge creation required; corrected before CI"
+  },
+  "stage_round_counts": {
+    "council": 2,
+    "code_review": 1,
+    "fix": 1
+  },
+  "capabilities": {
+    "local_node": "24",
+    "local_android_sdk": "unavailable",
+    "github_main": "authorized",
+    "admob_account_live_ids": "unavailable"
+  },
+  "checks": {
+    "node": "29/29 PASS",
+    "browser_focused": "8/8 initialdesktop/mobile;4/4 latestdesktop adsregressions PASS",
+    "native_unit": "CI pending5tests",
+    "android_sdk_runtime": "not tested",
+    "live_emissions": "not enabled/not tested"
+  },
+  "next_step": "Observe full Android/web CI"
+}

@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Drei Zeichen. Neue Möglichkeiten.",
   "description": "Tic-Tac-Toe mit verschwindenden Zeichen. Drei Zeichen pro Spieler. Spiele gegen den Computer oder einen Freund.",
   "fullscreen": "Spielfeld im Vollbild",
-  "exitFullscreen": "Vollbild verlassen"
+  "exitFullscreen": "Vollbild verlassen",
+  "adsSettings": "Werbung und Alter",
+  "ageTitle": "Altersgruppe",
+  "ageBody": "Wähle eine Altersgruppe für den Datenschutz. Wir fragen nicht nach deinem Geburtsdatum.",
+  "ageChoose": "Auswählen",
+  "ageUnder18": "Unter 18",
+  "ageAdult": "18 oder älter",
+  "ageUnknown": "Keine Angabe",
+  "ageSave": "Speichern",
+  "adsPrivacyOptions": "Werbedatenschutz",
+  "adsStatusOff": "Werbung deaktiviert",
+  "adsStatusTest": "Testwerbung",
+  "adsStatusLive": "Werbung aktiviert",
+  "adsLoading": "Werbung…",
+  "adsNativePrivacy": "Spielstand, Einstellungen und Altersgruppe bleiben auf diesem Gerät. Werbung ist standardmäßig deaktiviert. Nach Aktivierung kann Google AdMob Geräte- und Verbindungsdaten verarbeiten; wir fordern nicht personalisierte Werbung der Kategorie G an. Für unter 18 oder unbekanntes Alter sind gesondert geprüfte Families-Einstellungen nötig. Fehlende Werbung blockiert das Spiel nicht. Auswahl hier ändern."
 };

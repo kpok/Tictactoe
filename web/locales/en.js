@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Three marks. New possibilities.",
   "description": "Vanishing tic-tac-toe. Three marks per player. Play against the computer or a friend.",
   "fullscreen": "Fullscreen board",
-  "exitFullscreen": "Exit fullscreen"
+  "exitFullscreen": "Exit fullscreen",
+  "adsSettings": "Ads and age",
+  "ageTitle": "Age group",
+  "ageBody": "Choose an age group for privacy settings. We do not ask for your date of birth.",
+  "ageChoose": "Choose",
+  "ageUnder18": "Under 18",
+  "ageAdult": "18 or older",
+  "ageUnknown": "Prefer not to say",
+  "ageSave": "Save",
+  "adsPrivacyOptions": "Ad privacy choices",
+  "adsStatusOff": "Ads disabled",
+  "adsStatusTest": "Test ads",
+  "adsStatusLive": "Ads enabled",
+  "adsLoading": "Advertisement…",
+  "adsNativePrivacy": "Your game, settings and age group stay on this device. Ads are disabled by default. When enabled, Google AdMob may process device and connection data; we request non-personalized G-rated ads. Ads for under-18s or unknown ages require separately verified Families settings. Unavailable ads never block play. You can change age and privacy choices here."
 };

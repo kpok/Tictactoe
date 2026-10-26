@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Tre simboli. Nuove possibilità.",
   "description": "Tris con simboli che scompaiono. Tre simboli per giocatore. Gioca contro il computer o un amico.",
   "fullscreen": "Tabellone a schermo intero",
-  "exitFullscreen": "Esci dallo schermo intero"
+  "exitFullscreen": "Esci dallo schermo intero",
+  "adsSettings": "Pubblicità ed età",
+  "ageTitle": "Fascia d’età",
+  "ageBody": "Scegli la fascia d’età per la privacy. Non chiediamo la data di nascita.",
+  "ageChoose": "Scegli",
+  "ageUnder18": "Meno di 18 anni",
+  "ageAdult": "18 anni o più",
+  "ageUnknown": "Preferisco non rispondere",
+  "ageSave": "Salva",
+  "adsPrivacyOptions": "Privacy degli annunci",
+  "adsStatusOff": "Annunci disattivati",
+  "adsStatusTest": "Annunci di prova",
+  "adsStatusLive": "Annunci attivati",
+  "adsLoading": "Pubblicità…",
+  "adsNativePrivacy": "Partita, impostazioni e fascia d’età restano sul dispositivo. Gli annunci sono disattivati per impostazione iniziale. Se attivati, Google AdMob può elaborare dati del dispositivo e della connessione; richiediamo annunci non personalizzati di categoria G. Minori di 18 anni ed età sconosciute richiedono impostazioni Families verificate. Senza annunci si continua a giocare. Modifica qui le tue scelte."
 };

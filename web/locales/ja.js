@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — 3つのマーク、新しい可能性。",
   "description": "マークが消える三目並べ。ひとり3つのマークで、コンピューターや友達と対戦しよう。",
   "fullscreen": "盤面を全画面表示",
-  "exitFullscreen": "全画面表示を終了"
+  "exitFullscreen": "全画面表示を終了",
+  "adsSettings": "広告と年齢",
+  "ageTitle": "年齢区分",
+  "ageBody": "プライバシー設定のため年齢区分を選んでください。生年月日は尋ねません。",
+  "ageChoose": "選択",
+  "ageUnder18": "18歳未満",
+  "ageAdult": "18歳以上",
+  "ageUnknown": "回答しない",
+  "ageSave": "保存",
+  "adsPrivacyOptions": "広告のプライバシー",
+  "adsStatusOff": "広告は無効",
+  "adsStatusTest": "テスト広告",
+  "adsStatusLive": "広告は有効",
+  "adsLoading": "広告…",
+  "adsNativePrivacy": "ゲーム、設定、年齢区分は端末に保存されます。広告は初期状態では無効です。有効にするとGoogle AdMobが端末や接続のデータを処理する場合があります。非パーソナライズのG評価広告を要求します。18歳未満や年齢不明の場合は、別途確認済みのFamilies設定が必要です。広告がなくても遊べます。選択はここで変更できます。"
 };

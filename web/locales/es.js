@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Tres fichas. Nuevas posibilidades.",
   "description": "Tres en raya con fichas que desaparecen. Tres fichas por jugador. Juega contra el ordenador o un amigo.",
   "fullscreen": "Tablero a pantalla completa",
-  "exitFullscreen": "Salir de pantalla completa"
+  "exitFullscreen": "Salir de pantalla completa",
+  "adsSettings": "Anuncios y edad",
+  "ageTitle": "Grupo de edad",
+  "ageBody": "Elige un grupo de edad para configurar la privacidad. No pedimos tu fecha de nacimiento.",
+  "ageChoose": "Elegir",
+  "ageUnder18": "Menor de 18",
+  "ageAdult": "18 o más",
+  "ageUnknown": "Prefiero no decirlo",
+  "ageSave": "Guardar",
+  "adsPrivacyOptions": "Privacidad de anuncios",
+  "adsStatusOff": "Anuncios desactivados",
+  "adsStatusTest": "Anuncios de prueba",
+  "adsStatusLive": "Anuncios activados",
+  "adsLoading": "Anuncio…",
+  "adsNativePrivacy": "La partida, los ajustes y el grupo de edad se guardan en este dispositivo. Los anuncios están desactivados inicialmente. Al activarlos, Google AdMob puede procesar datos del dispositivo y la conexión; solicitamos anuncios no personalizados con clasificación G. Para menores de 18 o edad desconocida se requiere una configuración Families verificada. La falta de anuncios no bloquea el juego. Puedes cambiar tus opciones aquí."
 };

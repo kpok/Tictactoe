@@ -6,10 +6,28 @@ if (!(releaseCode ==~ /[1-9][0-9]{0,9}/) || releaseCode.toLong() > 2100000000L) 
 }
 def appVersion = new groovy.json.JsonSlurper().parse(file('../../package.json')).version
 
+// Ad identifiers are public configuration, never signing credentials.
+def adsMode = providers.gradleProperty('adsMode').orElse('disabled').get()
+if (!(adsMode in ['disabled','test','live'])) throw new GradleException('Invalid adsMode')
+def adsAppId = adsMode == 'live' ? providers.gradleProperty('admobAppId').orElse('').get() : 'ca-app-pub-3940256099942544~3347511713'
+def adsUnitId = adsMode == 'live' ? providers.gradleProperty('admobInterstitialId').orElse('').get() : 'ca-app-pub-3940256099942544/1033173712'
+def privacyUrl = providers.gradleProperty('adsPrivacyUrl').orElse('').get()
+def familiesReady = providers.gradleProperty('adsFamiliesReviewed').orElse('false').get() == 'true'
+if (adsMode == 'live' && (!(adsAppId ==~ /ca-app-pub-[0-9]{16}~[0-9]{10}/) || !(adsUnitId ==~ /ca-app-pub-[0-9]{16}\/[0-9]{10}/) || adsAppId.contains('3940256099942544') || adsUnitId.contains('3940256099942544') || !privacyUrl.startsWith('https://') || providers.gradleProperty('adsLiveReviewed').orElse('false').get() != 'true')) {
+    throw new GradleException('Live ads require reviewed setup, real IDs and an HTTPS privacy URL')
+}
+if (privacyUrl.contains('"') || privacyUrl.contains('\\') || privacyUrl.contains('\n')) throw new GradleException('Invalid privacy URL')
+
 android {
     namespace = "com.kpok.threefold"
     compileSdk = rootProject.ext.compileSdkVersion
+    buildFeatures { buildConfig true }
     defaultConfig {
+        manifestPlaceholders.admobAppId = adsAppId
+        buildConfigField 'String', 'ADS_MODE', '"' + adsMode + '"'
+        buildConfigField 'String', 'ADS_UNIT_ID', '"' + adsUnitId + '"'
+        buildConfigField 'String', 'ADS_PRIVACY_URL', '"' + privacyUrl + '"'
+        buildConfigField 'boolean', 'ADS_FAMILIES_REVIEWED', familiesReady.toString()
         applicationId "com.kpok.threefold"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -42,6 +60,8 @@ dependencies {
     implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
     implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
     implementation project(':capacitor-android')
+    implementation 'com.google.android.gms:play-services-ads:24.9.0'
+    implementation 'com.google.android.ump:user-messaging-platform:4.0.0'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"

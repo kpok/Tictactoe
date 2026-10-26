@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Tatlong marka. Bagong posibilidad.",
   "description": "Tic-tac-toe na may nawawalang mga marka. Tatlong marka bawat manlalaro. Labanan ang kompyuter o kaibigan.",
   "fullscreen": "Buong screen ng tablero",
-  "exitFullscreen": "Lumabas sa buong screen"
+  "exitFullscreen": "Lumabas sa buong screen",
+  "adsSettings": "Mga ad at edad",
+  "ageTitle": "Pangkat ng edad",
+  "ageBody": "Pumili ng pangkat ng edad para sa privacy. Hindi namin hinihingi ang petsa ng kapanganakan.",
+  "ageChoose": "Pumili",
+  "ageUnder18": "Wala pang 18",
+  "ageAdult": "18 pataas",
+  "ageUnknown": "Ayaw kong sabihin",
+  "ageSave": "I-save",
+  "adsPrivacyOptions": "Privacy ng mga ad",
+  "adsStatusOff": "Naka-off ang mga ad",
+  "adsStatusTest": "Mga pansubok na ad",
+  "adsStatusLive": "Naka-on ang mga ad",
+  "adsLoading": "Patalastas…",
+  "adsNativePrivacy": "Sa device na ito naka-save ang laro, mga setting at pangkat ng edad. Naka-off ang mga ad bilang default. Kapag naka-on, maaaring iproseso ng Google AdMob ang data ng device at koneksyon; hindi personalized at G-rated ang hinihinging mga ad. Kailangan ng hiwalay na beripikadong Families settings para sa wala pang 18 o hindi alam ang edad. Tuloy ang laro kahit walang ad. Dito puwedeng baguhin ang edad at privacy."
 };

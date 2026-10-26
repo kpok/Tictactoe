@@ -16,7 +16,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "android:sync": "npm run build && cap sync android",
-    "android:build": "npm run android:sync && cd android && ./gradlew --no-daemon :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease"
+    "android:build": "npm run android:sync && cd android && ./gradlew --no-daemon :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease"
   },
   "devDependencies": {
     "@capacitor/cli": "8.5.3",

@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Tiga tanda. Kemungkinan baru.",
   "description": "Tic-tac-toe dengan tanda yang menghilang. Tiga tanda per pemain. Lawan komputer atau teman.",
   "fullscreen": "Papan layar penuh",
-  "exitFullscreen": "Keluar dari layar penuh"
+  "exitFullscreen": "Keluar dari layar penuh",
+  "adsSettings": "Iklan dan usia",
+  "ageTitle": "Kelompok usia",
+  "ageBody": "Pilih kelompok usia untuk pengaturan privasi. Kami tidak meminta tanggal lahir.",
+  "ageChoose": "Pilih",
+  "ageUnder18": "Di bawah 18",
+  "ageAdult": "18 atau lebih",
+  "ageUnknown": "Tidak ingin menjawab",
+  "ageSave": "Simpan",
+  "adsPrivacyOptions": "Privasi iklan",
+  "adsStatusOff": "Iklan nonaktif",
+  "adsStatusTest": "Iklan uji coba",
+  "adsStatusLive": "Iklan aktif",
+  "adsLoading": "Iklan…",
+  "adsNativePrivacy": "Permainan, pengaturan dan kelompok usia disimpan di perangkat ini. Iklan nonaktif secara default. Jika diaktifkan, Google AdMob dapat memproses data perangkat dan koneksi; kami meminta iklan nonpersonalisasi berperingkat G. Usia di bawah 18 atau tidak diketahui memerlukan pengaturan Families yang diverifikasi terpisah. Tanpa iklan, permainan tetap berjalan. Pilihan dapat diubah di sini."
 };

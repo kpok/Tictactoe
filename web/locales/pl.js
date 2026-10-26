@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Trzy znaki. Nowe możliwości.",
   "description": "Kółko i krzyżyk ze znikającymi znakami. Zagraj z komputerem lub znajomym.",
   "fullscreen": "Pełny ekran planszy",
-  "exitFullscreen": "Opuść pełny ekran"
+  "exitFullscreen": "Opuść pełny ekran",
+  "adsSettings": "Reklamy i wiek",
+  "ageTitle": "Przedział wieku",
+  "ageBody": "Wybierz przedział wieku, aby ustawić prywatność. Nie pytamy o datę urodzenia.",
+  "ageChoose": "Wybierz",
+  "ageUnder18": "Poniżej 18 lat",
+  "ageAdult": "18 lat lub więcej",
+  "ageUnknown": "Wolę nie podawać",
+  "ageSave": "Zapisz",
+  "adsPrivacyOptions": "Prywatność reklam",
+  "adsStatusOff": "Reklamy wyłączone",
+  "adsStatusTest": "Reklamy testowe",
+  "adsStatusLive": "Reklamy włączone",
+  "adsLoading": "Reklama…",
+  "adsNativePrivacy": "Partia, ustawienia i przedział wieku są zapisane na urządzeniu. Reklamy są domyślnie wyłączone. Po ich włączeniu Google AdMob może przetwarzać dane urządzenia i połączenia; żądamy reklam niespersonalizowanych o kategorii G. Reklamy dla osób poniżej 18 lat lub o nieznanym wieku wymagają osobno zweryfikowanej konfiguracji Families. Brak reklamy nie blokuje gry. Wybór wieku i prywatności można zmienić tutaj."
 };

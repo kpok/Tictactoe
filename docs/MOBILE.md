@@ -8,7 +8,7 @@ Projekt `android/` jest zapisany w repo, bez generowania nowego projektu przy ka
 npm ci
 npm run android:sync
 cd android
-./gradlew --no-daemon :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
+./gradlew --no-daemon :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
 ```
 
 Wymagane Android SDK z platform36 i build-tools36.0.0; SDK wskazuje ANDROID_HOME lub lokalny android/local.properties (nie commitować). Gradle `-PversionCode=42` ustawia kod wersji; versionName pochodzi z package.json.
@@ -33,7 +33,7 @@ Uwaga: skrypt wyłącza sieć emulatora; używać urządzenia testowego. Debug A
 
 ## Zachowanie aplikacji
 
-Pakiet zawiera lokalne HTML/CSS/JS, tłumaczenia i worker AI; działa offline od pierwszego startu. Natywna wersja v1 ma AI i lokalne PvP. Ukrywa tryb online, którego backend nie jest publicznie wdrożony, i nie rejestruje service workera PWA. Wersja web zachowuje online i PWA. Backup aplikacji Android jest wyłączony. Brak reklam, analityki, płatności i kont.
+Pakiet zawiera lokalne HTML/CSS/JS, tłumaczenia i worker AI; działa offline od pierwszego startu. Natywna wersja v1 ma AI i lokalne PvP. Ukrywa tryb online, którego backend nie jest publicznie wdrożony, i nie rejestruje service workera PWA. Wersja web zachowuje online i PWA. Backup aplikacji Android jest wyłączony. Opcjonalne reklamy są domyślnie wyłączone; szczegóły i warunki dla dzieci: [ADS.md](ADS.md). Brak analityki, płatności i kont.
 
 ## Internal Testing
 

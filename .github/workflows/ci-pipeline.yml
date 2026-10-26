@@ -100,9 +100,11 @@ jobs:
         run: npm run android:sync
       - name: Build Android packages
         working-directory: android
-        run: ./gradlew --no-daemon -PversionCode="$ANDROID_VERSION_CODE" :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
+        run: ./gradlew --no-daemon -PversionCode="$ANDROID_VERSION_CODE" :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
       - name: Collect immutable Android artifacts
         run: node scripts/android-artifacts.js
+      - name: Verify merged Android ad privacy manifest
+        run: python3 scripts/check-android-ad-manifest.py
       - uses: actions/upload-artifact@v4
         with:
           name: threefold-android-${{ github.sha }}

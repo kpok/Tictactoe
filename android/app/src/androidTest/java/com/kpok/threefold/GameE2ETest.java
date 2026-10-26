@@ -100,6 +100,11 @@ public class GameE2ETest {
         assertEquals("true", js("document.documentElement.scrollWidth <= innerWidth"));
         assertEquals("true", js("document.querySelector('[data-mode=online]').hidden"));
         assertEquals("true", js("!navigator.serviceWorker.controller"));
+        js("window.Capacitor.nativePromise('ThreefoldAds','getState').then(s=>window.__adsState=s);true");
+        await("window.__adsState && window.__adsState.mode === 'disabled' && !window.__adsState.initialized && window.__adsState.requests === 0");
+        js("window.Capacitor.nativePromise('ThreefoldAds','setAge',{age:'under18'}).then(()=>window.Capacitor.nativePromise('ThreefoldAds','getState')).then(s=>window.__adsState=s);true");
+        await("window.__adsState.age === 'under18' && !window.__adsState.initialized && window.__adsState.requests === 0");
+        js("window.Capacitor.nativePromise('ThreefoldAds','reset');true");
     }
 
     @Test public void activityRestartPreservesGameLanguageAndFocusViewDoesNotReset() throws Exception {

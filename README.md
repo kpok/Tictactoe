@@ -91,7 +91,7 @@ Android ma zapisany projekt Capacitor8.5.3: `com.kpok.threefold`, AI/lokalne PvP
 
 Ręczny workflow **Google Play · Internal Testing** uruchamia pełne CI dla wybranego commitu main, podpisuje ten sam AAB i opcjonalnie publikuje wyłącznie do internal. Wymaga środowiska `google-play-internal` z ograniczeniem do main oraz sekretów podpisu i Play API. Domyślnie `publish=false` przygotowuje podpisany AAB do pierwszego ręcznego uploadu. Żaden PR nie otrzymuje sekretów wydawniczych.
 
-Szczegóły: [Android/build/E2E](docs/MOBILE.md), [konfiguracja Play i sekretów](docs/GOOGLE_PLAY_TESTING.md). Repo jest publiczne — artefakty traktuj jako publiczne, nigdy nie dodawaj kluczy ani haseł do git. iOS pozostaje osobnym etapem. Brak reklam, płatności i analityki; konfiguracja Console i rzeczywisty upload wymagają dostępu właściciela.
+Szczegóły: [Android/build/E2E](docs/MOBILE.md), [konfiguracja Play i sekretów](docs/GOOGLE_PLAY_TESTING.md). Repo jest publiczne — artefakty traktuj jako publiczne, nigdy nie dodawaj kluczy ani haseł do git. iOS pozostaje osobnym etapem. Opcjonalna integracja reklam Android jest domyślnie wyłączona:5 ukończonych rund i minimum3 minuty, neutralne ustawienia wieku/UMP, osobna bramka Families dla dzieci/unknown. Web pozostaje bez reklam. [Konfiguracja reklam](docs/ADS.md). Brak płatności i analityki; konfiguracja Console i rzeczywisty upload wymagają dostępu właściciela.
 
 ## Źródła i dokumentacja
 

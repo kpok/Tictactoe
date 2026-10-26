@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — Trois symboles. De nouvelles possibilités.",
   "description": "Un morpion aux symboles qui disparaissent. Trois symboles par joueur. Jouez contre l’ordinateur ou un ami.",
   "fullscreen": "Plateau en plein écran",
-  "exitFullscreen": "Quitter le plein écran"
+  "exitFullscreen": "Quitter le plein écran",
+  "adsSettings": "Publicités et âge",
+  "ageTitle": "Tranche d’âge",
+  "ageBody": "Choisissez une tranche d’âge pour la confidentialité. Nous ne demandons pas votre date de naissance.",
+  "ageChoose": "Choisir",
+  "ageUnder18": "Moins de 18 ans",
+  "ageAdult": "18 ans ou plus",
+  "ageUnknown": "Je préfère ne pas répondre",
+  "ageSave": "Enregistrer",
+  "adsPrivacyOptions": "Confidentialité des publicités",
+  "adsStatusOff": "Publicités désactivées",
+  "adsStatusTest": "Publicités de test",
+  "adsStatusLive": "Publicités activées",
+  "adsLoading": "Publicité…",
+  "adsNativePrivacy": "La partie, les réglages et la tranche d’âge restent sur cet appareil. Les publicités sont désactivées par défaut. Une fois activées, Google AdMob peut traiter des données de l’appareil et de connexion ; nous demandons des annonces non personnalisées classées G. Les moins de 18 ans et âges inconnus nécessitent une configuration Families vérifiée. Sans annonce, le jeu continue. Modifiez vos choix ici."
 };

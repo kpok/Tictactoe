@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — 세 개의 표시, 새로운 가능성.",
   "description": "표시가 사라지는 틱택토. 각자 세 개의 표시로 컴퓨터나 친구와 대결하세요.",
   "fullscreen": "게임판 전체 화면",
-  "exitFullscreen": "전체 화면 종료"
+  "exitFullscreen": "전체 화면 종료",
+  "adsSettings": "광고 및 연령",
+  "ageTitle": "연령대",
+  "ageBody": "개인정보 설정을 위해 연령대를 선택하세요. 생년월일은 묻지 않습니다.",
+  "ageChoose": "선택",
+  "ageUnder18": "18세 미만",
+  "ageAdult": "18세 이상",
+  "ageUnknown": "응답하지 않음",
+  "ageSave": "저장",
+  "adsPrivacyOptions": "광고 개인정보 설정",
+  "adsStatusOff": "광고 꺼짐",
+  "adsStatusTest": "테스트 광고",
+  "adsStatusLive": "광고 켜짐",
+  "adsLoading": "광고…",
+  "adsNativePrivacy": "게임, 설정과 연령대는 이 기기에 저장됩니다. 광고는 기본적으로 꺼져 있습니다. 켜면 Google AdMob이 기기 및 연결 데이터를 처리할 수 있으며, 개인 맞춤이 아닌 G 등급 광고를 요청합니다. 18세 미만이나 연령 미상은 별도로 검증된 Families 설정이 필요합니다. 광고가 없어도 게임은 계속됩니다. 여기에서 선택을 바꿀 수 있습니다."
 };

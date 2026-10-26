@@ -111,5 +111,19 @@ export default {
   "appTitle": "Threefold — 三个棋子，全新可能。",
   "description": "会消失棋子的井字棋。每位玩家最多拥有三个棋子，与电脑或好友对战。",
   "fullscreen": "全屏棋盘",
-  "exitFullscreen": "退出全屏"
+  "exitFullscreen": "退出全屏",
+  "adsSettings": "广告与年龄",
+  "ageTitle": "年龄组",
+  "ageBody": "请选择用于隐私设置的年龄组。我们不会询问出生日期。",
+  "ageChoose": "请选择",
+  "ageUnder18": "未满18岁",
+  "ageAdult": "18岁及以上",
+  "ageUnknown": "不愿透露",
+  "ageSave": "保存",
+  "adsPrivacyOptions": "广告隐私选项",
+  "adsStatusOff": "广告已关闭",
+  "adsStatusTest": "测试广告",
+  "adsStatusLive": "广告已开启",
+  "adsLoading": "广告…",
+  "adsNativePrivacy": "游戏、设置和年龄组保存在此设备。广告默认关闭。开启后，Google AdMob可能处理设备和连接数据；我们请求非个性化的G级广告。未满18岁或年龄未知的广告需要单独验证的Families配置。没有广告也能继续游戏。您可以在此更改选项。"
 };
