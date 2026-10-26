@@ -6,3 +6,13 @@ test-results/
 .env
 *.log
 .DS_Store
+
+android-artifacts/
+android-e2e-results/
+*.jks
+*.keystore
+play-service-account*.json
+*.base64
+*.p12
+google-services.json
+*service-account*.json

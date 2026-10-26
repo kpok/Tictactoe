@@ -75,3 +75,5 @@ html[lang=tl] dialog h2{font-size:20px;line-height:1.4}
 @media(max-width:800px){html[lang=tl] .intro h1{font-size:22px;line-height:1.35}}
 /* WebKit's native select renderer can leak a long selected label past its fixed width. */
 .language-select{-webkit-appearance:none;appearance:none;min-width:0;overflow:hidden;text-overflow:ellipsis;padding-inline-end:18px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='m1 1 4 4 4-4' fill='none' stroke='%23a5afc2' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 5px center}
+
+.native-modes{grid-template-columns:repeat(2,minmax(0,1fr))}

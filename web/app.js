@@ -1,5 +1,7 @@
 import { newGame, other, play, validGame } from './engine.js';
 import { LANGUAGES, message, hasMessage, normalizeLanguage, languageFromPreferences, directionFor } from './i18n.js';
+// Native v1 bundles offline play; online requires a separately deployed trusted API.
+const nativeApp=window.Capacitor?.isNativePlatform?.()===true;
 const $ = id => document.getElementById(id);
 let language=languageFromPreferences(navigator.languages || [navigator.language]), mode='ai', difficulty='medium', sound=false, localGame=newGame(), game=localGame;
 let scores={ai:{O:0,X:0},local:{O:0,X:0},online:{O:0,X:0}}, counted=false;
@@ -19,8 +21,12 @@ try {
     counted=!!(localGame.winner||localGame.draw);
   }
   const stored=JSON.parse(sessionStorage.getItem('threefold.room'));
-  if(stored && /^[A-Z2-9]{6}$/.test(stored.code) && /^[a-f0-9]{64}$/.test(stored.token) && ['O','X'].includes(stored.seat)) {session=stored;mode='online';}
+  if(!nativeApp && stored && /^[A-Z2-9]{6}$/.test(stored.code) && /^[a-f0-9]{64}$/.test(stored.token) && ['O','X'].includes(stored.seat)) {session=stored;mode='online';}
 } catch { /* Corrupt or inaccessible storage must not prevent play. */ }
+if(nativeApp){
+  document.querySelector('[data-mode="online"]').hidden=true;
+  document.querySelector('.mode-tabs').classList.add('native-modes');
+}
 game=localGame;
 function save() {
   try {localStorage.setItem(storageKey,JSON.stringify({language,mode:mode==='online'?'ai':mode,difficulty,sound,game:localGame,scores}));}
@@ -141,6 +147,7 @@ function localRestart(confirmActive=true){
   cancelAI();localGame=newGame(other(localGame.starter));game=localGame;counted=false;save();render();scheduleAI();
 }
 function setMode(next){
+  if(nativeApp&&next==='online')return;
   if(next===mode){if(next==='online'&&!session)$('online-dialog').showModal();return;}
   cancelAI();clearTimeout(pollTimer);generation++;busy=false;$('create-room').disabled=false;mode=next;aiUnavailable=false;counted=!!(localGame.winner||localGame.draw);
   if(next==='online'){game=room?.game||newGame();counted=false;if(session)poll();else $('online-dialog').showModal();}
@@ -170,6 +177,7 @@ async function poll(){
   if(expected===generation&&session===auth&&ticket===pollSequence)pollTimer=setTimeout(poll,onlineHealthy?1000:3000);
 }
 async function enterRoom(joinCode){
+  if(nativeApp)return;
   if(busy)return;busy=true;$('online-error').textContent='';$('create-room').disabled=true;clearTimeout(pollTimer);const expected=++generation;
   try{
     const data=await api(joinCode?`/${joinCode}/join`:'',{},null);if(expected!==generation)return;
@@ -216,6 +224,6 @@ window.addEventListener('online',()=>{if(mode==='online')poll();render();});wind
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&mode==='online')poll();});
 translate();render();
 const invite=new URL(location.href).searchParams.get('room');
-if(invite&&/^[A-Z2-9]{6}$/.test(invite)&&(!session||session.code!==invite)){cancelAI();mode='online';$('join-code').value=invite;$('online-dialog').showModal();render();}
+if(!nativeApp&&invite&&/^[A-Z2-9]{6}$/.test(invite)&&(!session||session.code!==invite)){cancelAI();mode='online';$('join-code').value=invite;$('online-dialog').showModal();render();}
 else if(mode==='online'&&session)poll();else scheduleAI();
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
+if(!nativeApp&&'serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});

@@ -1,0 +1,46 @@
+{
+  "task_id": "android-delivery",
+  "repository": "kpok/Tictactoe",
+  "baseline_revision": "a1c3c2f580f5a87e40b1e308e5338f9b26ed3f05",
+  "requirement": "Android build -> separate real emulator E2E -> manual Google Play Internal Testing pipeline; PUBLIC repository",
+  "phase": "VERIFY",
+  "status": "in_progress",
+  "acceptance_criteria": {
+    "AC1": "implemented, CI pending",
+    "AC2": "5 instrumentation tests and fail-closed parser, CI pending",
+    "AC3": "manual same-revision sign/publish workflow implemented; no Play secrets/access",
+    "AC4": "credential isolation and protected-environment setup documented",
+    "AC5": "native offline policy implemented; browser validation pending"
+  },
+  "findings": {
+    "AR-PLAN-001": "resolved: API35 modern WebView diagnostics",
+    "AR-PLAN-002": "resolved: fail-closed runner parser"
+  },
+  "stage_round_counts": {
+    "plan_review": 2,
+    "implementation_fix": 0
+  },
+  "capabilities": {
+    "github_main": "authorized, available",
+    "local_node": "24 available",
+    "local_java": "17 only; Android requires21",
+    "local_android_sdk": "unavailable",
+    "play_console": "unavailable"
+  },
+  "authorized_actions": [
+    "local implementation",
+    "main commits",
+    "GitHub CI"
+  ],
+  "checks": {
+    "syntax": "PASS",
+    "unit_api": "24/24 PASS",
+    "native_sync_build_web": "PASS",
+    "yaml_parse": "PASS",
+    "local_browser": "2/2 native-shell Chromium/mobile PASS2.9s",
+    "android_build_emulator": "not yet run",
+    "independent_plan_review": "PASS after2 findings fixed",
+    "independent_code_review": "PASS static; Android runtime CI pending"
+  },
+  "next_step": "Commit main and observe first Android build/emulator CI"
+}

@@ -87,9 +87,11 @@ Publiczne uruchomienie wymaga HTTPS, reverse proxy i monitorowania. Ten commit n
 
 ## Android i iOS
 
-`capacitor.config.json` i `dist/` przygotowują układ do opakowania mobilnego, **nie są gotowymi ani przetestowanymi projektami natywnymi**. Dalsze kroki opisuje [docs/MOBILE.md](docs/MOBILE.md). Gra lokalna i AI nie wymagają backendu; natywny online wymaga jeszcze skonfigurowania zaufanego API/originu i bezpiecznego przechowania sesji. Obecny klient online jest same-origin dla wersji web.
+Android ma zapisany projekt Capacitor8.5.3: `com.kpok.threefold`, AI/lokalne PvP offline. CI buduje debug APK, APK instrumentacji i niepodpisany release AAB; osobny job testuje zainstalowaną aplikację na emulatorze API35. Dotychczasowe testy web pozostają.
 
-Brak reklam, płatności i analityki. Publikacja sklepowa, konta, podpisy, wymagane formularze, komercyjna polityka prywatności i akceptacja sklepów pozostają osobnym etapem. Nie ma prognozy przychodów.
+Ręczny workflow **Google Play · Internal Testing** uruchamia pełne CI dla wybranego commitu main, podpisuje ten sam AAB i opcjonalnie publikuje wyłącznie do internal. Wymaga środowiska `google-play-internal` z ograniczeniem do main oraz sekretów podpisu i Play API. Domyślnie `publish=false` przygotowuje podpisany AAB do pierwszego ręcznego uploadu. Żaden PR nie otrzymuje sekretów wydawniczych.
+
+Szczegóły: [Android/build/E2E](docs/MOBILE.md), [konfiguracja Play i sekretów](docs/GOOGLE_PLAY_TESTING.md). Repo jest publiczne — artefakty traktuj jako publiczne, nigdy nie dodawaj kluczy ani haseł do git. iOS pozostaje osobnym etapem. Brak reklam, płatności i analityki; konfiguracja Console i rzeczywisty upload wymagają dostępu właściciela.
 
 ## Źródła i dokumentacja
 
