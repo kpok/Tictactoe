@@ -3,20 +3,20 @@
   "repository": "kpok/Tictactoe",
   "baseline_revision": "a1c3c2f580f5a87e40b1e308e5338f9b26ed3f05",
   "requirement": "Android build -> separate real emulator E2E -> manual Google Play Internal Testing pipeline; PUBLIC repository",
-  "phase": "VERIFY",
-  "status": "in_progress",
+  "phase": "HANDOFF",
+  "status": "complete",
   "acceptance_criteria": {
-    "AC1": "implemented, CI pending",
-    "AC2": "5 instrumentation tests and fail-closed parser, CI pending",
-    "AC3": "manual same-revision sign/publish workflow implemented; no Play secrets/access",
-    "AC4": "credential isolation and protected-environment setup documented",
-    "AC5": "native offline policy implemented; browser validation pending"
+    "AC1": "verified Android APK/test APK/unsigned AAB build SUCCESS",
+    "AC2": "verified separate real Android15 emulator5/5 offline tests SUCCESS",
+    "AC3": "main-only internal pipeline implemented/reviewed; actual AAB synthetic signing PASS; real credentials/upload not run",
+    "AC4": "public-repo boundaries implemented and documented; environment main-only protection requires owner setup",
+    "AC5": "native offline policy verified in actual WebView and web regression;63/63 browser PASS"
   },
   "findings": {
     "AR-PLAN-001": "resolved: API35 modern WebView diagnostics",
     "AR-PLAN-002": "resolved: fail-closed runner parser",
-    "AR-CI-001": "setup-android default obsolete tools package; fixed explicit platform-tools",
-    "AR-CI-002": "unqualified Gradle test task selects dependency projects; fix :app-qualified tasks"
+    "AR-CI-001": "closed: explicit SDK packages, build succeeded",
+    "AR-CI-002": "closed: app-qualified tasks, all5 app tests passed"
   },
   "stage_round_counts": {
     "plan_review": 2,
@@ -40,10 +40,16 @@
     "native_sync_build_web": "PASS",
     "yaml_parse": "PASS",
     "local_browser": "2/2 native-shell Chromium/mobile PASS2.9s",
-    "android_build_emulator": "not yet run",
+    "android_build_emulator": "PASS build +5/5 instrumentation",
     "independent_plan_review": "PASS after2 findings fixed",
     "independent_code_review": "PASS static; Android runtime CI pending",
-    "android_app_compile": "debug and AndroidTest compilation PASS in run40327558788; overall failed dependency tests"
+    "android_app_compile": "debug and AndroidTest compilation PASS in run40327558788; overall failed dependency tests",
+    "web_e2e": "63/63 PASS first attempt",
+    "node22_24": "24/24 PASS each",
+    "ci_run": "https://github.com/kpok/Tictactoe/actions/runs/40328159473",
+    "artifact_provenance": "PASS downloaded run artifact12651604669",
+    "synthetic_signing": "PASS using Java17 jartool launcher + ephemeral key; cleanup PASS; no Play API"
   },
-  "next_step": "Commit main and observe first Android build/emulator CI"
+  "next_step": "Owner: protect google-play-internal environment to main, add signing secrets, build signed bootstrap AAB with publish=false; configure Play app/service account before publish=true",
+  "current_revision": "823a970c30bfdca7ea3fa62f6b55293b50918ed3"
 }

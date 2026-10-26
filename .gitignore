@@ -16,3 +16,4 @@ play-service-account*.json
 *.p12
 google-services.json
 *service-account*.json
+signed-android/
