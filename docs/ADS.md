@@ -35,10 +35,10 @@ Po `npm run android:sync`:
 ```sh
 cd android
 # Oficjalne identyfikatory TESTOWE Google, żadnych zarobków.
-./gradlew :app:assembleDebug -PadsMode=test
+./gradlew :app:assembleDebug -PdebugAdsMode=test
 ```
 
-Test mode używa wyłącznie oficjalnych test IDs zapisanych w Gradle. Brak poprawnej konfiguracji UMP dla wybranej aplikacji może uniemożliwić emisję; nie omijamy UMP po błędzie. Testy automatyczne używają deterministycznej atrapy mostka do sprawdzenia przepływu, a nie prawdziwych emisji sieciowych. Nie wolno klikać prawdziwych reklam podczas testów.
+Debug APK jest domyślnie bez reklam, niezależnie od ustawień release, aby CI nigdy nie wyświetlało prawdziwych reklam. Tylko jawne debugAdsMode=test pozwala testować SDK w debug. Release używa adsMode=disabled/test/live. Test mode zawsze używa oficjalnego testowego AD UNIT ID Google. Opcjonalnie dodaj -PadmobAppId=TWÓJ_POPRAWNY_APP_ID, aby testować komunikaty UMP skonfigurowane dla własnej aplikacji; bez tego używany jest sample App ID. Własny App ID nie zmienia testowej jednostki reklamowej. Brak poprawnej konfiguracji UMP dla wybranej aplikacji może uniemożliwić emisję; nie omijamy UMP po błędzie. Testy automatyczne używają deterministycznej atrapy mostka do sprawdzenia przepływu, a nie prawdziwych emisji sieciowych. Nie wolno klikać prawdziwych reklam podczas testów.
 
 Produkcyjna konfiguracja wymaga jawnych właściwości Gradle (można przechowywać niepoufne identyfikatory w android/gradle.properties po review):
 
@@ -54,7 +54,7 @@ adsFamiliesReviewed=false
 
 Placeholdery z przykładu celowo nie przechodzą walidacji. Live build odrzuca test IDs, brak prawdziwych ID, brak HTTPS privacy URL i brak adsLiveReviewed. Flagi review są potwierdzeniem właściciela, a nie automatycznym odczytem z Console. Bez adsFamiliesReviewed dzieci/unknown nadal nie uruchamiają SDK/UMP/żądań.
 
-Po zmianie publicznej konfiguracji dotychczasowy pipeline buduje i testuje ten sam commit, następnie podpisuje AAB. Nie trzeba zmieniać workflowów Play ani dodawać sekretów reklamowych. Przy aktywnym trybie test/live automat instrumentacji wymaga ustawienia profilu unknown przed grą; domyślny CI disabled nie uruchamia sieci reklamowej.
+Po zmianie publicznej konfiguracji dotychczasowy pipeline buduje i testuje ten sam commit, następnie podpisuje AAB. Nie trzeba zmieniać workflowów Play ani dodawać sekretów reklamowych. Automat instrumentacji używa debug APK bez reklam nawet po aktywowaniu trybu release test/live. Osobne testy rzeczywistych emisji i formularzy na testowym urządzeniu wymagają ręcznego builda debugAdsMode=test i konta/komunikatów AdMob. Nie są zastępowane przez atrapę ani CI offline.
 
 Przed zarabianiem: konto AdMob, link do sklepu, app-ads.txt na witrynie dewelopera, zatwierdzenie aplikacji, komunikaty UMP, prawidłowa polityka i deklaracje danych. **Żadna z tych usług nie została włączona w tej dostawie.**
 

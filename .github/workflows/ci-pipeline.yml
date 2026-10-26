@@ -101,6 +101,14 @@ jobs:
       - name: Build Android packages
         working-directory: android
         run: ./gradlew --no-daemon -PversionCode="$ANDROID_VERSION_CODE" :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
+      - name: Upload native unit test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-unit-reports
+          path: android/app/build/test-results/testDebugUnitTest/
+          if-no-files-found: warn
+          retention-days: 7
       - name: Collect immutable Android artifacts
         run: node scripts/android-artifacts.js
       - name: Verify merged Android ad privacy manifest

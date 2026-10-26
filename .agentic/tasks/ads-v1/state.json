@@ -36,7 +36,10 @@
     "browser_focused": "8/8 initialdesktop/mobile;4/4 latestdesktop adsregressions PASS",
     "native_unit": "CI pending5tests",
     "android_sdk_runtime": "not tested",
-    "live_emissions": "not enabled/not tested"
+    "live_emissions": "not enabled/not tested",
+    "first_ci": "40391747153: Android build/nativeunit/mergedmanifest PASS,75/75 browser PASS; emulator pending",
+    "final_ui_regression": "5/5 desktop ads PASS",
+    "final_polish_review": "independent PASS"
   },
   "next_step": "Observe full Android/web CI"
 }

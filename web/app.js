@@ -65,6 +65,8 @@ function translate(){
   $('ads-settings').hidden=!nativeApp;
   $('ads-age').value=adsState.age||'';
   $('ads-status').textContent=t(adsState.mode==='test'?'adsStatusTest':adsState.mode==='live'?'adsStatusLive':'adsStatusOff');
+  $('ads-policy-link').hidden=true;
+  try{const policy=new URL(adsState.privacyUrl);if(nativeApp&&policy.protocol==='https:'&&!policy.username&&!policy.password){$('ads-policy-link').href=policy.href;$('ads-policy-link').hidden=false;}}catch{/* No configured public policy URL. */}
   $('ads-privacy-options').hidden=!adsState.privacyOptions;
   $('ads-age').disabled=!!adsState.privacyBusy;$('ads-save').disabled=!!adsState.privacyBusy;
   if(nativeApp)document.querySelector('#privacy-dialog [data-i18n=privacyBody]').textContent=t('adsNativePrivacy');

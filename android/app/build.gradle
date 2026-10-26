@@ -9,7 +9,8 @@ def appVersion = new groovy.json.JsonSlurper().parse(file('../../package.json'))
 // Ad identifiers are public configuration, never signing credentials.
 def adsMode = providers.gradleProperty('adsMode').orElse('disabled').get()
 if (!(adsMode in ['disabled','test','live'])) throw new GradleException('Invalid adsMode')
-def adsAppId = adsMode == 'live' ? providers.gradleProperty('admobAppId').orElse('').get() : 'ca-app-pub-3940256099942544~3347511713'
+def adsAppId = providers.gradleProperty('admobAppId').orElse(adsMode == 'live' ? '' : 'ca-app-pub-3940256099942544~3347511713').get()
+if (!(adsAppId ==~ /ca-app-pub-[0-9]{16}~[0-9]{10}/)) throw new GradleException('Invalid AdMob App ID')
 def adsUnitId = adsMode == 'live' ? providers.gradleProperty('admobInterstitialId').orElse('').get() : 'ca-app-pub-3940256099942544/1033173712'
 def privacyUrl = providers.gradleProperty('adsPrivacyUrl').orElse('').get()
 def familiesReady = providers.gradleProperty('adsFamiliesReviewed').orElse('false').get() == 'true'
@@ -41,6 +42,13 @@ android {
         }
     }
     buildTypes {
+        debug {
+            // CI's instrumented APK never serves live ads, even when release ads are enabled.
+            def debugMode = providers.gradleProperty('debugAdsMode').orElse('disabled').get()
+            if (!(debugMode in ['disabled','test'])) throw new GradleException('debugAdsMode supports disabled or test only')
+            buildConfigField 'String', 'ADS_MODE', '"' + debugMode + '"'
+            buildConfigField 'String', 'ADS_UNIT_ID', '"ca-app-pub-3940256099942544/1033173712"'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

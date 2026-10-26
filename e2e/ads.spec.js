@@ -4,7 +4,7 @@ async function nativeFake(page,{delayed=false}={}){
   window.__adCalls=[];window.__age='';
   window.Capacitor={isNativePlatform:()=>true,nativePromise:async(_,method,data)=>{
    window.__adCalls.push({method,data});
-   if(method==='getState')return {mode:'disabled',age:window.__age,familiesReady:false,privacyOptions:false};
+   if(method==='getState')return {mode:'disabled',age:window.__age,familiesReady:false,privacyOptions:false,privacyUrl:window.__policyUrl||''};
    if(method==='setAge'){window.__age=data.age;return {};}
    if(method==='reset'){window.__age='';return {};}
    if(method==='beginBoundary')return {boundaryToken:'test'};
@@ -46,4 +46,13 @@ test('restored completed legacy game restarts when native boundary has no data',
  await Promise.all([page.waitForNavigation(),page.evaluate(()=>location.reload())]);
  await page.evaluate(()=>{const original=window.Capacitor.nativePromise;window.Capacitor.nativePromise=(plugin,method,data)=>method==='beginBoundary'?Promise.resolve(undefined):original(plugin,method,data);});
  await page.locator('#restart').click();await expect(page.locator('#board [data-mark=O]')).toHaveCount(0);await expect(page.locator('#restart')).toBeEnabled();
+});
+test('native privacy policy link only accepts credential-free HTTPS URLs',async({page})=>{
+ await nativeFake(page);await page.goto('/');
+ for(const [url,visible] of [['javascript:alert(1)',false],['https://example.org/privacy',true],['https://name@example.org/privacy',false]]){
+  await page.evaluate(value=>{window.__policyUrl=value;},url);await page.locator('#ads-settings').click();
+  if(visible){await expect(page.locator('#ads-policy-link')).toBeVisible();await expect(page.locator('#ads-policy-link')).toHaveAttribute('href',url);}
+  else await expect(page.locator('#ads-policy-link')).toBeHidden();
+  await page.locator('#ads-dialog .close-dialog').click();
+ }
 });
