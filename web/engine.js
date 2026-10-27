@@ -37,16 +37,33 @@ export function validGame(game) {
     if (!game || !Array.isArray(game.board) || game.board.length !== 9 || !['O','X'].includes(game.turn) ||
         !['O','X'].includes(game.starter) || !Number.isInteger(game.moves) || game.moves < 0 || game.moves > 100 ||
         ![null,'O','X'].includes(game.winner) || ![null,'repetition','limit'].includes(game.draw) ||
-        (game.winner && game.draw) || !Array.isArray(game.line) || !game.history || typeof game.history !== 'object') return false;
+        (game.winner && game.draw) || !Array.isArray(game.line) || !game.line.every(Number.isInteger) || !game.history || typeof game.history !== 'object' || Array.isArray(game.history)) return false;
+    // A stored board must agree with alternating turns and the three-mark FIFO cap.
+    if (game.turn !== (game.moves % 2 === 0 ? game.starter : other(game.starter))) return false;
     const all = [];
     for (const p of ['O','X']) {
       const queue = game.queues[p];
-      if (!Array.isArray(queue) || queue.length > 3) return false;
+      const turns = p === game.starter ? Math.ceil(game.moves / 2) : Math.floor(game.moves / 2);
+      if (!Array.isArray(queue) || queue.length !== Math.min(3, turns)) return false;
       for (const i of queue) { if (!Number.isInteger(i) || i < 0 || i > 8 || game.board[i] !== p) return false; all.push(i); }
     }
     if (new Set(all).size !== all.length || !game.board.every((cell,i) => cell === null || (['O','X'].includes(cell) && all.includes(i)))) return false;
-    if (Object.keys(game.history).length > 101 || !Object.entries(game.history).every(([key,n]) => /^[OX]\|[0-8,]*\|[0-8,]*$/.test(key) && Number.isInteger(n) && n > 0 && n <= 3)) return false;
-    return game.line.every(i => Number.isInteger(i) && i >= 0 && i < 9) &&
-      (game.winner ? LINES.some(line => line.every(i => game.board[i] === game.winner) && line.join() === game.line.join()) : game.line.length === 0);
+    const currentKey = positionKey(game), entries = Object.entries(game.history);
+    if (entries.length > 101 || !entries.every(([key,n]) => {
+      if (!/^[OX]\|(?:[0-8](?:,[0-8]){0,2})?\|(?:[0-8](?:,[0-8]){0,2})?$/.test(key) || !Number.isInteger(n) || n < 1 || n > 3) return false;
+      const [,o,x] = key.split('|'), marks = [o,x].flatMap(queue => queue ? queue.split(',') : []);
+      return new Set(marks).size === marks.length && (n < 3 || key === currentKey);
+    })) return false;
+    const repetitions = game.history[currentKey];
+    if (!Number.isInteger(repetitions) || entries.reduce((total,[,n]) => total+n,0) !== game.moves+1) return false;
+    const winning = p => LINES.some(line => line.every(i => game.board[i] === p));
+    if (game.winner) {
+      return game.winner === other(game.turn) && !winning(game.turn) &&
+        LINES.some(line => line.every(i => game.board[i] === game.winner) && line.join() === game.line.join());
+    }
+    if (winning('O') || winning('X') || game.line.length !== 0) return false;
+    if (game.draw === 'repetition') return repetitions === 3;
+    if (game.draw === 'limit') return game.moves === 100 && repetitions < 3;
+    return game.moves < 100 && repetitions < 3;
   } catch { return false; }
 }

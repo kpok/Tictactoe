@@ -7,7 +7,7 @@ import { checkPolicy, readWorkflows, readPins, evaluateGate, ownerContext } from
 const workflows=await readWorkflows(),pins=await readPins();
 function mutate(change){const copy=structuredClone(workflows);change(copy);assert.throws(()=>checkPolicy(copy,pins));}
 test('actual workflow gates admit only the owner on main and reject hostile event contexts',()=>{
-  assert.equal(checkPolicy(workflows,pins),11);
+  assert.equal(checkPolicy(workflows,pins),12);
   const gate=workflows['ci-pipeline.yml'].jobs['build-and-unit-tests'].if;
   assert.equal(evaluateGate(gate,ownerContext({event_name:'workflow_dispatch'})),true);
   assert.equal(evaluateGate(gate,ownerContext({actor:'kpok',triggering_actor:'attacker'})),false);

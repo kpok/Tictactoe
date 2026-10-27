@@ -1,0 +1,25 @@
+{
+  "task_id": "release-hardening",
+  "baseline_revision": "c9aec957a60bdb23b20b400af7a5808d3be94078",
+  "phase": "VERIFY",
+  "status": "in_progress",
+  "stage_round_counts": {
+    "plan_review": 1,
+    "code_review": 1,
+    "fix": 0
+  },
+  "checks": {
+    "node": "39/39 PASS",
+    "python": "10/10 PASS",
+    "syntax_policy_build": "PASS",
+    "independent_state_review": "PASS;10000legalgames144146positions",
+    "independent_release_review": "PASS static+focusedtests",
+    "actual_android_release": "CI pending"
+  },
+  "next_step": "Push authorized main and verify actual AAB/signing/release update CI",
+  "limits": [
+    "No real Play upload or real upload key",
+    "No ads activation",
+    "Current schema upgrade only; no allhistoricalmigrationclaim"
+  ]
+}

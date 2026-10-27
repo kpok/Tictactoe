@@ -17,3 +17,8 @@ play-service-account*.json
 google-services.json
 *service-account*.json
 signed-android/
+
+# Disposable release upgrade packages and diagnostics
+release-smoke/
+release-upgrade-results/
+__pycache__/

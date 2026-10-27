@@ -40,3 +40,7 @@ Pakiet zawiera lokalne HTML/CSS/JS, tłumaczenia i worker AI; działa offline od
 Instrukcja: [GOOGLE_PLAY_TESTING.md](GOOGLE_PLAY_TESTING.md). Workflow `Google Play · Internal Testing` jest ręczny, uruchamiany z main. Weryfikuje ponownie dokładnie wybrany commit przez reusable CI, następnie podpisuje wcześniej zbudowany AAB. Upload wymaga jawnego publish=true; track jest zawsze internal, nigdy production.
 
 Brak sekretów/konfiguracji Play blokuje podpisanie/upload, ale nie blokuje normalnego CI i emulatora. Ten kod nie zakłada konta Play, nie tworzy kluczy produkcyjnych i nie publikuje automatycznie.
+
+## Release hardening
+
+CI sprawdza rzeczywisty manifest AAB przez bundletool1.18.3 z kontrolą SHA-256: pakiet, obie wersje, flagi release, backup, cleartext i przejrzane uprawnienia. Test aktualizacji buduje release APK1001/1002 i AAB z jednorazowym kluczem poza repo; certyfikat APK i AAB musi odpowiadać temu kluczowi. Na Android15 instalacja `-r` zachowuje lokalną partię i wybrany język; kolejny ruch musi działać offline. To kontrola aktualnego schematu danych, nie wszystkich historycznych migracji ani podpisu Play. Do publicznych artefaktów trafiają wyłącznie diagnostyka UI/logi, bez klucza i paczek próbnych. Prawdziwy pipeline weryfikuje certyfikat podpisanego AAB względem skonfigurowanego upload key.

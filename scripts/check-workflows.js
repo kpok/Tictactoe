@@ -32,7 +32,7 @@ export function ownerContext(overrides={}){
   return {github:{repository:'kpok/Tictactoe',repository_id:'969630128',repository_owner_id:'10676481',actor_id:'10676481',actor:'kpok',triggering_actor:'kpok',ref:'refs/heads/main',event_name:'push',...overrides}};
 }
 const workflowJobs={
-  'ci-pipeline.yml':['android-build','android-emulator-e2e','build-and-unit-tests','playwright'],
+  'ci-pipeline.yml':['android-build','android-emulator-e2e','build-and-unit-tests','playwright','release-upgrade'],
   'deploy.yml':['package'],
   'repo-diagnostics.yml':['actions-smoke','diagnostics','jekyll-smoke'],
   'google-play-internal.yml':['sign-and-publish','validate','verify']
@@ -71,7 +71,7 @@ export function checkPolicy(workflows,pins){
       assert.ok(Number.isInteger(job['timeout-minutes'])&&job['timeout-minutes']>0&&job['timeout-minutes']<=25,`${label}: bounded timeout required`);
       assert.equal(job.concurrency?.['cancel-in-progress'],false,`${label}: no cancellation of trusted work`);
       const group=job.concurrency?.group;
-      assert.equal(group,`trusted-threefold-${name}${name==='build-and-unit-tests'?'-${{ matrix.node }}':''}`);
+      assert.equal(group,`trusted-threefold-${ci?'${{ github.workflow }}-':''}${name}${name==='build-and-unit-tests'?'-${{ matrix.node }}':''}`);
       assert.ok(!groups.has(group),`${label}: shared concurrency group`);groups.add(group);
       if(name==='sign-and-publish'){
         assert.equal(job.needs,'verify');assert.equal(job.environment,'google-play-internal');

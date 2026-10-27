@@ -55,3 +55,38 @@ test('real legal cycle ends in a threefold draw without filling the board',()=>{
   assert.equal(game.draw,'repetition');assert.equal(game.moves,22);assert.equal(game.winner,null);
   assert.throws(()=>play(game,4));
 });
+
+test('persisted games reject inconsistent turns, FIFO counts and terminal results', () => {
+  const won=sequence([0,3,1,4,2]);
+  const corrupt=[
+    {...newGame(),moves:20},
+    {...sequence([4]),turn:'O'},
+    {...newGame(),draw:'repetition'},
+    {...newGame(),draw:'limit'},
+    {...won,winner:null,line:[]},
+    {...won,turn:'O'},
+    {...won,line:['0','1','2']},
+    {...sequence([4]),starter:'X'},
+  ];
+  for(const game of corrupt)assert.equal(validGame(game),false);
+});
+test('persisted repetition history must identify the current position and agree with move count', () => {
+  const g=sequence([4]);
+  for(const history of [{},[],{[positionKey(g)]:1},{[positionKey(g)]:2,'O|0,0|':1},{[positionKey(g)]:2,'O|0|0':1}]) {
+    assert.equal(validGame({...g,history}),false);
+  }
+  const impossible=structuredClone(g);
+  impossible.history['O||']=3;
+  impossible.history[positionKey(g)]=1;
+  assert.equal(validGame(impossible),false);
+});
+test('legal saved FIFO games, both starters and all terminal reasons survive JSON round trips', () => {
+  const limitMoves=[8,4,3,5,0,2,7,1,8,3,5,4,0,7,2,6,3,1,4,0,7,8,5,2,6,4,1,3,0,7,8,6,5,4,3,0,2,1,6,8,5,4,3,7,1,2,6,5,8,4,0,7,3,2,1,8,4,6,5,3,7,1,2,8,4,6,3,5,7,0,2,1,6,3,5,8,0,2,4,1,3,7,6,0,2,5,8,4,1,6,7,3,5,8,2,4,0,7,3,5];
+  const cycle=[0,1,2,3,8,7,6,5];
+  for(const starter of ['O','X'])for(const moves of [[],[4,0,8,1,3,6,5],[0,3,1,4,2],[...cycle,...cycle,...cycle.slice(0,6)],limitMoves]) {
+    let g=newGame(starter);
+    assert(validGame(JSON.parse(JSON.stringify(g))));
+    for(const move of moves){g=play(g,move);assert(validGame(JSON.parse(JSON.stringify(g))));}
+    if(moves===limitMoves)assert.equal(g.draw,'limit');
+  }
+});
