@@ -34,6 +34,7 @@ export function ownerContext(overrides={}){
 const workflowJobs={
   'ci-pipeline.yml':['android-build','android-emulator-e2e','build-and-unit-tests','playwright'],
   'deploy.yml':['package'],
+  'repo-diagnostics.yml':['actions-smoke','diagnostics','jekyll-smoke'],
   'google-play-internal.yml':['sign-and-publish','validate','verify']
 };
 export async function readPins(){return JSON.parse(await readFile(resolve(root,'.github/action-pins.json'),'utf8'));}
@@ -89,6 +90,7 @@ export function checkPolicy(workflows,pins){
       }
     }
   }
+  assert.ok(workflows['repo-diagnostics.yml'].jobs.diagnostics.steps.every(s=>!s.uses),'Baseline diagnostics must run without external actions');
   const play=workflows['google-play-internal.yml'];
   assert.equal(play.on.workflow_dispatch.inputs.publish.default,false,'Publishing must be opt-in');
   const upload=play.jobs['sign-and-publish'].steps.find(s=>s.uses?.startsWith('r0adkll/upload-google-play@'));

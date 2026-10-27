@@ -1,0 +1,148 @@
+name: Repository configuration diagnostics
+on:
+  workflow_dispatch:
+permissions: {}
+jobs:
+  diagnostics:
+    if: >-
+      github.repository == 'kpok/Tictactoe' &&
+      github.repository_id == '969630128' &&
+      github.repository_owner_id == '10676481' &&
+      github.actor_id == '10676481' &&
+      github.actor == 'kpok' &&
+      github.triggering_actor == 'kpok' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+    concurrency:
+      group: trusted-threefold-diagnostics
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Report runner and read-only configuration visibility
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: python
+        run: |
+          import json, os, urllib.request, urllib.error
+          repo = os.environ['GITHUB_REPOSITORY']
+          probes = [
+              ('Actions policy', 'actions/permissions', ['enabled', 'allowed_actions', 'sha_pinning_required']),
+              ('Selected actions', 'actions/permissions/selected-actions', ['github_owned_allowed', 'verified_allowed', 'patterns_allowed']),
+              ('Token defaults', 'actions/permissions/workflow', ['default_workflow_permissions', 'can_approve_pull_request_reviews']),
+              ('Fork approvals', 'actions/permissions/fork-pr-contributor-approval', ['approval_policy']),
+              ('Pages source', 'pages', ['build_type', 'source', 'status']),
+          ]
+          lines = ['# Repository diagnostics', '',
+                   'This job proves that an owner-authorized hosted runner can start.',
+                   'UNKNOWN is not PASS: the built-in read-only token may not inspect administrative settings.', '',
+                   '| Probe | Result |', '| --- | --- |']
+          details = []
+          for label, path, keys in probes:
+              request = urllib.request.Request(
+                  f'https://api.github.com/repos/{repo}/{path}',
+                  headers={'Authorization': 'Bearer ' + os.environ['GH_TOKEN'],
+                           'Accept': 'application/vnd.github+json',
+                           'X-GitHub-Api-Version': '2022-11-28'})
+              try:
+                  with urllib.request.urlopen(request, timeout=10) as response:
+                      data = json.load(response)
+                  safe = {key: data[key] for key in keys if key in data}
+                  lines.append(f'| {label} | Readable; inspect values below |')
+                  details.extend([f'## {label}', '```json', json.dumps(safe, indent=2), '```'])
+              except urllib.error.HTTPError as error:
+                  lines.append(f'| {label} | UNKNOWN (HTTP {error.code}); check Settings manually |')
+              except (urllib.error.URLError, TimeoutError, ValueError):
+                  lines.append(f'| {label} | UNKNOWN (network or response error) |')
+          lines.extend(['', *details, '',
+                        'A successful run does not prove that fork approvals, collaborator access, historical workflows or generated Pages are secured.',
+                        'See docs/WORKFLOW_SECURITY_PL.md. No configuration was changed.'])
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as report:
+              report.write('\n'.join(lines) + '\n')
+  actions-smoke:
+    if: >-
+      github.repository == 'kpok/Tictactoe' &&
+      github.repository_id == '969630128' &&
+      github.repository_owner_id == '10676481' &&
+      github.actor_id == '10676481' &&
+      github.actor == 'kpok' &&
+      github.triggering_actor == 'kpok' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+    concurrency:
+      group: trusted-threefold-actions-smoke
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Test versions and create harmless artifact
+        run: |
+          node --version
+          java -version
+          mkdir -p diagnostic-upload
+          printf 'threefold-diagnostic\n' > diagnostic-upload/probe.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: configuration-probe
+          path: diagnostic-upload/probe.txt
+          retention-days: 1
+          if-no-files-found: error
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: configuration-probe
+          path: diagnostic-download
+      - name: Verify artifact round trip
+        run: |
+          cmp diagnostic-upload/probe.txt diagnostic-download/probe.txt
+          echo '## Official actions and artifact round trip: PASS' >> "$GITHUB_STEP_SUMMARY"
+  jekyll-smoke:
+    if: >-
+      github.repository == 'kpok/Tictactoe' &&
+      github.repository_id == '969630128' &&
+      github.repository_owner_id == '10676481' &&
+      github.actor_id == '10676481' &&
+      github.actor == 'kpok' &&
+      github.triggering_actor == 'kpok' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+    concurrency:
+      group: trusted-threefold-jekyll-smoke
+      cancel-in-progress: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Create isolated Jekyll fixture
+        run: |
+          mkdir -p diagnostic-jekyll
+          printf '%s\n' 'title: Threefold diagnostics' > diagnostic-jekyll/_config.yml
+          printf '%s\n' '---' 'layout: null' '---' 'threefold-jekyll-probe' > diagnostic-jekyll/index.md
+      - name: Test official Pages Jekyll action without deploying
+        uses: actions/jekyll-build-pages@44a6e6beabd48582f863aeeb6cb2151cc1716697 # v1
+        with:
+          source: ./diagnostic-jekyll
+          destination: ./diagnostic-site
+      - name: Verify generated fixture
+        run: |
+          grep -q 'threefold-jekyll-probe' diagnostic-site/index.html
+          echo '## Official Jekyll fixture build: PASS (no deployment)' >> "$GITHUB_STEP_SUMMARY"

@@ -7,7 +7,7 @@ import { checkPolicy, readWorkflows, readPins, evaluateGate, ownerContext } from
 const workflows=await readWorkflows(),pins=await readPins();
 function mutate(change){const copy=structuredClone(workflows);change(copy);assert.throws(()=>checkPolicy(copy,pins));}
 test('actual workflow gates admit only the owner on main and reject hostile event contexts',()=>{
-  assert.equal(checkPolicy(workflows,pins),8);
+  assert.equal(checkPolicy(workflows,pins),11);
   const gate=workflows['ci-pipeline.yml'].jobs['build-and-unit-tests'].if;
   assert.equal(evaluateGate(gate,ownerContext({event_name:'workflow_dispatch'})),true);
   assert.equal(evaluateGate(gate,ownerContext({actor:'kpok',triggering_actor:'attacker'})),false);
@@ -45,4 +45,15 @@ test('duplicate YAML keys and aliases cannot hide a second workflow definition',
     await writeFile(join(dir,'ci.yml'),'jobs: &jobs {}\nalias: *jobs\n');
     await assert.rejects(readWorkflows(dir));
   }finally{await rm(dir,{recursive:true,force:true});}
+});
+test('diagnostic report labels inaccessible settings UNKNOWN and filters response fields',async()=>{
+  const { spawnSync }=await import('node:child_process');
+  const script=workflows['repo-diagnostics.yml'].jobs.diagnostics.steps[0].run;
+  const harness=`import io,json,os,tempfile,urllib.error\nfrom unittest.mock import patch\nscript=${JSON.stringify(script)}\nwith tempfile.TemporaryDirectory() as d:\n p=os.path.join(d,'summary.md')\n os.environ.update(GITHUB_REPOSITORY='kpok/Tictactoe',GH_TOKEN='test-token',GITHUB_STEP_SUMMARY=p)\n def reply(request,timeout):\n  if request.full_url.endswith('/actions/permissions'):\n   return io.StringIO(json.dumps({'enabled':False,'allowed_actions':'selected','unreviewed_field':'must-not-leak'}))\n  raise urllib.error.HTTPError(request.full_url,403,'Forbidden',None,None)\n with patch('urllib.request.urlopen',side_effect=reply):\n  exec(compile(script,'diagnostic-inline','exec'))\n print(open(p).read())\n`;
+  const result=spawnSync('python3',['-c',harness],{encoding:'utf8'});
+  assert.equal(result.status,0,result.stderr);
+  assert.match(result.stdout,/"enabled": false/);
+  assert.match(result.stdout,/UNKNOWN \(HTTP 403\)/);
+  assert.doesNotMatch(result.stdout,/must-not-leak|test-token/);
+  assert.match(result.stdout,/successful run does not prove/);
 });

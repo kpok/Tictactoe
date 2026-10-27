@@ -4,9 +4,10 @@ Repozytorium: **kpok/Tictactoe**, ID `969630128`. Konto właściciela: **kpok**,
 
 ## Zabezpieczenia zapisane w repo
 
-Każdy z 8 jobów w 3 edytowalnych workflowach wymaga właściwej nazwy i ID repozytorium, ID właściciela i aktora, `actor=kpok`, `triggering_actor=kpok`, gałęzi `refs/heads/main` oraz dozwolonego zdarzenia. Inni użytkownicy i boty nie dostają wyjątku. Obcy re-run nie może wykorzystać uprawnień pierwotnego uruchomienia właściciela.
+Każdy z 11 jobów w 4 edytowalnych workflowach wymaga właściwej nazwy i ID repozytorium, ID właściciela i aktora, `actor=kpok`, `triggering_actor=kpok`, gałęzi `refs/heads/main` oraz dozwolonego zdarzenia. Inni użytkownicy i boty nie dostają wyjątku. Obcy re-run nie może wykorzystać uprawnień pierwotnego uruchomienia właściciela.
 
 - **Build and test**: push właściciela na `main` lub ręczny run na `main`. Brak `pull_request` i `pull_request_target`.
+- **Repository configuration diagnostics**: tylko ręcznie przez właściciela na `main`; diagnostyka i próby bez publikacji.
 - **Package web preview**: tylko ręcznie przez właściciela na `main`; nadal wyłącznie pakowanie.
 - **Google Play Internal Testing**: tylko ręcznie przez właściciela na `main`; pełne CI pozostaje obowiązkowe, podpisywanie w środowisku `google-play-internal`, `publish=false` domyślnie. Testy nie dziedziczą sekretów. Reusable CI ocenia oryginalny kontekst wywołującego (push/dispatch), a nie osobne zdarzenie `workflow_call`.
 
@@ -70,3 +71,21 @@ W interfejsie mogą być widoczne wpisy workflow ze statusem skipped; bramka blo
 - [Kontekst aktora i re-run](https://docs.github.com/en/actions/reference/workflows-and-actions/contexts)
 - [Ponawianie runów](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/re-run-workflows-and-jobs)
 - [Źródło GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
+
+## Ręczny workflow diagnostyczny
+
+Otwórz [Actions → Repository configuration diagnostics](https://github.com/kpok/Tictactoe/actions/workflows/repo-diagnostics.yml), kliknij **Run workflow**, wybierz `main` i uruchom jako `kpok`. Workflow ma wyłącznie trigger ręczny; nie publikuje strony ani paczek Play i nie zmienia ustawień. Nie potrzebuje PAT ani sekretów konta. Pozostają te same bramki właściciela co w pozostałych workflowach (teraz 11 definicji jobów w 4 plikach).
+
+- **diagnostics**: uruchamia wbudowany Python bez `uses`. W Summary zapisuje odczytane, wybrane pola polityki Actions/Pages. HTTP401/403/404 i błędy sieci oznacza **UNKNOWN**. Wbudowany token z `contents:read` zwykle nie może czytać ustawień administracyjnych; zielony job potwierdza wtedy wyłącznie start runnera, nie poprawność zabezpieczeń.
+- **actions-smoke**: sprawdza checkout, Node24, Java21 oraz upload/download i porównanie nieszkodliwego pliku. Wynik PASS potwierdza tylko te konkretne akcje i ich SHA; nie testuje wszystkich akcji emulatora, podpisywania lub publikacji.
+- **jekyll-smoke**: buduje małą izolowaną stronę próbną oficjalną akcją Jekyll. Nie wdraża jej. Błąd „action is not allowed” wskazuje na listę dozwolonych akcji; błąd pobrania obrazu/budowania może mieć inną przyczynę, którą pokażą logi. Akcja ma pełny SHA, ale jej upstreamowy plik używa obrazu Docker z tagiem — nie deklarujemy przypięcia wszystkich zależności przechodnich.
+
+Do ścisłej listy dozwolonych akcji dodaj także:
+
+```text
+actions/jekyll-build-pages@44a6e6beabd48582f863aeeb6cb2151cc1716697
+```
+
+To dopuszcza wersję próbną; generowany workflow Pages może odwoływać się do innego SHA/tagu i dodatkowych akcji. Sukces próby nie dowodzi poprawności wszystkich ustawień produkcyjnego Pages.
+
+Joby są niezależne: blokada akcji Jekyll nie wymaga uruchomienia innych testów w jego jobie, a bazowa diagnostyka nie korzysta z zewnętrznych akcji. GitHub może zgłosić blokadę już podczas przygotowywania joba. Gdy Actions są całkowicie wyłączone, żaden test nie wystartuje — najpierw włącz je w Settings → Actions → General. Jeśli GitHub wyłączył Actions dla konta/repo w osobnym stanie administracyjnym, potrzebny może być kontakt ze wsparciem GitHuba. Nie dodawaj tokenu administracyjnego do tego workflowa, żeby usuwać UNKNOWN.
