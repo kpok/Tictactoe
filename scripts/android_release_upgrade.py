@@ -27,15 +27,33 @@ def center(bounds):
     return str((left + right) // 2), str((top + bottom) // 2)
 
 
+def snapshot():
+    # UIAutomator can exit zero without writing a dump while the cold UI is busy.
+    # Remove the previous file first so a failed dump can never satisfy a later assertion.
+    path = '/sdcard/release-window.xml'
+    run('adb', 'shell', 'rm', '-f', path)
+    output = run('adb', 'shell', 'uiautomator', 'dump', path)
+    (OUT / 'uiautomator.txt').write_text(output)
+    xml = run('adb', 'shell', 'cat', path)
+    tree = ET.fromstring(xml)
+    (OUT / 'ui.xml').write_text(xml)
+    return tree
+
+
 def wait_node(pattern, scroll=False):
     deadline = time.monotonic() + 75
     swipes = 0
     while time.monotonic() < deadline:
-        run('adb', 'shell', 'uiautomator', 'dump', '/sdcard/release-window.xml')
-        xml = run('adb', 'shell', 'cat', '/sdcard/release-window.xml')
-        (OUT / 'ui.xml').write_text(xml)
-        for node in reversed(list(ET.fromstring(xml).iter('node'))):
-            if re.search(pattern, label(node)):
+        try:
+            tree = snapshot()
+        except (subprocess.SubprocessError, ET.ParseError) as error:
+            parts = (getattr(error, 'stdout', '') or '', getattr(error, 'stderr', '') or '')
+            detail = ''.join(part.decode(errors='replace') if isinstance(part, bytes) else part for part in parts)
+            (OUT / 'probe-error.txt').write_text(str(error) + '\n' + detail)
+            time.sleep(.3)
+            continue
+        for node in reversed(list(tree.iter('node'))):
+            if re.search(pattern, label(node), re.IGNORECASE):
                 try:
                     center(node.get('bounds', ''))
                     return node
@@ -109,6 +127,10 @@ if __name__ == '__main__':
         main()
     finally:
         OUT.mkdir(exist_ok=True)
+        try:
+            screenshot('final-screen.png')
+        except subprocess.SubprocessError:
+            pass
         try:
             (OUT / 'logcat.txt').write_text(run('adb', 'logcat', '-d', '-t', '1200'))
         except subprocess.SubprocessError:

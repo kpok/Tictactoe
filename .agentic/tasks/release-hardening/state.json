@@ -6,7 +6,7 @@
   "stage_round_counts": {
     "plan_review": 1,
     "code_review": 1,
-    "fix": 1
+    "fix": 2
   },
   "checks": {
     "node": "39/39 PASS",
@@ -23,6 +23,7 @@
     "Current schema upgrade only; no allhistoricalmigrationclaim"
   ],
   "findings": {
-    "RELEASE-003": "ActualAAB rejected existing WorkManager FOREGROUND_SERVICE permission; source-chain inspected and one exact normal permission allowed, unknowns still blocked"
+    "RELEASE-003": "ActualAAB rejected existing WorkManager FOREGROUND_SERVICE permission; source-chain inspected and one exact normal permission allowed, unknowns still blocked",
+    "RELEASE-004": "UIAutomator zeroexit without firstXML: readiness retries, stale dump removed everyprobe, boundedfail and final screenshot"
   }
 }
