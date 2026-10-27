@@ -99,6 +99,33 @@ test('two isolated browsers join, play, reconnect and accept rematch together',a
 test.describe('injected HTTP failures',()=>{
   // Playwright routing cannot reliably intercept service-worker-owned requests.
   test.use({serviceWorkers:'block'});
+test('unchanged room polls preserve tap targets and reconnect still renders',async({page})=>{
+  await page.goto('/');await page.locator('[data-mode="online"]').click();await page.locator('#create-room').click();
+  await expect(page.locator('#online-dialog')).toBeHidden();
+  await expect(page.locator('#turn-status')).toHaveText('Czekamy na znajomego…');
+  const status=await page.locator('#turn-status').textContent();
+  await page.evaluate(()=>{
+    window.__boardTarget=document.querySelector('#board button');
+    window.__restartText=document.querySelector('#restart span').firstChild;
+    const original=window.fetch;
+    window.fetch=async(...args)=>{
+      const response=await original(...args);
+      if(response.url.includes('/api/rooms/')&&(!args[1]?.method||args[1].method==='GET')){
+        const json=response.json.bind(response);
+        response.json=async()=>{const data=await json();setTimeout(()=>window.__pollApplied=true,0);return data;};
+      }
+      return response;
+    };
+    window.__pollApplied=false;document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await expect.poll(()=>page.evaluate(()=>window.__pollApplied)).toBe(true);
+  expect(await page.evaluate(()=>window.__boardTarget===document.querySelector('#board button')&&window.__restartText===document.querySelector('#restart span').firstChild)).toBe(true);
+  await page.evaluate(()=>window.dispatchEvent(new Event('offline')));
+  await expect(page.locator('#turn-status')).not.toHaveText(status);
+  await page.evaluate(()=>{window.__pollApplied=false;window.dispatchEvent(new Event('online'));});
+  await expect.poll(()=>page.evaluate(()=>window.__pollApplied)).toBe(true);
+  await expect(page.locator('#turn-status')).toHaveText(status);
+});
 test('failed connection is visible and local play remains available',async({page})=>{
   await page.route('**/api/rooms',route=>route.fulfill({status:503,contentType:'application/json',body:'{"error":"rooms_full"}'}));
   await page.goto('/');await page.locator('[data-mode="online"]').click();await page.locator('#create-room').click();

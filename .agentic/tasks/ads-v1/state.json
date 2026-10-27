@@ -19,12 +19,14 @@
     "AR-ADS-001": "resolved: independent rereview PASS",
     "AR-ADS-002": "resolved: independent rereview PASS",
     "AR-ADS-003": "resolved: independent rereview PASS; native privacy controls independent of ad eligibility",
-    "AR-ADS-REG001": "plugin registration before Bridge creation verified"
+    "AR-ADS-REG001": "plugin registration before Bridge creation verified",
+    "CI-ADS-004": "fixed-awaiting-CI: healthy equal-revision polling preserves DOM targets; independent static review PASS",
+    "CI-ADS-005": "fixed-awaiting-CI: cold WebView startup gets separate bounded callback/readiness budget; functional checks unchanged"
   },
   "stage_round_counts": {
     "council": 2,
     "code_review": 1,
-    "fix": 2
+    "fix": 3
   },
   "capabilities": {
     "local_node": "24",
@@ -40,7 +42,8 @@
     "live_emissions": "not enabled/not tested",
     "first_ci": "40391747153: Android build/nativeunit/mergedmanifest PASS,75/75 browser PASS; emulator pending",
     "final_ui_regression": "5/5 desktop ads PASS",
-    "final_polish_review": "independent PASS"
+    "final_polish_review": "independent PASS",
+    "final_ci": "40394606174 failed: WebKit rematch flaky (77 passed/1 flaky), emulator first cold readiness callback timed out (4/5 pass); Node29 +nativeJUnit6 +build +manifest PASS"
   },
-  "next_step": "Observe full Android/web CI"
+  "next_step": "Run focused regression and full GitHub Actions for CI repair round3"
 }

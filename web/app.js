@@ -189,6 +189,8 @@ async function api(path,body,auth=session){
 }
 function acceptRoom(next){
   if(room&&next.revision<room.revision)return;
+  // Keep tap targets intact when polling returns an unchanged, healthy snapshot.
+  if(room&&next.revision===room.revision&&onlineHealthy)return;
   const oldMoves=room?.game.moves||0;room=next;game=room.game;onlineHealthy=true;
   if(game.moves>oldMoves)soundEffect();finishRound();render();
 }

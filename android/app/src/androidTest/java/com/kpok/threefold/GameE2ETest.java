@@ -38,25 +38,35 @@ public class GameE2ETest {
     }
 
     private String js(String expression) throws Exception {
+        return js(expression, 5);
+    }
+
+    private String js(String expression, long timeoutSeconds) throws Exception {
         CompletableFuture<String> result = new CompletableFuture<>();
         scenario.onActivity(activity -> {
             WebView view = activity.getBridge().getWebView();
             view.evaluateJavascript(expression, result::complete);
         });
-        return result.get(5, TimeUnit.SECONDS);
+        return result.get(timeoutSeconds, TimeUnit.SECONDS);
     }
 
     private void await(String expression) throws Exception {
-        long deadline = SystemClock.elapsedRealtime() + 15000;
+        await(expression, 15000, 5);
+    }
+
+    private void await(String expression, long timeoutMillis, long callbackTimeoutSeconds) throws Exception {
+        long deadline = SystemClock.elapsedRealtime() + timeoutMillis;
         while (SystemClock.elapsedRealtime() < deadline) {
-            if ("true".equals(js("Boolean(" + expression + ")"))) return;
+            if ("true".equals(js("Boolean(" + expression + ")", callbackTimeoutSeconds))) return;
             SystemClock.sleep(80);
         }
         fail("WebView condition timed out: " + expression);
     }
 
     private void ready() throws Exception {
-        await("document.querySelectorAll('#board button').length === 9");
+        // The first Chromium renderer starts cold on a freshly booted CI emulator.
+        // Keep ordinary game assertions short; only startup receives this bounded budget.
+        await("document.querySelectorAll('#board button').length === 9", 45000, 30);
     }
 
     private void click(String selector) {
