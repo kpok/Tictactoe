@@ -3,25 +3,25 @@
   "repository": "kpok/Tictactoe",
   "baseline_revision": "555044349fa139e91c1bc3221b430031563c2856",
   "requirement": "Android optional interstitial max1/5 completed rounds AND180s; mixedchild audience; defaultoff publicrepo",
-  "phase": "VERIFY",
-  "status": "in_progress",
+  "phase": "DELIVERED",
+  "status": "complete",
   "decisions": [
     "ADS-001 round2 conditionalchildcapability"
   ],
   "acceptance_criteria": {
-    "AC1": "native policy +unit tests implemented, CI pending",
+    "AC1": "native cadence policy +JUnit tests verified",
     "AC2": "pinned SDK24.9.0 UMP4.0.0 defaultoff ownergates/manifest removals",
     "AC3": "guardedpreload freshconsent shortboundary token +restartlocks",
     "AC4": "16localizedneutralage/privacy settings",
-    "AC5": "local Node/browserPASS; Android/mergedmanifestCI pending"
+    "AC5": "Node29/browser81/nativeJUnit6/emulator5/build/mergedmanifest PASS"
   },
   "findings": {
     "AR-ADS-001": "resolved: independent rereview PASS",
     "AR-ADS-002": "resolved: independent rereview PASS",
     "AR-ADS-003": "resolved: independent rereview PASS; native privacy controls independent of ad eligibility",
     "AR-ADS-REG001": "plugin registration before Bridge creation verified",
-    "CI-ADS-004": "fixed-awaiting-CI: healthy equal-revision polling preserves DOM targets; independent static review PASS",
-    "CI-ADS-005": "fixed-awaiting-CI: cold WebView startup gets separate bounded callback/readiness budget; functional checks unchanged"
+    "CI-ADS-004": "verified-closed: negative control fails, regression +81 browser E2E first attempt PASS; independent review PASS",
+    "CI-ADS-005": "verified-closed: all5 installed APK emulator tests PASS; independent review PASS"
   },
   "stage_round_counts": {
     "council": 2,
@@ -37,13 +37,14 @@
   "checks": {
     "node": "29/29 PASS",
     "browser_focused": "8/8 initialdesktop/mobile;4/4 latestdesktop adsregressions PASS",
-    "native_unit": "6 tests final CI pending",
-    "android_sdk_runtime": "not tested",
+    "native_unit": "6/6 PASS verified downloaded XML artifact12714874317",
+    "android_sdk_runtime": "SDK compilation and5 real installed APK offline E2E PASS; real ads remain off and not tested",
     "live_emissions": "not enabled/not tested",
     "first_ci": "40391747153: Android build/nativeunit/mergedmanifest PASS,75/75 browser PASS; emulator pending",
     "final_ui_regression": "5/5 desktop ads PASS",
     "final_polish_review": "independent PASS",
-    "final_ci": "40394606174 failed: WebKit rematch flaky (77 passed/1 flaky), emulator first cold readiness callback timed out (4/5 pass); Node29 +nativeJUnit6 +build +manifest PASS"
+    "final_ci": "40462715295 SUCCESS at0442898e: Node22/24 each29; browser81 first attempt; nativeJUnit6; emulator5; APK/AAB; manifest"
   },
-  "next_step": "Run focused regression and full GitHub Actions for CI repair round3"
+  "next_step": "Owner AdMob/Play configuration and real device/internal testing; no activation performed",
+  "verified_revision": "0442898e468b1e3934197dcc4d970221a7131b2e"
 }

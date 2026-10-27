@@ -17,3 +17,17 @@ CI-ADS-004: downloaded failing Playwright trace contains no second-client rematc
 CI-ADS-005: allow cold startup readiness45s with individual callback30s; ordinary game evaluate/assertion budgets5s/15s unchanged. No test skip, unconditional sleep or flaky acceptance added. Independent static review PASS for both changes. Local Android execution unavailable; CI required. Node29/check PASS. Local initial browser attempt could not launch because browser binaries were absent; installing binaries before rerun.
 
 Local after browser installation:22/22 Chromium desktop/mobile game E2E PASS. Negative control: temporarily removed equal-revision guard; new DOM stability regression FAILED as expected; restored fixed source. WebKit host libraries unavailable locally; GitHub runner installs them. No test acceptance settings changed. Independent reviewer PASS.
+
+
+## Final verified delivery
+
+Runtime revision0442898e468b1e3934197dcc4d970221a7131b2e, tree bba9106e4762aad2dfc93b832c4f29057ba6a071.
+GitHub Actions https://github.com/kpok/Tictactoe/actions/runs/40462715295 completed SUCCESS.
+- Node22 and24:29/29 tests each, syntax and build PASS.
+- Browser:81/81 first attempt PASS (desktop Chromium, Pixel viewport, iPhone WebKit); no retry/flaky result. failOnFlakyTests remains enabled.
+- Native JUnit: downloaded artifact12714874317 XML confirms AdCadence3 +AdAudience3, zero failure/error/skip.
+- Android build APK/instrumentation APK/unsigned AAB and actual merged privacy manifest check PASS.
+- Installed APK offline Android15 emulator:OK(5 tests), strict instrumentation gate PASS.
+- Independent static review PASS. CI-ADS-004/005 verified closed. No workflow gates weakened, no real ads or Play publication enabled.
+
+Documentation-only closure commit follows the tested runtime revision; no runtime changes after CI.
