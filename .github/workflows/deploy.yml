@@ -2,15 +2,31 @@ name: Package web preview
 # Packaging only: public deployment is a separate, explicit decision.
 on:
   workflow_dispatch:
-permissions:
-  contents: read
+permissions: {}
 jobs:
   package:
+    if: >-
+      github.repository == 'kpok/Tictactoe' &&
+      github.repository_id == '969630128' &&
+      github.repository_owner_id == '10676481' &&
+      github.actor_id == '10676481' &&
+      github.actor == 'kpok' &&
+      github.triggering_actor == 'kpok' &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+    concurrency:
+      group: trusted-threefold-package
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 24
           cache: npm
@@ -18,7 +34,7 @@ jobs:
       - run: npm run check
       - run: npm test
       - run: npm run build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: threefold-static-preview
           path: dist/

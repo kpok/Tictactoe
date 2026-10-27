@@ -102,3 +102,5 @@ Szczegóły: [Android/build/E2E](docs/MOBILE.md), [konfiguracja Play i sekretów
 - `test/`, `e2e/` — weryfikacja.
 - `.agentic/tasks/vanishing-v1/` — plan, decyzje, review i wyniki realizacji.
 - [Analiza pierwotnego stanu](docs/ANALYSIS-2026-10-25.md).
+
+Workflowy są ograniczone do właściciela `kpok` na `main`. Wymagane ustawienia administracyjne dla forków, Pages i Google Play: [instrukcja bezpieczeństwa Actions](docs/WORKFLOW_SECURITY_PL.md).

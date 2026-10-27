@@ -1,0 +1,40 @@
+{
+  "task_id": "workflow-security",
+  "requirement": "Owner-only GitHub Actions analogous kpok/cartoon_ai",
+  "repository": "kpok/Tictactoe",
+  "baseline_revision": "942d0e95c220b963b2cdfd3bcb2574206ca5c1a0",
+  "phase": "REVIEW_CODE",
+  "status": "in_progress",
+  "acceptance_criteria": {
+    "AC1": "8 owner-only gates; no PR trigger",
+    "AC2": "minimal tokens, SHA actions/checkout, post-gate noncancelling concurrency",
+    "AC3": "actual YAML authorization and mutation tests",
+    "AC4": "admin/fork/Pages limitations documented; settings require owner action",
+    "AC5": "local checks PASS, independent code PASS, doc review +remoteCI pending"
+  },
+  "stage_round_counts": {
+    "plan_review": 1,
+    "code_review": 1,
+    "fix": 0
+  },
+  "authorized_actions": [
+    "edit",
+    "push main",
+    "run CI"
+  ],
+  "capabilities": {
+    "github_repo_writes": "available",
+    "github_admin_settings": "unavailable via connector",
+    "local_node": "24",
+    "local_android_sdk": "unavailable"
+  },
+  "checks": {
+    "check": "PASS,8 jobs",
+    "unit": "34/34 PASS",
+    "build": "PASS",
+    "independent_plan": "PASS",
+    "independent_code": "PASS,focused5/5 tests",
+    "remote_ci": "pending"
+  },
+  "next_step": "Finish docs review; push main; await actual owner execution"
+}

@@ -1,0 +1,7 @@
+# Review routing only; enforcement requires repository branch rules.
+/.github/ @kpok
+/scripts/ @kpok
+/test/workflow-security.test.js @kpok
+/package.json @kpok
+/package-lock.json @kpok
+/docs/WORKFLOW_SECURITY_PL.md @kpok
