@@ -26,6 +26,10 @@ class ReleaseManifestTests(unittest.TestCase):
     def test_accepts_reviewed_release(self):
         self.assertTrue(verify_manifest(MANIFEST, 1002, "1.0.0"))
 
+    def test_reviewed_workmanager_permission_is_explicitly_allowed(self):
+        xml = MANIFEST.replace('<application ', '<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/><application ')
+        self.assertTrue(verify_manifest(xml, 1002, "1.0.0"))
+
     def test_rejects_wrong_identity_version_and_flags(self):
         for old, new in [
             ("com.kpok.threefold", "com.example.fake"),

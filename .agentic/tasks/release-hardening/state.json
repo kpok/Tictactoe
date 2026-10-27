@@ -6,7 +6,7 @@
   "stage_round_counts": {
     "plan_review": 1,
     "code_review": 1,
-    "fix": 0
+    "fix": 1
   },
   "checks": {
     "node": "39/39 PASS",
@@ -21,5 +21,8 @@
     "No real Play upload or real upload key",
     "No ads activation",
     "Current schema upgrade only; no allhistoricalmigrationclaim"
-  ]
+  ],
+  "findings": {
+    "RELEASE-003": "ActualAAB rejected existing WorkManager FOREGROUND_SERVICE permission; source-chain inspected and one exact normal permission allowed, unknowns still blocked"
+  }
 }

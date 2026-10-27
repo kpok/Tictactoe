@@ -14,6 +14,8 @@ ALLOWED_PERMISSIONS = {
     "android.permission.INTERNET",
     "android.permission.ACCESS_NETWORK_STATE",
     "android.permission.WAKE_LOCK",
+    # GMA ads-api24.9.0 depends on WorkManager2.7.0, which declares this normal permission.
+    "android.permission.FOREGROUND_SERVICE",
 }
 INTERNAL_PERMISSION = PACKAGE + ".DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
 SIGNATURE_LEVELS = {"signature", "0x00000002", "0x2", "2"}

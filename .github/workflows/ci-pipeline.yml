@@ -156,10 +156,18 @@ jobs:
       - name: Validate actual release AAB
         run: |
           bash scripts/fetch-bundletool.sh
-          java -jar "$RUNNER_TEMP/bundletool.jar" validate --bundle=android/app/build/outputs/bundle/release/app-release.aab
+          java -jar "$RUNNER_TEMP/bundletool.jar" validate --bundle=android/app/build/outputs/bundle/release/app-release.aab > "$RUNNER_TEMP/bundle-validation.txt"
           java -jar "$RUNNER_TEMP/bundletool.jar" dump manifest --bundle=android/app/build/outputs/bundle/release/app-release.aab > "$RUNNER_TEMP/release-manifest.xml"
           version=$(node -p 'require("./package.json").version')
           python3 scripts/android_release.py manifest "$RUNNER_TEMP/release-manifest.xml" --code "$ANDROID_VERSION_CODE" --name "$version"
+      - name: Preserve decoded release manifest for diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: decoded-release-manifest
+          path: ${{ runner.temp }}/release-manifest.xml
+          if-no-files-found: warn
+          retention-days: 7
       - name: Collect immutable Android artifacts
         run: node scripts/android-artifacts.js
       - name: Verify merged Android ad privacy manifest
