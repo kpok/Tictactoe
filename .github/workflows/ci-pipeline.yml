@@ -117,6 +117,8 @@ jobs:
     timeout-minutes: 25
     env:
       ANDROID_VERSION_CODE: ${{ inputs.version_code || '1' }}
+      ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713' }}
+      ADS_PRIVACY_URL: ${{ vars.ADS_PRIVACY_URL }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -142,9 +144,11 @@ jobs:
         run: node scripts/android-version.js
       - name: Bundle offline assets and synchronize native project
         run: npm run android:sync
+      - name: Validate public Internal Testing ad configuration
+        run: node scripts/internal-ads.js > "$RUNNER_TEMP/internal-ads.json"
       - name: Build Android packages
         working-directory: android
-        run: ./gradlew --no-daemon -PversionCode="$ANDROID_VERSION_CODE" :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
+        run: ./gradlew --no-daemon -PversionCode="$ANDROID_VERSION_CODE" -PadsMode=test -PdebugAdsMode=disabled -PadsFamiliesReviewed=false -PadsLiveReviewed=false -PadmobAppId="$ADMOB_APP_ID" -PadsPrivacyUrl="$ADS_PRIVACY_URL" :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
       - name: Upload native unit test reports
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -160,6 +164,8 @@ jobs:
           java -jar "$RUNNER_TEMP/bundletool.jar" dump manifest --bundle=android/app/build/outputs/bundle/release/app-release.aab > "$RUNNER_TEMP/release-manifest.xml"
           version=$(node -p 'require("./package.json").version')
           python3 scripts/android_release.py manifest "$RUNNER_TEMP/release-manifest.xml" --code "$ANDROID_VERSION_CODE" --name "$version"
+      - name: Verify test-only release and disabled debug ad configuration
+        run: python3 scripts/check-internal-ads.py --config "$RUNNER_TEMP/internal-ads.json" --manifest "$RUNNER_TEMP/release-manifest.xml"
       - name: Preserve decoded release manifest for diagnostics
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -200,6 +206,8 @@ jobs:
     timeout-minutes: 25
     env:
       ANDROID_VERSION_CODE: ${{ inputs.version_code || '1' }}
+      ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713' }}
+      ADS_PRIVACY_URL: ${{ vars.ADS_PRIVACY_URL }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:

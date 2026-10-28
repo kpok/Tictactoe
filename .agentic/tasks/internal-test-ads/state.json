@@ -1,0 +1,31 @@
+{
+  "task_id": "internal-test-ads",
+  "requirement": "Enable test ads for Android Internal Testing",
+  "repository": "kpok/Tictactoe",
+  "baseline_revision": "706a4a0f777c443888a30e66c24041229ed25c83",
+  "phase": "VERIFY",
+  "status": "in_progress",
+  "acceptance_criteria": [
+    "AC1 test-only release and disabled debug/Families",
+    "AC2 public vars and actual native/AAB validation",
+    "AC3 artifact profile/hash binding and owner policy",
+    "AC4 tests and owner instructions"
+  ],
+  "stage_round_counts": {
+    "plan_review": 1,
+    "code_review": 2,
+    "fix": 1
+  },
+  "findings": {
+    "ADS-001": "verified-closed"
+  },
+  "checks": {
+    "node": 42,
+    "python": 17,
+    "syntax_workflow_build": "pass",
+    "android_ci": "pending",
+    "network_ads_ump": "not run; requires owner AdMob configuration"
+  },
+  "next_step": "Push reviewed changes and inspect actual CI; finish focused browser checks",
+  "updated_at": "2026-10-28"
+}

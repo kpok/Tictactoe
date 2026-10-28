@@ -93,6 +93,8 @@ jobs:
     environment: google-play-internal
     env:
       ANDROID_VERSION_CODE: ${{ inputs.version_code }}
+      ADMOB_APP_ID: ${{ vars.ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713' }}
+      ADS_PRIVACY_URL: ${{ vars.ADS_PRIVACY_URL }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:

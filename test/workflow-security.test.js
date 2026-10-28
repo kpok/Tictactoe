@@ -57,3 +57,11 @@ test('diagnostic report labels inaccessible settings UNKNOWN and filters respons
   assert.doesNotMatch(result.stdout,/must-not-leak|test-token/);
   assert.match(result.stdout,/successful run does not prove/);
 });
+
+test('internal release cannot silently switch to live ads or lose native configuration checks',()=>{
+  for(const flag of ['-PadsMode=test','-PdebugAdsMode=disabled','-PadsFamiliesReviewed=false','-PadsLiveReviewed=false']){
+    mutate(w=>{const s=w['ci-pipeline.yml'].jobs['android-build'].steps.find(s=>s.name==='Build Android packages');s.run=s.run.replace(flag,'');});
+  }
+  mutate(w=>w['google-play-internal.yml'].jobs['sign-and-publish'].env.ADMOB_APP_ID='other');
+  mutate(w=>{const s=w['ci-pipeline.yml'].jobs['android-build'].steps.find(s=>s.name==='Verify test-only release and disabled debug ad configuration');s.run='echo skipped';});
+});

@@ -95,6 +95,17 @@ export function checkPolicy(workflows,pins){
   assert.equal(play.on.workflow_dispatch.inputs.publish.default,false,'Publishing must be opt-in');
   const upload=play.jobs['sign-and-publish'].steps.find(s=>s.uses?.startsWith('r0adkll/upload-google-play@'));
   assert.equal(upload?.if,'inputs.publish');assert.equal(upload?.with?.tracks,'internal');
+  const adEnv={ADMOB_APP_ID: "${{ vars.ADMOB_APP_ID || 'ca-app-pub-3940256099942544~3347511713' }}",ADS_PRIVACY_URL:'${{ vars.ADS_PRIVACY_URL }}'};
+  const build=workflows['ci-pipeline.yml'].jobs['android-build'];
+  for(const job of [build,workflows['ci-pipeline.yml'].jobs['android-emulator-e2e'],play.jobs['sign-and-publish']]){
+    for(const [key,value] of Object.entries(adEnv))assert.equal(job.env?.[key],value,'Identical public ad configuration required for build and verification');
+  }
+  const command=build.steps.find(s=>s.name==='Build Android packages')?.run;
+  assert.equal(command,'./gradlew --no-daemon -PversionCode="$ANDROID_VERSION_CODE" -PadsMode=test -PdebugAdsMode=disabled -PadsFamiliesReviewed=false -PadsLiveReviewed=false -PadmobAppId="$ADMOB_APP_ID" -PadsPrivacyUrl="$ADS_PRIVACY_URL" :app:testDebugUnitTest :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease','Internal builds must explicitly use only test ads');
+  const configCheck=build.steps.findIndex(s=>s.run==='node scripts/internal-ads.js > "$RUNNER_TEMP/internal-ads.json"');
+  assert.ok(configCheck>=0&&configCheck<build.steps.findIndex(s=>s.name==='Build Android packages'),'Validate public inputs before Gradle');
+  const nativeCheck=build.steps.findIndex(s=>s.run==='python3 scripts/check-internal-ads.py --config "$RUNNER_TEMP/internal-ads.json" --manifest "$RUNNER_TEMP/release-manifest.xml"');
+  assert.ok(nativeCheck>configCheck&&nativeCheck<build.steps.findIndex(s=>s.run==='node scripts/android-artifacts.js'),'Verify native test profile before artifact upload');
   assert.ok(workflows['ci-pipeline.yml'].jobs['build-and-unit-tests'].steps.some(s=>s.run==='npm run check'));
   return total;
 }

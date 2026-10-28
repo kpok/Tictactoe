@@ -1,17 +1,17 @@
 import { test, expect } from 'playwright/test';
-async function nativeFake(page,{delayed=false}={}){
- await page.addInitScript(({delayed})=>{
+async function nativeFake(page,{delayed=false,mode='disabled'}={}){
+ await page.addInitScript(({delayed,mode})=>{
   window.__adCalls=[];window.__age='';
   window.Capacitor={isNativePlatform:()=>true,nativePromise:async(_,method,data)=>{
    window.__adCalls.push({method,data});
-   if(method==='getState')return {mode:'disabled',age:window.__age,familiesReady:false,privacyOptions:false,privacyUrl:window.__policyUrl||''};
+   if(method==='getState')return {mode,age:window.__age,familiesReady:false,privacyOptions:false,privacyUrl:window.__policyUrl||''};
    if(method==='setAge'){window.__age=data.age;return {};}
    if(method==='reset'){window.__age='';return {};}
    if(method==='beginBoundary')return {boundaryToken:'test'};
    if(method==='showBetweenRounds'&&delayed)return new Promise(resolve=>{window.__closeAd=()=>resolve({shown:true});});
    return {shown:false};
   }};
- },{delayed});
+ },{delayed,mode});
 }
 async function win(page){for(const n of [0,3,1,4,2])await page.locator(`#board [data-index="${n}"]`).click();}
 test('ads only requested at completed-round restart, not abandonment or reload',async({page})=>{
@@ -55,4 +55,16 @@ test('native privacy policy link only accepts credential-free HTTPS URLs',async(
   else await expect(page.locator('#ads-policy-link')).toBeHidden();
   await page.locator('#ads-dialog .close-dialog').click();
  }
+});
+
+test('test-enabled internal profile opens neutral age prompt and identifies test ads',async({page})=>{
+ await nativeFake(page,{mode:'test'});await page.goto('/');
+ await expect(page.locator('#ads-dialog')).toBeVisible();await expect(page.locator('#ads-age')).toHaveValue('');
+ await expect(page.locator('#ads-status')).toContainText(/test/i);
+ await page.locator('#ads-age').selectOption('under18');await page.locator('#ads-save').click();
+ await expect(page.locator('#ads-dialog')).toBeHidden();
+ await page.locator('[data-mode=local]').click();await page.locator('#board [data-index="4"]').click();
+ await expect(page.locator('#board [data-index="4"]')).toHaveAttribute('data-mark','O');
+ await page.locator('#ads-settings').click();await expect(page.locator('#ads-age')).toHaveValue('under18');
+ expect(await page.evaluate(()=>window.__adCalls.some(c=>c.method==='showBetweenRounds'))).toBe(false);
 });
