@@ -1,8 +1,8 @@
 {
   "task_id": "release-hardening",
   "baseline_revision": "c9aec957a60bdb23b20b400af7a5808d3be94078",
-  "phase": "VERIFY",
-  "status": "in_progress",
+  "phase": "HANDOFF",
+  "status": "complete",
   "stage_round_counts": {
     "plan_review": 1,
     "code_review": 1,
@@ -10,22 +10,27 @@
   },
   "checks": {
     "node": "39/39 PASS",
-    "python": "14/14 PASS before repair3",
+    "python": "15/15 PASS",
     "syntax_policy_build": "PASS",
     "independent_state_review": "PASS;10000legalgames144146positions",
     "independent_release_review": "PASS static+focusedtests",
-    "actual_android_release": "CI pending"
+    "actual_android_release": "CI40638520909 SUCCESS: actual AAB/APK manifests, matching ephemeral signer certificates and offline release upgrade1001→1002",
+    "browser": "81/81 first attempt PASS",
+    "native_emulator": "5/5 PASS",
+    "independent_fix3": "PASS including scroll regression15/15",
+    "ci": "All6 jobs executed SUCCESS at57af2c45; actor kpok"
   },
-  "next_step": "Push authorized main and verify actual AAB/signing/release update CI",
+  "next_step": "Owner follows docs/GOOGLE_PLAY_TESTING.md A–F; configure real secrets/account and test Play-delivered app separately",
   "limits": [
     "No real Play upload or real upload key",
     "No ads activation",
     "Current schema upgrade only; no allhistoricalmigrationclaim"
   ],
   "findings": {
-    "RELEASE-003": "ActualAAB rejected existing WorkManager FOREGROUND_SERVICE permission; source-chain inspected and one exact normal permission allowed, unknowns still blocked",
-    "RELEASE-004": "UIAutomator zeroexit without firstXML: readiness retries, stale dump removed everyprobe, boundedfail and final screenshot",
-    "RELEASE-005": "Recorded accessibility XML exposes language select as Language, not selected option; exact accessible selector corrected; move counter scroll enabled",
-    "CI-002": "First debug setup storage-clear callback exceeds5s after DOMready: startup-only30s; functional assertions unchanged"
-  }
+    "RELEASE-003": "verified-closed on CI40638520909: ActualAAB rejected existing WorkManager FOREGROUND_SERVICE permission; source-chain inspected and one exact normal permission allowed, unknowns still blocked",
+    "RELEASE-004": "verified-closed on CI40638520909: UIAutomator zeroexit without firstXML: readiness retries, stale dump removed everyprobe, boundedfail and final screenshot",
+    "RELEASE-005": "verified-closed on CI40638520909: Recorded accessibility XML exposes language select as Language, not selected option; exact accessible selector corrected; move counter scroll enabled",
+    "CI-002": "verified-closed on CI40638520909: First debug setup storage-clear callback exceeds5s after DOMready: startup-only30s; functional assertions unchanged"
+  },
+  "verified_revision": "57af2c45fdb2aa3cefcb063172aa45685e878e03"
 }

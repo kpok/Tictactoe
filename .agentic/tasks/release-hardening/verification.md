@@ -12,3 +12,21 @@ Repair2: CI40574571861 actualAAB and bothAPK manifests/certs plus signedAABcert 
 Repair3 (continued2026-10-28): CI40575962925 confirmsNode39/Python14/Playwright81/actualAABcert+manifest PASS, but debugemulator first setup storageclear timedout atGameE2ETest.java29 (5s callback; other4testsPASS) and releaseupgrade couldnotfind selected-value ENEnglish. Downloaded artifact12766608808: screenshotshowsworkingapp, ui.xml exposes actual select text Language withvalidbounds, not selectedoptiontext. Corrected exactaccessible selector Language and enabled scrolling for counters belowboard; ordinary mark/state assertions retained. Debug startupclear uses30s callback only; subsequent functional checks remain5s/15s. UI dump freshness fix independentlyPASS and stillactive. No application code or securitypolicy relaxed.
 
 Repair3 pre-push robustness: recordedXML also has off-screen counter bounds[0,0][0,0]. Scrolling now uses smaller gestures and document-order direction to recover targets above the viewport after visiting a counter, with up/down fixture regression. No game assertions changed.
+
+
+## Final verified delivery — 2026-10-28
+
+Runtime revision57af2c45fdb2aa3cefcb063172aa45685e878e03, treea36f15c5272d97c786adde1828422e4de8348bbb.
+https://github.com/kpok/Tictactoe/actions/runs/40638520909 completed SUCCESS; all6 jobs actually executed.
+- Node22/24 each39tests and Python15tests plus policy/syntax/build PASS.
+- Playwright81/81 PASS first attempt, no retries/flaky acceptance.
+- Debug installed APK offline Android15 instrumentation OK(5 tests), strict gate PASS.
+- Actual decoded release AAB and APK manifests verified against identity/version/release/privacy/permission expectations.
+- Both release APK signatures match generated disposable certificate; signed AAB integrity and actual certificate DER match verified. No real upload key used.
+- Actual release update1001→1002 through adb install-r PASS: Tagalog, local game and centerO retained across restart/update; furtherX move and2/100 counter verified offline.
+- Downloaded artifact12794284261; before/after/final screenshots present, after-upgrade screenshot independently visually inspected byparent: localmode selected, Tagalog labels, centerO andcornerX,2/100galaw. No key or package uploaded in diagnostics artifact.
+- Independent plan/state/release reviews PASS; repair3 narrowreview including scroll helper PASS, Python15 independently rerun. All required findings closed.
+
+Operator guide delivered in docs/GOOGLE_PLAY_TESTING.md: Windows private key outside checkout, clipboard/backup, exact protected-environment secrets, build-only first upload/manual Console, API optional, tester install, public-artifact boundaries and credential incident handling. No owner secrets read, no real key generated, no Play upload or ads activation. This test covers current schema and disposable signatures, not all historical migrations or Play App Signing/physical devices. Administrative repo settings remain owner responsibility per separate workflow security guide.
+
+Closure commit changes task evidence only [skip ci]; runtime files unchanged after verified revision.
