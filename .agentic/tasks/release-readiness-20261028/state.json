@@ -1,0 +1,48 @@
+{
+  "task_id": "release-readiness-20261028",
+  "requirement": "Full independent expert council review of Google Play release readiness",
+  "repository": "kpok/Tictactoe",
+  "baseline_revision": "08403ebb1e1b923b552a0edb5f27e530d0ce57f7",
+  "runtime_revision": "a9e5a70076fa7b7619cd56c019b311ec6b0efc67",
+  "phase": "HANDOFF",
+  "status": "complete",
+  "scope": "Read-only application/config review; report-only commit authorized on main",
+  "decision_id": "DEC-PLAY-READY-001",
+  "internal_testing": "accept_with_conditions",
+  "public_production": "hold",
+  "participants": [
+    "release_game_review",
+    "release_android_review",
+    "release_security_review",
+    "release_play_ads_review"
+  ],
+  "council_rounds": 2,
+  "findings": [
+    "RR-01",
+    "RR-02",
+    "RR-03",
+    "RR-04",
+    "RR-05",
+    "RR-06",
+    "RR-07",
+    "RR-08",
+    "RR-09"
+  ],
+  "checks": {
+    "ci_run": 40751579227,
+    "ci": "success",
+    "node": 42,
+    "python": 17,
+    "playwright": 84,
+    "android_emulator": 5,
+    "extra_legal_games": 1000,
+    "roundtrip_states": 13188,
+    "legal_ai_checks": 621,
+    "production_npm_audit": 0,
+    "full_npm_audit_moderate_nodes": 3,
+    "actual_artifact_so_files": 0
+  },
+  "report": "docs/RELEASE_REVIEW_2026-10-28.md",
+  "next_step": "Correct privacy/QA text drift; configure owner-controlled policy/AdMob/signing; first manual Internal Testing upload and physical release acceptance",
+  "updated_at": "2026-10-28"
+}
