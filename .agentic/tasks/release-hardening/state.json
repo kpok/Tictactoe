@@ -6,11 +6,11 @@
   "stage_round_counts": {
     "plan_review": 1,
     "code_review": 1,
-    "fix": 2
+    "fix": 3
   },
   "checks": {
     "node": "39/39 PASS",
-    "python": "10/10 PASS",
+    "python": "14/14 PASS before repair3",
     "syntax_policy_build": "PASS",
     "independent_state_review": "PASS;10000legalgames144146positions",
     "independent_release_review": "PASS static+focusedtests",
@@ -24,6 +24,8 @@
   ],
   "findings": {
     "RELEASE-003": "ActualAAB rejected existing WorkManager FOREGROUND_SERVICE permission; source-chain inspected and one exact normal permission allowed, unknowns still blocked",
-    "RELEASE-004": "UIAutomator zeroexit without firstXML: readiness retries, stale dump removed everyprobe, boundedfail and final screenshot"
+    "RELEASE-004": "UIAutomator zeroexit without firstXML: readiness retries, stale dump removed everyprobe, boundedfail and final screenshot",
+    "RELEASE-005": "Recorded accessibility XML exposes language select as Language, not selected option; exact accessible selector corrected; move counter scroll enabled",
+    "CI-002": "First debug setup storage-clear callback exceeds5s after DOMready: startup-only30s; functional assertions unchanged"
   }
 }

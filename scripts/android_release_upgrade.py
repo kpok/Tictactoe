@@ -40,6 +40,22 @@ def snapshot():
     return tree
 
 
+def scroll_direction(tree, pattern):
+    # Accessibility includes off-screen nodes with empty bounds, in document order.
+    nodes = list(tree.iter('node'))
+    targets = [i for i, node in enumerate(nodes) if re.search(pattern, label(node), re.IGNORECASE)]
+    visible = []
+    for i, node in enumerate(nodes):
+        if len(node) or not label(node) or node.get('class') == 'android.webkit.WebView':
+            continue
+        try:
+            center(node.get('bounds', ''))
+            visible.append(i)
+        except ValueError:
+            pass
+    return 'up' if targets and visible and min(targets) < min(visible) else 'down'
+
+
 def wait_node(pattern, scroll=False):
     deadline = time.monotonic() + 75
     swipes = 0
@@ -59,8 +75,9 @@ def wait_node(pattern, scroll=False):
                     return node
                 except ValueError:
                     continue
-        if scroll and swipes < 4:
-            run('adb', 'shell', 'input', 'swipe', '540', '1550', '540', '650', '400')
+        if scroll and swipes < 6:
+            start, end = ('700', '1250') if scroll_direction(tree, pattern) == 'up' else ('1250', '700')
+            run('adb', 'shell', 'input', 'swipe', '540', start, '540', end, '600')
             swipes += 1
         time.sleep(.3)
     raise RuntimeError(f'Release UI not found: {pattern}; inspect release-upgrade-results')
@@ -85,7 +102,7 @@ def version(code):
 def saved_game():
     wait_node(r'Salit-salitan', scroll=True)
     wait_node(r'Kahon 5: O\b', scroll=True)
-    wait_node(r'\b1/100 galaw\b')
+    wait_node(r'\b1/100 galaw\b', scroll=True)
 
 
 def screenshot(name):
@@ -102,7 +119,7 @@ def main():
     run('adb', 'shell', 'svc', 'wifi', 'disable')
     run('adb', 'shell', 'svc', 'data', 'disable')
     launch()
-    tap(r'EN\s*·\s*English')
+    tap(r'^Language$')
     tap(r'TL\s*·\s*Tagalog')
     tap(r'^Salit-salitan$', scroll=True)
     tap(r'Kahon 5: bakante', scroll=True)
@@ -117,7 +134,7 @@ def main():
     saved_game()
     tap(r'Kahon 1: bakante', scroll=True)
     wait_node(r'Kahon 1: X\b')
-    wait_node(r'\b2/100 galaw\b')
+    wait_node(r'\b2/100 galaw\b', scroll=True)
     screenshot('after-upgrade.png')
     print('PASS: release1001 ->1002 retained Tagalog, local game and center O; further X move works offline')
 

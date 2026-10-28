@@ -26,7 +26,8 @@ public class GameE2ETest {
     @Before public void startFresh() throws Exception {
         scenario = ActivityScenario.launch(MainActivity.class);
         ready();
-        js("localStorage.clear(); sessionStorage.clear(); true");
+        // Storage initialization can still be cold after the first DOM becomes visible.
+        js("localStorage.clear(); sessionStorage.clear(); true", 30);
         scenario.recreate();
         ready();
         language("en");

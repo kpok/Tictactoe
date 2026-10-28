@@ -42,3 +42,12 @@ class SnapshotReadinessTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, patch.object(upgrade, 'OUT', pathlib.Path(directory)), patch.object(upgrade.time, 'sleep'), patch.object(upgrade, 'snapshot', side_effect=[error, tree]):
             self.assertEqual(label(upgrade.wait_node('Kahon 5: O')), 'Kahon 5: O')
             self.assertIn('cold rendererbusy', (pathlib.Path(directory) / 'probe-error.txt').read_text())
+
+    def test_offscreen_target_above_visible_counter_scrolls_up(self):
+        import xml.etree.ElementTree as ET
+        tree = ET.fromstring('<hierarchy><node text="Threefold" class="android.webkit.WebView" bounds="[0,0][1080,1920]"><node text="Kahon 1: bakante" bounds="[0,0][0,0]"/><node text="1/100 galaw" bounds="[10,200][100,240]"/><node text="Bagong round" bounds="[10,300][100,350]"/></node></hierarchy>')
+        self.assertEqual(upgrade.scroll_direction(tree, 'Kahon 1'), 'up')
+        tree[0][0].set('bounds', '[10,100][100,150]')
+        tree[0][1].set('bounds', '[0,0][0,0]')
+        tree[0][2].set('bounds', '[0,0][0,0]')
+        self.assertEqual(upgrade.scroll_direction(tree, '1/100'), 'down')
