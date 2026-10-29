@@ -38,4 +38,5 @@ jobs:
         with:
           name: threefold-static-preview
           path: dist/
+          retention-days: 1
           if-no-files-found: error
