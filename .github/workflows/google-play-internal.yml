@@ -158,7 +158,7 @@ jobs:
           name: threefold-signed-aab-${{ inputs.version_code }}
           path: signed-android/threefold.aab
           if-no-files-found: error
-          retention-days: 3
+          retention-days: 1
       - name: Remove signing material
         if: always()
         run: rm -f "$RUNNER_TEMP/threefold-upload.jks" "$RUNNER_TEMP/threefold-upload-cert.der"
