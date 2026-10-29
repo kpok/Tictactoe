@@ -52,7 +52,7 @@ jobs:
           name: threefold-web
           path: dist/
           if-no-files-found: error
-          retention-days: 14
+          retention-days: 1
   playwright:
     if: >-
       github.repository == 'kpok/Tictactoe' &&
@@ -94,7 +94,7 @@ jobs:
           path: |
             playwright-report/
             test-results/
-          retention-days: 14
+          retention-days: 1
 
   android-build:
     if: >-
@@ -156,7 +156,7 @@ jobs:
           name: android-unit-reports
           path: android/app/build/test-results/testDebugUnitTest/
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 1
       - name: Validate actual release AAB
         run: |
           bash scripts/fetch-bundletool.sh
@@ -173,7 +173,7 @@ jobs:
           name: decoded-release-manifest
           path: ${{ runner.temp }}/release-manifest.xml
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 1
       - name: Collect immutable Android artifacts
         run: node scripts/android-artifacts.js
       - name: Verify merged Android ad privacy manifest
@@ -183,7 +183,7 @@ jobs:
           name: threefold-android-${{ github.sha }}
           path: android-artifacts/
           if-no-files-found: error
-          retention-days: 7
+          retention-days: 1
 
   android-emulator-e2e:
     if: >-
@@ -255,7 +255,7 @@ jobs:
           name: android-emulator-results
           path: android-e2e-results/
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 1
 
   release-upgrade:
     if: >-
@@ -334,7 +334,7 @@ jobs:
           name: release-upgrade-results
           path: release-upgrade-results/
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 1
       - name: Remove disposable packages and signing material
         if: always()
         run: rm -rf release-smoke "$RUNNER_TEMP/threefold-disposable.jks" "$RUNNER_TEMP/smoke-cert.der"
